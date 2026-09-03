@@ -215,3 +215,11 @@ footer a{color:var(--muted)}
 /* 괄호 주석은 통째로 줄바꿈 (중간에서 끊기지 않게) */
 .nb{color:var(--faint); display:inline-block; white-space:nowrap}
 @media (max-width:520px){ .nb{white-space:normal} }
+
+/* 대표 작업 카드 — 내용 길이가 달라도 하단 정렬 */
+.worklink{display:flex; flex-direction:column; height:100%}
+.worklink h3{min-height:2.6em; display:flex; align-items:flex-start}
+.worklink p{flex:0 0 auto}
+.worklink .tags{margin-top:auto}
+.worklink .more{margin-top:12px}
+@media (max-width:560px){ .worklink h3{min-height:0} }
