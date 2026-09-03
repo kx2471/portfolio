@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>검증 실무 — 산출물 · API · 도구 · 김상옥</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="QA 표준 산출물, API 레벨 검증, 직접 만든 업무 자동화 도구.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
+  <div class="menu"><a href="process.html">Process Design</a><a href="automation.html">Test Automation</a><a href="runner.html">QA Enablement</a><a href="agent.html">AI in Workflow</a><a href="practice.html" class="on">Practice</a></div>
+  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+</div></nav>
+<header class="phead"><div class="wrap wide">
+  <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 05 · Practice</div>
+  <h1>검증 실무 — 산출물 · API 검증 · 업무 도구</h1>
+  <p class="lede">SWR · TC · Defect · Xray 추적성 같은 QA 표준 산출물과, UI 뒤를 직접 두드리는 API 검증, 반복 업무를 줄이려고 만든 유틸리티들입니다.</p>
+</div></header>
+<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>요구사항–TC–결함이 따로 놀았고, UI에서 막히는 값이 서버에서도 막히는지는 확인되지 않았습니다.</p></div><div><h5>Action</h5><p>추적성 체계를 세우고, API 레벨로 내려가 검증하고, 반복은 도구로 줄였습니다.</p></div><div class="r"><h5>Result</h5><p>요구사항 커버리지와 결함 추적성 확보, 서버 측 검증 부재 발견·개선 주도.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>QA 산출물 — 요구사항에서 결함까지 추적 가능하게<span class="meta">SWR · TC · Defect · Xray</span></summary>
+  <div class="det">
+    <h4 class="h">Test Case 설계 기법</h4>
+    <p>기법 정의보다 <strong>실제로 무엇을 만들어 관리했는지</strong>를 남깁니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:140px">기법</th><th>적용한 방식</th><th style="width:210px">남긴 것</th></tr></thead>
+      <tbody>
+        <tr><td><strong>요구사항 기반</strong></td>
+            <td>요구사항 문서를 항목 단위로 쪼개 <strong>빠진 기능이 없는지</strong> 대조</td>
+            <td class="after">Jira 등록 후 <strong>요구사항 ID와 매핑</strong></td></tr>
+        <tr><td><strong>동등 클래스 분할</strong></td>
+            <td>입력값 범위·조건을 분석해 <strong>유효/무효 클래스</strong>로 나누고 대표값 선정</td>
+            <td class="after">필드별 클래스 정의 — <strong>최소 TC로 최대 결함</strong></td></tr>
+        <tr><td><strong>경곗값 분석</strong></td>
+            <td>각 필드의 최솟값·최댓값과 <strong>직전/직후</strong>를 도출. <strong>off-by-one</strong> 방지</td>
+            <td class="after"><code>min</code> · <code>min-1</code> · <code>max</code> · <code>max+1</code></td></tr>
+        <tr><td><strong>오류 추정</strong></td>
+            <td><strong>과거 결함 이력 · 복잡한 로직 · 사용자 오용 시나리오</strong>로 의심 영역을 좁힘</td>
+            <td class="after">정형 기법으로 안 잡히는 <strong>엣지 케이스</strong></td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <b>기법을 나눠 관리한 이유</b> — 어떤 기법으로 만든 TC인지가 남아 있어야
+      <strong>커버리지의 성격</strong>을 말할 수 있습니다.
+      “TC 300개”보다 “요구사항 전 항목 대조 + 경계값 조합 + 과거 결함 기반 의심 영역”이
+      훨씬 정확한 진술이고, 회귀 대상을 고를 때도 이 축이 기준이 됩니다.
+    </div>
+
+    <h4 class="h">Xray 기반 추적성</h4>
+    <p>요구사항과 TC의 연결로 추적성을 확보하고, 결함 관리 연동으로 양방향 추적이 가능합니다.</p>
+    <div class="shots2"><figure class="shot"><img src="assets/img/xray-req.png" alt="Requirement Traceability — 요구사항 하나에서 연결된 TC와 각 버전의 실행 결과까지 한 줄로 따라간다." loading="lazy"><figcaption>Requirement Traceability — 요구사항 하나에서 연결된 TC와 각 버전의 실행 결과까지 한 줄로 따라간다.</figcaption></figure><figure class="shot"><img src="assets/img/xray-defect.jpg" alt="Defect Traceability — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 되짚는다. (담당자명 비식별 처리)" loading="lazy"><figcaption>Defect Traceability — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 되짚는다. (담당자명 비식별 처리)</figcaption></figure></div>
+    <ul style="margin-bottom:0">
+      <li><strong>Requirement Traceability</strong> — 모든 요구사항이 TC로 연결되어 충족 여부 판단 가능</li>
+      <li><strong>Defect Traceability</strong> — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 추적</li>
+      <li>Test Set(기능별 TC 관리) · Test Plan(스케줄) · Test Execution(실행 결과)로 라이프사이클 통합 관리</li>
+    </ul>
+  </div>
+</details>
+
+<details>
+  <summary>API 검증 — UI 뒤를 직접 두드린다<span class="meta">서버 측 검증 부재 발견</span></summary>
+  <div class="det">
+    <p>프론트엔드 유효성 검증은 <strong>사용자에게 친절한 장치일 뿐 품질 보증이 아닙니다.</strong>
+      그래서 UI를 거치지 않고 <strong>REST API를 직접 호출해</strong> 같은 규칙이 서버에서도 지켜지는지 확인했습니다.</p>
+    <div class="flow">
+      <div class="node git"><b>1. 요청 캡처</b><em>DevTools로 실제 패킷 추출</em></div><div class="arrow">→</div>
+      <div class="node"><b>2. 구조·인증 분석</b><em>파라미터 · Cookie · CSRF</em></div><div class="arrow">→</div>
+      <div class="node"><b>3. 변조 요청</b><em>Postman · cURL</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>4. 결과 검증</b><em>응답 · DB 저장 · 관리자 화면까지</em></div>
+    </div>
+    <div class="why"><b>왜 이렇게</b>
+      UI 자동화는 <strong>“막히는 것”만 확인</strong>합니다. 화면에서 막혔다는 사실은
+      서버가 막았다는 증거가 아니라 <strong>화면이 요청을 보내지 않았다는 증거</strong>일 뿐입니다.</div>
+
+    <h4 class="h">화면을 거치지 않기 때문에 가능한 것</h4>
+    <figure class="shot"><img src="assets/img/api-postman.png" alt="API 계층에서 타입·정밀도 경계값을 직접 넣어 서버의 수용 범위를 확인한다. (호스트 비식별)" loading="lazy"><figcaption>API 계층에서 타입·정밀도 경계값을 직접 넣어 서버의 수용 범위를 확인한다. (호스트 비식별)</figcaption></figure>
+    <ul>
+      <li><strong>타입·정밀도 경계를 그대로 통과시켜 본다</strong> — 정수 필드에 실수를, 불리언에 문자열을 넣었을 때
+        서버가 무엇을 저장하는지</li>
+      <li><strong>도달하기 어려운 상태를 만들어 놓고 시작한다</strong> — 배포 상태 같은 값을 직접 PUT으로 세팅하면
+        UI로 몇 단계 거쳐야 하는 전제 조건을 한 번에 구성</li>
+      <li><strong>거부돼야 할 요청을 만들어 보낸다</strong> — 인증 헤더를 빼거나 바꿔서,
+        통과하는 경우가 아니라 <strong>막혀야 하는 경우</strong>를 확인</li>
+    </ul>
+
+    <h4 class="h">발견 사례 — 프론트만 막고 있던 유효성 검증</h4>
+    <div class="grid g3">
+      <div class="card"><h3>진행</h3><ul style="margin-bottom:0">
+        <li>DevTools로 회원가입·회원정보 수정 요청 패킷 추출</li>
+        <li>파라미터 구조와 인증 방식 분석</li>
+        <li>Postman·cURL로 형식 위반 값과 <code>&lt;script&gt;</code> 태그를 삽입해 전송</li>
+        <li>응답만 보지 않고 <strong>DB 저장 여부와 관리자 페이지 반영까지</strong> 추적</li>
+      </ul></div>
+      <div class="card"><h3>발견</h3><ul style="margin-bottom:0">
+        <li><strong>서버 측 입력값 검증 부재</strong> — 프론트엔드 검증만 존재</li>
+        <li>형식·규칙을 위반한 데이터가 <strong>그대로 DB에 저장</strong></li>
+        <li>주입한 스크립트가 <strong>관리자 페이지에서 렌더링</strong>되는 경로 확인 → XSS</li>
+      </ul></div>
+      <div class="card"><h3>보고</h3><ul style="margin-bottom:0">
+        <li><strong>재현 절차를 그대로 옮길 수 있게</strong> 정리</li>
+        <li><strong>스크린샷과 패킷 로그를 증거로 확보</strong></li>
+        <li>UI 결함이 아니라 <strong>서버 검증 로직 부재</strong>로 원인 규정</li>
+        <li>개선 방향까지 제안해 <strong>수정 주도</strong></li>
+      </ul></div>
+    </div>
+    <div class="callout">
+      화면 기준 테스트만 했다면 <strong>끝까지 발견되지 않았을 결함</strong>입니다.
+      그 뒤로 폼이 있는 기능은 <strong>UI 통과와 API 통과를 별도의 검증 항목</strong>으로 나눠 씁니다.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>업무 자동화 도구 — 반복을 줄이려고 직접 만든 것들<span class="meta">Python · Apps Script</span></summary>
+  <div class="det">
+    <figure class="shot"><img src="assets/img/tool-extract.jpg" alt="IP를 고르고 버튼 하나로 로그·스크린샷·CoreDump를 받아온다. 서비스 중단/재시작과 바이너리 배포까지 같은 창에서 처리. (장비 IP 비식별)" loading="lazy"><figcaption>IP를 고르고 버튼 하나로 로그·스크린샷·CoreDump를 받아온다. 서비스 중단/재시작과 바이너리 배포까지 같은 창에서 처리. (장비 IP 비식별)</figcaption></figure>
+    <div class="grid g3">
+      <div class="card"><h3>📦 종합추출도구</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · paramiko · Tkinter</p>
+        <p>원격 서버에 SSH로 접속해 로그·스크린샷·CoreDump·Binary를 자동 수집하는 GUI 도구.
+          서비스 중단/재시작과 바이너리 배포까지 같은 창에서 처리합니다.</p></div>
+      <div class="card"><h3>📊 KPI Calculator</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · re · threading</p>
+        <p>DLT 로그에서 KPI 이벤트를 정규식으로 파싱해 구간별 시간 차를 계산.
+          <strong>수작업 대비 검증 리소스 30% 절감</strong>에 기여했습니다.</p></div>
+      <div class="card"><h3>🗺️ Positioning Viewer</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · pandas · folium</p>
+        <p>GNSS 로그에서 좌표를 추출·검증해 CSV로 저장하고, 지도 위에 주행 경로를 폴리라인으로 시각화합니다.</p></div>
+      <div class="card"><h3>🌐 Clipboard Translate</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · Tesseract OCR</p>
+        <p>클립보드 이미지·텍스트를 실시간 감지해 OCR + 번역. OCR 줄바꿈을 문장 종결 기준으로 병합하고
+          기술 문서용 <strong>명사형 종결로 자동 변환</strong>합니다.</p></div>
+      <div class="card"><h3>⏰ 공수표 알리미</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Google Apps Script × Slack</p>
+        <p>“매달 잊지 말고 공유해야 하는 링크”를 사람의 기억에서 시스템으로 옮겼습니다.
+          <strong>링크 누락 시 경고, 월말 사전 점검</strong>까지 포함 — 실패 케이스를 설계에 넣었습니다.</p></div>
+      <div class="card"><h3>🖥️ Selenium 반응형 UI 도구</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · Selenium · Tkinter</p>
+        <p>여러 Breakpoint에서 자동 로그인 후 페이지를 순회하며 스크린샷을 일괄 캡처.
+          GitHub Releases로 실행 파일을 배포해 <strong>비개발자도 쓸 수 있게</strong> 했습니다.</p></div>
+    </div>
+    <div class="why"><b>공통점</b>
+      전부 <strong>“같은 일을 두 번 하고 있다”는 자각에서 출발</strong>했습니다.
+      그리고 만들 때는 실패 케이스(링크 누락, 경로 못 찾음, 무한 루프)를 설계 범위에 넣었습니다.</div>
+  </div>
+</details>
+</div><footer><div class="wrap wide">
+  <div class="pager"><a href="agent.html"><span class="k">이전</span><span class="t">← AI Agent — Regression TC Creator</span></a></div>
+  <p style="margin-top:28px"><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer ·
+    <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
+    고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
+</div></footer>
+<script src="assets/site.js"></script>
+</body></html>

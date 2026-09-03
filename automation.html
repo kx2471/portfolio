@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MLOps E2E 회귀 자동화 · 김상옥</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="Playwright 기반 MLOps 파이프라인 무인 회귀 검증 시스템 1인 설계·구축·운영 기록.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
+  <div class="menu"><a href="process.html">Process Design</a><a href="automation.html" class="on">Test Automation</a><a href="runner.html">QA Enablement</a><a href="agent.html">AI in Workflow</a><a href="practice.html">Practice</a></div>
+  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+</div></nav>
+<header class="phead"><div class="wrap wide">
+  <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 02 · Test Automation</div>
+  <h1>MLOps 파이프라인 무인 회귀 검증</h1>
+  <p class="lede">데이터셋 업로드부터 7종 AI 모델 학습·배포까지, 비전 AI 학습 플랫폼의 전체 파이프라인을 Playwright로 자동 검증하는 회귀 시스템을 <strong>1인으로 설계·구축·운영</strong>하고 있습니다.</p>
+</div></header>
+<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>릴리스마다 수동으로 하루 이상 걸리던 회귀 검증. 실서버 · 단일 공유 계정 · 30분~3시간짜리 학습이라는 제약까지 걸려 있었습니다.</p></div><div><h5>Action</h5><p>제약을 먼저 정의하고, 테스트가 서로를 깨뜨리지 않는 구조를 설계했습니다.</p></div><div class="r"><h5>Result</h5><p>명령 한 줄 무인 실행 + Slack 자동 보고. 스위트가 2배 이상 늘어나는 동안 아키텍처는 다시 쓰지 않았습니다.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>먼저 제약을 정의했다 — 아키텍처의 모든 결정이 여기서 나왔습니다<span class="meta">5가지 제약</span></summary>
+  <div class="det">
+    <p>테스트를 짜기 전에 <strong>이 제품이 자동화에 무엇을 허용하지 않는지</strong>부터 정리했습니다.</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:190px">제약</th><th>그래서 무엇이 어려워지는가</th><th>설계로 답한 방식</th></tr></thead>
+      <tbody>
+        <tr><td><strong>산출물의 소속</strong><br><span class="before">모든 노드는 자기 프로젝트 안에서만 유효</span></td>
+            <td class="before">고정 프로젝트를 재사용하면 실행할 때마다 노드가 쌓여 결국 깨진다</td>
+            <td class="after">테스트마다 <strong>전용 프로젝트 생성 → 종료 시 삭제</strong>를 공용 헬퍼로 강제</td></tr>
+        <tr><td><strong>실서버 대상</strong><br><span class="before">목(mock) 없이 3개 실환경</span></td>
+            <td class="before">실패를 임의로 만들 수 없고, 서버 상태가 결과에 개입한다</td>
+            <td class="after">서버 정책을 <strong>실험으로 규명</strong>해 전제로 삼고, 장애는 요청 차단·주입으로 재현</td></tr>
+        <tr><td><strong>단일 공유 계정 + SSO</strong></td>
+            <td class="before">동시 로그인이 앞 세션을 끊어 병렬 실행이 성립하지 않는다</td>
+            <td class="after">세션 단위가 계정이 아니라 <strong>기기(User-Agent)</strong>임을 규명 → worker별 UA 분리</td></tr>
+        <tr><td><strong>고비용 작업</strong><br><span class="before">모델 학습 30분~3시간</span></td>
+            <td class="before">소비 테스트마다 재학습하면 스위트를 운영할 수 없다</td>
+            <td class="after">학습 결과를 <strong>픽스처에 기록해 재사용</strong> — 타입당 1회로 고정</td></tr>
+        <tr><td><strong>비동기 장기 작업</strong><br><span class="before">완료 신호가 일시적 UI</span></td>
+            <td class="before">토스트를 기준으로 삼으면 부하 시 <strong>false PASS</strong>가 난다</td>
+            <td class="after">노드 상태 · 다운로드 파일 · <strong>요청 페이로드</strong>를 판정 근거로</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <b>화면이 아니라 데이터를 단언한다</b> — 리포트 검증은 화면 표시만 보지 않고
+      <strong>다운로드한 zip을 파싱해 서버 원본 값과 대조</strong>합니다.
+      이미지 수 · 모델 사이즈 · Threshold가 <strong>UI · 파일 · 요청 페이로드</strong> 세 곳에서 일치하는지 확인합니다.
+      “떠 보이는 것”과 <strong>“실제로 된 것”</strong>을 구분하는 것이 판정 기준입니다.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>병렬 실행 — 단일 계정 실서버에서 성립시키기<span class="meta">핵심 난제</span></summary>
+  <div class="det">
+    <div class="grid g3">
+      <div class="card"><h3>🔑 worker별 User-Agent 분리</h3>
+        <p>SSO가 “같은 UA 동시 로그인 = 같은 기기 재로그인”으로 앞 세션을 끊는 것을
+          <strong>실험으로 규명</strong>하고, worker마다 UA 토큰을 부여해 <strong>3-worker 동시 로그인</strong> 성립.</p></div>
+      <div class="card"><h3>⚡ 파일 내 병렬</h3>
+        <p>단일 직렬 전처리 스위트를 3그룹으로 분할, 각 그룹이 전용 프로젝트를 갖고 worker에 분산.<br>
+          <strong>19.3분 → 11.8분 (-39%)</strong></p></div>
+      <div class="card"><h3>🧮 서버 정합</h3>
+        <p>서버 <strong>동시 작업 상한(3)</strong>에 맞춰 worker 수와 대기 정책을 정합,
+          완료 대기 한도를 “최장 학습 잔여 + 여유”로 산정해 큐 대기 오탐 제거.</p></div>
+    </div>
+    <div class="why"><b>버린 것도 기록합니다</b>
+      세션 문제 우회용으로 만들었던 탭 orchestration 구조는 <strong>단일 실패점이므로 폐기</strong>했습니다.
+      더 단순한 정답이 나오면 이미 만든 것도 버립니다.</div>
+  </div>
+</details>
+
+<details>
+  <summary>트러블슈팅 — 증거로 원인을 확정한 5건<span class="meta">추측으로 고친 것은 없습니다</span></summary>
+  <div class="det">
+    <div class="grid g2">
+      <div class="card"><h3>CASE 1 — 로그인은 됐는데 로그인 화면으로 돌아온다</h3>
+        <p>로그인 직후 <code>goto</code>로 끼어들면 SSO 리다이렉트 체인이 끊겨 미인증이 됨을
+          단계별 URL 진단으로 확정. 이동을 금지하고 자동 도달만 대기하도록 변경,
+          신/구 로그인 방식을 자동 분기해 <strong>3개 환경이 한 헬퍼를 공유</strong>.</p></div>
+      <div class="card"><h3>CASE 2 — “수동은 되는데 왜 자동화만 안 되지?”</h3>
+        <p>“계정당 단일 세션”이라는 그럴듯한 가설에 머물지 않고 <strong>모순을 실험으로 파고들어</strong>,
+          세션이 계정이 아니라 기기 단위임을 규명. cloud 병렬 <strong>1 → 3 worker 복구</strong>.</p></div>
+      <div class="card"><h3>CASE 3 — 6분짜리 학습이 26초 만에 “완료”</h3>
+        <p><strong>통과한 TC가 범인</strong>인 케이스. 리포트 타임라인 재구성 + DOM 스냅샷으로
+          준비 구간이 부하에서 길어져 완료 판정을 오판함을 확인. 진행 토스트를 판정에 추가해 전 구간 보호.</p></div>
+      <div class="card"><h3>CASE 4 — 캔버스가 하얗게 비는 글리치</h3>
+        <p>trace DOM 스냅샷 추적으로 React Flow의 인라인 <code>visibility:hidden</code> 고착을 확인,
+          트리거(모달 닫힘 직후 소켓 알림)까지 특정. <strong>단독 재현 스크립트</strong>를 제작해 제품 버그로 리포트.</p></div>
+      <div class="card"><h3>CASE 5 — 40초가 모자라서 실패한 검증</h3>
+        <p>“재현 안 되는 flaky”를 전체 테스트의 시작/종료 시각으로 서버 슬롯 점유를 재구성해 규명 —
+          코드 버그가 아니라 <strong>구조적 대기</strong>. flaky를 “운”이 아니라 원인 있는 결함으로 다뤘습니다.</p></div>
+      <div class="card" style="background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 30%,transparent)">
+        <h3>🔍 공통 접근</h3>
+        <ul style="margin-bottom:0">
+          <li>trace DOM 스냅샷 시점별 추적</li><li>리포트 타임라인 재구성</li>
+          <li>요청 페이로드 가로채기</li><li>단독 재현 스크립트 제작</li>
+          <li>가설과 모순되는 사실을 끝까지 파고들기</li>
+        </ul></div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>리포팅과 성과 — 결과가 팀에 도달해야 자동화가 완성된다<span class="meta">커스텀 Slack 리포터 자작</span></summary>
+  <div class="det">
+    <figure class="shot"><img src="assets/img/e2e-slack.jpg" alt="실행이 끝나면 리포터가 결과 카드를 채널에 올린다. PASS/FAIL/FLAKY/SKIP 네 상태와 소요 시간, 검증한 스위트명이 함께 남는다." loading="lazy"><figcaption>실행이 끝나면 리포터가 결과 카드를 채널에 올린다. PASS/FAIL/FLAKY/SKIP 네 상태와 소요 시간, 검증한 스위트명이 함께 남는다.</figcaption></figure>
+    <ul>
+      <li><strong>경량 첨부 설계</strong> — video·trace 제외 zip만 첨부(<strong>수 GB → 1~2MB</strong>),
+        로컬에는 전체 아티팩트를 실행별 폴더로 보존</li>
+      <li><strong>대화형 실행기</strong> — 명령 한 줄로 테스트명·Slack 전송 여부를 묻고 실행.
+        CI에서는 무질문 자동, 부분 실행이 팀 채널을 오염시키지 않도록 <strong>전송은 opt-in</strong></li>
+      <li><strong>보안</strong> — trace에 평문 기록되는 자격 증명을 인지하고
+        계정 정책·gitignore·첨부 제외로 노출 경로 차단</li>
+    </ul>
+    <h4 class="h">성과</h4>
+    <div class="tw"><table>
+      <thead><tr><th>항목</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr><td>릴리스 회귀 검증</td><td class="before">수동 · 1일 이상</td><td class="after">명령 한 줄 · 무인 실행 + Slack 자동 보고</td></tr>
+        <tr><td>cloud 병렬 실행</td><td class="before">SSO 개편 후 1 worker</td><td class="after">3 worker 복구</td></tr>
+        <tr><td>전처리 스위트</td><td class="before">직렬 19.3분</td><td class="after">그룹 병렬 11.8분 (-39%)</td></tr>
+        <tr><td>모델 학습 비용</td><td class="before">소비 테스트마다 재학습</td><td class="after">타입당 1회 · 픽스처 재사용</td></tr>
+        <tr><td>스위트 확장</td><td class="before">추가할수록 구조 수정 필요</td><td class="after">규모 2배 이상 확장 · <strong>아키텍처 무변경</strong></td></tr>
+        <tr><td>검증의 질문</td><td class="before">기능이 도는가</td><td class="after">+ 결과 품질이 유지되는가 · 고친 것이 유지되는가</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout">
+      <b>확장 비용을 낮추는 설계</b> — 초기 구축 이후 <strong>모델 성능 비교 · 회귀 테스트</strong> 영역이 더해지며
+      스위트 규모는 두 배 이상이 됐습니다. 그때 한 일은 구조를 고치는 것이 아니라
+      <strong>기존 구조 위에 스위트를 얹는 것</strong>이었습니다.
+      자동화의 진짜 비용은 처음 만들 때가 아니라 <strong>늘려갈 때</strong> 발생하기 때문에 그 지점을 먼저 설계했습니다.
+    </div>
+    <div class="callout warm">
+      <b>이 프로젝트에서 보여준 방식</b><br>
+      · <strong>증거로 원인을 확정한다</strong> — trace DOM 스냅샷, 리포트 타임라인 재구성, 요청 페이로드 가로채기<br>
+      · <strong>가설은 실험으로 깬다</strong> — 그럴듯한 결론에 안주하지 않고 모순을 파고들어 진짜 정책을 찾는다<br>
+      · <strong>더 단순한 답이 나오면 버린다</strong> — 동작하던 구조도 단일 실패점이면 미련 없이 폐기<br>
+      · <strong>실패를 설계한다</strong> — 제품 버그는 실패하는 테스트로 고정해 추적하고, 의존 그래프로 실패 전파를 차단
+    </div>
+  </div>
+</details>
+</div><footer><div class="wrap wide">
+  <div class="pager"><a href="process.html"><span class="k">이전</span><span class="t">← QA 프로세스를 0에서 1로</span></a><a href="runner.html" style="text-align:right"><span class="k">다음</span><span class="t">테스트 러너 — 실행 권한을 팀 전체로 →</span></a></div>
+  <p style="margin-top:28px"><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer ·
+    <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
+    고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
+</div></footer>
+<script src="assets/site.js"></script>
+</body></html>

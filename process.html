@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QA 프로세스 설계 · 김상옥</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="QA 프로세스가 부재한 환경에 워크플로우·배포 게이트·RC 검증 절차·RCA 체계를 0에서 설계한 기록.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
+  <div class="menu"><a href="process.html" class="on">Process Design</a><a href="automation.html">Test Automation</a><a href="runner.html">QA Enablement</a><a href="agent.html">AI in Workflow</a><a href="practice.html">Practice</a></div>
+  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+</div></nav>
+<header class="phead"><div class="wrap wide">
+  <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 01 · Process Design</div>
+  <h1>QA 프로세스를 0에서 1로</h1>
+  <p class="lede">이슈 관리 체계가 없던 환경에 워크플로우 · Priority 기준 · Root Cause 의무화 · 배포 게이트 · RC 검증 절차를 직접 설계하고, 규칙이 실제로 동작하도록 자동화까지 붙였습니다.</p>
+</div></header>
+<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>우선순위는 작성자 주관에 맡겨졌고, 버그 원인은 기록되지 않았으며, 미검증 빌드가 현장에 배포되는 사고가 있었습니다.</p></div><div><h5>Action</h5><p>판단 기준을 명문화하고, 지켜지지 않으면 자동으로 되돌리는 규칙을 트래커에 걸었습니다.</p></div><div class="r"><h5>Result</h5><p>“이거 QA 봐도 되나요?”가 필드 조건으로 치환되고, 배포 차단권이 QA에 명시적으로 생겼습니다.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>개발·QA 워크플로우 — 코드의 흐름과 일의 흐름을 연결<span class="meta">Git × 이슈 트래커 × Automation</span></summary>
+  <div class="det">
+    <h4 class="h">설계한 전체 흐름</h4>
+    <div class="flow">
+      <div class="node git"><b>브랜치 생성</b><em>Git 이벤트</em></div><div class="arrow">→</div>
+      <div class="node"><b>In Development</b><em>자동 전환</em></div><div class="arrow">→</div>
+      <div class="node"><b>In Review</b><em>PR · Fix Version 기입</em></div><div class="arrow">→</div>
+      <div class="node"><b>Dev Complete</b><em>버전 브랜치 병합</em></div><div class="arrow">→</div>
+      <div class="node"><b>In QA</b><em>RCA 작성 + Version 확인</em></div><div class="arrow">→</div>
+      <div class="node"><b>Resolved</b><em>수정 완료</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>Closed</b><em>QA 최종 검수</em></div>
+    </div>
+    <div class="callout">
+      <b>마지막 문을 QA가 닫는다</b> — <code>Resolved</code>는 개발이 “고쳤다”고 선언한 상태일 뿐입니다.
+      <strong>QA가 최종 검수한 뒤에만 <code>Closed</code></strong>로 넘어갑니다.
+      티켓을 여는 사람과 닫는 사람을 분리해, <em>고쳤다는 말</em>과 <em>고쳐졌다는 확인</em>이 섞이지 않게 했습니다.
+    </div>
+    <div class="callout warm">
+      <b>되돌아가는 길도 설계</b> — 검증 반려 시 <code>In QA → In Development</code>로 복귀.
+      RCA 미작성 상태로 <code>Dev Complete</code>를 시도하면 Automation이 자동으로 <strong>In Development로 복구</strong>합니다.
+    </div>
+
+    <h4 class="h">바꾼 것들</h4>
+    <div class="tw"><table>
+      <thead><tr><th>영역</th><th>기존</th><th>도입한 변화</th></tr></thead>
+      <tbody>
+        <tr><td>Priority 판단</td><td class="before">작성자 주관에 의존</td><td class="after">4단계 판단 Flow + 핵심 기능 목록 · 등급별 처리 SLA</td></tr>
+        <tr><td>티켓 유형</td><td class="before">Bug/Task 혼재, 통계 불가</td><td class="after">Task Type 분리 → Bug에만 RCA 자동화 연결</td></tr>
+        <tr><td>결함 기록</td><td class="before">“수정 완료”만 남고 원인 유실</td><td class="after">Root Cause / Corrective Action 의무 작성</td></tr>
+        <tr><td>상태 전환</td><td class="before">수동 전환, 누락·역행 빈번</td><td class="after">Git 이벤트 → 트래커 상태 자동 전환</td></tr>
+        <tr><td>QA 진입 조건</td><td class="before">구두 확인 필요</td><td class="after">Fix/RC Version 기입을 조건으로 자동화</td></tr>
+        <tr><td>브랜치 운영</td><td class="before">명명 규칙 부재, 삭제 시점 모호</td><td class="after">4종 브랜치 정의 + 네이밍·생애주기 규칙</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="h">Priority — 누가 작성해도 같은 결과가 나오도록</h4>
+    <div class="flow">
+      <div class="node no"><b>Urgent</b><em>시스템 사용 자체가 불가능?</em></div><div class="arrow">→</div>
+      <div class="node"><b>High</b><em>핵심 기능에 영향?</em></div><div class="arrow">→</div>
+      <div class="node"><b>Medium</b><em>사용자가 불편 체감?</em></div><div class="arrow">→</div>
+      <div class="node"><b>Low</b><em>그 외</em></div>
+    </div>
+    <p>“내 티켓은 다 Urgent”가 반복되던 상황이었습니다. <strong>핵심 기능 목록</strong>(검사 실행·판정, 결과 조회,
+      모델 학습/배포, 사용자 인증, 데이터 저장·조회)을 따로 정의하고, 등급별 처리 SLA까지 약속해
+      Priority가 단순 라벨이 아니라 <strong>실제 처리 흐름</strong>으로 이어지게 했습니다.</p>
+
+    <h4 class="h">규칙은 실제로 걸려 있습니다</h4>
+    <div class="shots2"><figure class="shot"><img src="assets/img/wf-auto-1.png" alt="상태 · 커스텀 필드 변경을 트리거로 상태 전환과 코멘트를 자동 실행한다. 맨 아래가 Root Cause 미입력 시 상태를 되돌리는 규칙." loading="lazy"><figcaption>상태 · 커스텀 필드 변경을 트리거로 상태 전환과 코멘트를 자동 실행한다. 맨 아래가 Root Cause 미입력 시 상태를 되돌리는 규칙.</figcaption></figure><figure class="shot"><img src="assets/img/wf-auto-2.png" alt="우선순위 · 태그 · 타입 변경까지 트리거로 활용한다. Urgent 승격 즉시 Slack 공지, Epic 전환 시 하위 작업 자동 생성." loading="lazy"><figcaption>우선순위 · 태그 · 타입 변경까지 트리거로 활용한다. Urgent 승격 즉시 Slack 공지, Epic 전환 시 하위 작업 자동 생성.</figcaption></figure></div>
+    <div class="callout">
+      <b>앞의 표와 대조해 보면</b><br>
+      · <code>Root Cause 입력 하지 않으면 → 상태 변경 및 코멘트</code> — RCA 미작성 시 되돌리는 규칙<br>
+      · <code>fix, rc 버전 작성 시 → In QA 상태 변경</code> — 버전 필드를 QA 진입 조건으로<br>
+      · <code>Ticket이 Urgent로 변경되면 SLACK Noti</code> — Priority SLA의 “즉시 전체 공유”를 규칙으로 보장
+    </div>
+    <p style="font-size:13px;color:var(--muted)">화면은 운영 중인 규칙 목록의 일부입니다.
+      Epic 전환 시 하위 작업 3종 자동 생성, Reopen 태그 시 RC 버전 초기화, 폴더 기준 티켓 ID 자동 부여 등
+      <strong>티켓 생애주기 전반에 걸쳐 손이 가던 지점들을 규칙으로 옮겼습니다.</strong></p>
+  </div>
+</details>
+
+<details>
+  <summary>QA Request 봇 — 요청 접수를 시스템으로<span class="meta">Slack · AWS Lambda · ClickUp API</span></summary>
+  <div class="det">
+    <p>여러 프로젝트의 QA 요청이 DM·구두·여러 채널로 흩어져 들어왔고, 버전·일정·범위가 빠진 채 오기 일쑤였습니다.
+      <strong>슬래시 명령 하나로 접수를 일원화</strong>하고, 이후 알림까지 자동화했습니다.</p>
+    <div class="flow">
+      <div class="node git"><b>/qa-request</b><em>Slack Slash Command</em></div><div class="arrow">→</div>
+      <div class="node"><b>AWS Lambda</b><em>모달 표출 → 검증 → API</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>티켓 생성 + 채널 공지</b><em>이후 알림이 같은 스레드에 축적</em></div>
+    </div>
+    <div class="shots2"><figure class="shot"><img src="assets/img/bot-modal.png" alt="슬랙에서 /qa-request 입력 시 뜨는 요청 양식. 제목 · 프로덕트 · 목적 · 버전 · 변경 범위 · 일정 · 배포 예정일 · 고객사 배포일을 받는다." loading="lazy"><figcaption>슬랙에서 /qa-request 입력 시 뜨는 요청 양식. 제목 · 프로덕트 · 목적 · 버전 · 변경 범위 · 일정 · 배포 예정일 · 고객사 배포일을 받는다.</figcaption></figure><figure class="shot"><img src="assets/img/bot-validate.png" alt="형식이 맞지 않으면 실시간 경고가 뜨고 제출이 막힌다." loading="lazy"><figcaption>형식이 맞지 않으면 실시간 경고가 뜨고 제출이 막힌다.</figcaption></figure><figure class="shot"><img src="assets/img/bot-deploydate.png" alt="배포 예정 시각. 이 값이 리마인더의 기준점이 된다는 설명을 입력 칸 바로 아래에 붙였다." loading="lazy"><figcaption>배포 예정 시각. 이 값이 리마인더의 기준점이 된다는 설명을 입력 칸 바로 아래에 붙였다.</figcaption></figure><figure class="shot"><img src="assets/img/bot-ticket.jpg" alt="제출 즉시 생성된 ClickUp 티켓. 본문이 [요청 양식] 블록으로 정리되고 날짜·커스텀 필드가 자동 입력된다." loading="lazy"><figcaption>제출 즉시 생성된 ClickUp 티켓. 본문이 [요청 양식] 블록으로 정리되고 날짜·커스텀 필드가 자동 입력된다.</figcaption></figure></div><h4 class="h">발송 후 — 약속이 지켜지는지까지 감시</h4><div class="shots2"><figure class="shot"><img src="assets/img/bot-schedule.png" alt="일정 변경 시 관련자 멘션과 함께 변경 전 → 후가 스레드에 자동 공지된다." loading="lazy"><figcaption>일정 변경 시 관련자 멘션과 함께 변경 전 → 후가 스레드에 자동 공지된다.</figcaption></figure><figure class="shot"><img src="assets/img/bot-deployed.png" alt="예정 시각 전에 빌드가 확인되면 “배포 확인됨”으로 스스로 닫는다." loading="lazy"><figcaption>예정 시각 전에 빌드가 확인되면 “배포 확인됨”으로 스스로 닫는다.</figcaption></figure><figure class="shot"><img src="assets/img/bot-warn.png" alt="예정 시각까지 빌드를 찾지 못하면 경고 + 관련자 멘션. 배포될 때까지 2시간 간격으로 재알림." loading="lazy"><figcaption>예정 시각까지 빌드를 찾지 못하면 경고 + 관련자 멘션. 배포될 때까지 2시간 간격으로 재알림.</figcaption></figure></div>
+
+    <h4 class="h">티켓을 만드는 데서 끝내지 않았습니다</h4>
+    <p>봇이 <code>release</code> 채널의 <strong>Jenkins 빌드 메시지를 감시</strong>하면서,
+      티켓에 적힌 버전의 RC1 빌드가 올라왔는지 스스로 확인합니다.
+      예정 시각이 지나도 못 찾으면 경고 + 관련자 멘션, <strong>2시간 간격 재알림</strong>,
+      <strong>24시간 후 자동 종료</strong>.</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:170px">상황</th><th>순진하게 만들면</th><th>실제 설계</th></tr></thead>
+      <tbody>
+        <tr><td>날짜 <strong>최초</strong> 설정</td><td class="before">변경으로 보고 알림</td><td class="after">알림 없음 — 변경·삭제일 때만</td></tr>
+        <tr><td>시작일·마감일 동시 변경</td><td class="before">알림 2건</td><td class="after">1건으로 병합</td></tr>
+        <tr><td>예정 시각 전 배포</td><td class="before">예정 시각까지 대기</td><td class="after">확인 즉시 ✅ 처리</td></tr>
+        <tr><td>미배포 지속</td><td class="before">1회 경고 후 방치</td><td class="after">2시간 간격 재알림</td></tr>
+        <tr><td>계속 안 나옴</td><td class="before">무한 반복 → 알람 피로</td><td class="after"><strong>24시간 후 자동 종료</strong></td></tr>
+        <tr><td>배포일이 변경됨</td><td class="before">옛 시각 기준 오탐</td><td class="after"><strong>1분 내 감지</strong> → 새 기준 재동작</td></tr>
+        <tr><td>티켓이 삭제됨</td><td class="before">고아 리마인더가 계속 울림</td><td class="after">1분 내 자동 정리</td></tr>
+        <tr><td>판정 규칙 없는 제품</td><td class="before">오탐 알림</td><td class="after">티켓만 생성 · 리마인더 미동작</td></tr>
+      </tbody>
+    </table></div>
+    <div class="why"><b>여기서 배운 것</b>
+      알림 시스템의 진짜 난이도는 <strong>“언제 안 보낼지”</strong>에 있습니다.
+      자동 알림은 만들기는 쉽고 미움받기도 쉽습니다. 팀이 봇을 끄지 않게 만드는 것이 설계의 목표였습니다.</div>
+    <div class="callout">
+      <b>이 작업이 보여주는 것</b> — <em>규칙을 만드는 사람</em>에서 나아가
+      <strong>규칙이 동작하도록 시스템을 직접 빌드</strong>했고,
+      Slack · 서버리스 · 트래커 API · CI 알림이라는 <strong>이질적 시스템을 하나의 경험으로 연결</strong>했습니다.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>배포 게이트 — QA의 NO-GO 차단권<span class="meta">인시던트에서 출발한 프로세스</span></summary>
+  <div class="det">
+    <p>미검증 빌드가 고객사 현장에 배포된 인시던트가 있었습니다. 원인을 추적해보니 개인의 실수가 아니라
+      <strong>구조의 공백</strong>이었습니다 — 배포 대상 확인이 버전 라벨 기준으로만 이뤄졌고,
+      QA 검증 완료와 배포 결정 사이에 <strong>명시적 연결 고리가 없었습니다.</strong></p>
+    <div class="flow">
+      <div class="node"><b>1. 빌드 아티팩트 일치</b><em>버전 라벨이 아닌 빌드 번호 단위</em></div><div class="arrow">→</div>
+      <div class="node"><b>2. QA 검증 완료 체크</b><em>배포의 선행 조건</em></div><div class="arrow">→</div>
+      <div class="node"><b>3. 개발팀 승인</b><em></em></div><div class="arrow">→</div>
+      <div class="node ok"><b>4. PM 최종 GO</b><em>배포 결정 권한</em></div>
+    </div>
+    <div class="callout">
+      <b>권한을 나눴습니다</b> — QA는 품질 상태를 보고하고 <strong>NO-GO로 배포를 차단</strong>할 수 있고,
+      <strong>go/no-go 최종 결정은 PM</strong>에게 둡니다. 품질 보고 책임과 배포 결정 권한이 섞이지 않게 한 설계입니다.
+    </div>
+    <div class="callout warm">
+      <b>예외를 프로세스 안으로</b> — 긴급 배포를 부정하는 프로세스는 우회됩니다.
+      비상 레인을 따로 두되 <strong>위험 감수 승인 · 미검증 범위 문서화 · 사후 QA 의무화</strong>를 붙였습니다.
+    </div>
+    <p>인시던트를 <strong>책임 추궁이 아닌 프로세스 개선</strong>으로 전환했고,
+      QA가 릴리즈 파이프라인의 형식적 참여자가 아니라 <strong>명시적 권한을 가진 게이트키퍼</strong>가 됐습니다.</p>
+  </div>
+</details>
+
+<details>
+  <summary>RC 검증 절차 — “언제 끝나는가”를 숫자로<span class="meta">Exit Criteria · 역할 분리</span></summary>
+  <div class="det">
+    <p>RC 검증이 “상황마다 다르게” 진행되던 것을 <strong>반복 가능한 절차</strong>로 정립했습니다.
+      QA 검증과 개발 수정이 병행되고, 준비되는 즉시 배포(상한 ≤1영업일)해 조기 수렴시킵니다.</p>
+    <div class="flow">
+      <div class="node"><b>RC1</b><em>Full Test · 전체 TC</em></div><div class="arrow">→</div>
+      <div class="node git"><b>이슈 수정</b><em>Urgent→High 순</em></div><div class="arrow">→</div>
+      <div class="node"><b>RC2</b><em>Retest + Regression</em></div><div class="arrow">→</div>
+      <div class="node"><b>RC3</b><em>검증</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>릴리즈 판정</b><em>PM GO / NO-GO</em></div>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Exit Criteria</th><th>기준</th></tr></thead>
+      <tbody>
+        <tr><td>잔여 Urgent</td><td class="after">0건 (우선 게이트)</td></tr>
+        <tr><td>잔여 High</td><td class="after">5건 미만 (건별 PM·PL 협의)</td></tr>
+        <tr><td>Pass Rate</td><td class="after">95% 이상</td></tr>
+        <tr><td>Normal / Low</td><td>개별 게이트 없이 Pass Rate에 포함 → Known Issue로 관리</td></tr>
+      </tbody>
+    </table></div>
+    <p>개별 건을 놓고 매번 논쟁하는 대신 <strong>숫자로 판정 가능한 기준</strong>을 정의해 판정 비용을 줄였습니다.
+      <strong>QA는 충족 여부를 보고</strong>하고, <strong>GO/NO-GO 결정은 PM</strong>이 합니다 —
+      QA가 비즈니스 판단을 떠안지 않고 품질 사실에 집중할 수 있게 한 분리입니다.
+      프로덕션 긴급 수정은 Full Test 없이 자동화 기반 빠른 검증만 거치는 <strong>Hotfix 별도 트랙</strong>으로 분리해,
+      긴급 수정이 정규 절차를 무너뜨리지 않게 했습니다.</p>
+  </div>
+</details>
+
+<details>
+  <summary>QA Test Run 관리 도구 — 결과를 하나의 이력으로<span class="meta">Google Sheets + Apps Script</span></summary>
+  <div class="det">
+    <p>버전마다 마스터 시트에서 TC를 복사하고 결과를 각 버전 시트에 흩어 기록하다 보니,
+      <strong>“이 TC가 버전을 거치며 어떻게 됐나”</strong>는 여러 시트를 눈으로 따라가야 했습니다.
+      회귀 대상 선별 · 버전별 요약 · 추적성 근거도 매번 수동이었습니다.</p>
+    <div class="flow">
+      <div class="node git"><b>마스터 TC</b><em>요구사항 연결</em></div><div class="arrow">→</div>
+      <div class="node"><b>Test Run 시트</b><em>실행 · 결과 입력</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>Test Run History</b><em>축적 · 조회의 원천</em></div>
+    </div>
+    <div class="callout">
+      <b>쌓는 곳과 보는 곳의 분리</b> — History는 결과를 세로로 계속 쌓는 원천이고,
+      사람은 그 위에 얹은 조회 뷰로 봅니다.
+      <strong>DB 원본 테이블을 직접 뒤지지 않고 쿼리로 조회하는 것과 같은 구조</strong>입니다.
+    </div>
+    <div class="shots2"><figure class="shot"><img src="assets/img/tr-menu.jpg" alt="스프레드시트에 추가한 QA 메뉴. 생성 · 조회 · 정리 · 완료 기록이 한곳에 모인다." loading="lazy"><figcaption>스프레드시트에 추가한 QA 메뉴. 생성 · 조회 · 정리 · 완료 기록이 한곳에 모인다.</figcaption></figure><figure class="shot"><img src="assets/img/tr-summary.jpg" alt="📊 버전별 요약 — 총 TC · PASS · FAIL · NA · Pass Rate가 버전별로 자동 집계된다. 표 복사로 보고서에 그대로 붙인다." loading="lazy"><figcaption>📊 버전별 요약 — 총 TC · PASS · FAIL · NA · Pass Rate가 버전별로 자동 집계된다. 표 복사로 보고서에 그대로 붙인다.</figcaption></figure><figure class="shot"><img src="assets/img/tr-history.jpg" alt="🔎 TC 이력 조회 — 하나의 TC가 버전을 거치며 어떻게 됐는지 세로로 쌓인 History에서 뽑아 보여준다." loading="lazy"><figcaption>🔎 TC 이력 조회 — 하나의 TC가 버전을 거치며 어떻게 됐는지 세로로 쌓인 History에서 뽑아 보여준다.</figcaption></figure><figure class="shot"><img src="assets/img/tr-guide.jpg" alt="도구와 함께 작성한 사용자 가이드. 개요 · 메뉴 구성 · 최초 설정 · 생성/실행/완료/조회 · 유의사항으로 구성." loading="lazy"><figcaption>도구와 함께 작성한 사용자 가이드. 개요 · 메뉴 구성 · 최초 설정 · 생성/실행/완료/조회 · 유의사항으로 구성.</figcaption></figure></div>
+
+    <h4 class="h">회귀 승계 — RC2를 만드는 법</h4>
+    <p>소스를 <strong>기존 Test Run 시트</strong>에서 RC1로 두고 필터를 <code>P/F = FAIL, NA</code>로 걸면,
+      <strong>RC1에서 깨졌거나 미검증인 항목만</strong> P/F 빈 채로 승계됩니다.
+      RC 검증 절차의 “Retest + Regression”을 손이 아니라 도구가 계산합니다.</p>
+    <h4 class="h">이 도구로 답할 수 있게 된 질문</h4>
+    <div class="tw"><table>
+      <thead><tr><th>질문</th><th>답하는 방법</th></tr></thead>
+      <tbody>
+        <tr><td><strong>커버리지</strong> — 이번 버전에 뭘 검증했나?</td><td>Test Run 시트 + 통계 블록</td></tr>
+        <tr><td><strong>회귀 대상</strong> — 과거 FAIL 난 TC는?</td><td>History 필터 / 승계 생성</td></tr>
+        <tr><td><strong>배포 판단</strong> — 이 버전 Pass율은?</td><td class="after">버전별 요약 (Exit Criteria와 직결)</td></tr>
+        <tr><td><strong>추적성</strong> — 이 TC가 버전마다 어땠나?</td><td class="after">TC 이력 조회</td></tr>
+      </tbody>
+    </table></div>
+    <div class="why"><b>확산까지 설계</b>
+      자동 기입 트리거는 <strong>스프레드시트 자체에 설치</strong>되어 누가 편집하든 동작합니다.
+      팀원이 각자 켤 필요가 없습니다. 도구를 나눠주는 것과 팀이 실제로 쓰게 만드는 것은 다른 문제입니다.</div>
+  </div>
+</details>
+
+<details>
+  <summary>근본원인 분석 — 원인이 쌓이는 구조<span class="meta">전수 리뷰 · 10개 카테고리</span></summary>
+  <div class="det">
+    <p>버그 티켓은 쌓이는데 근본 원인은 자유 서술로 흩어지거나 아예 기록되지 않았습니다.
+      “어떤 유형의 원인이 반복되는가”를 아무도 정량적으로 답할 수 없었고,
+      구조화된 필드를 도입하자고 제안해도 <strong>설득 근거가 없었습니다.</strong></p>
+    <div class="flow">
+      <div class="node no"><b>자유 서술 · 미기록</b><em>집계 불가</em></div><div class="arrow">→</div>
+      <div class="node git"><b>전수 분석 (1회)</b><em>귀납적으로 10개 카테고리 도출</em></div><div class="arrow">→</div>
+      <div class="node"><b>선택형 필드 + 작성 의무화</b><em>Automation이 강제</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>원인 분포 자동 축적</b><em>이후 모든 버그가 데이터가 된다</em></div>
+    </div>
+    <div class="callout warm">
+      <b>“몇 건을 분석했는가”는 중요하지 않습니다.</b>
+      분석 시점의 건수는 계속 늘어나고, 그것이 이 체계가 의도한 결과입니다.
+      목적은 한 번의 정확한 집계가 아니라
+      <strong>버그가 늘어나는 동안에도 원인 분포가 자동으로 최신 상태를 유지하는 것</strong>이었습니다.
+    </div>
+    <p><strong>표본이 아니라 전수를 봤습니다.</strong> 분류 체계를 먼저 정의하고 티켓을 끼워 맞춘 것이 아니라,
+      실제 티켓에서 반복 패턴을 추출해 카테고리를 만들었기 때문에 현장의 결함 양상을 그대로 반영합니다.</p>
+    <h4 class="h">이 데이터가 흘러가는 곳</h4>
+    <ul>
+      <li>품질현황보고의 <strong>정량 근거</strong> — 반복 원인 상위 카테고리 기준으로 개선 우선순위 도출</li>
+      <li>정기 트리아지 · Known Issue 백로그 관리의 기초 데이터</li>
+      <li><strong>Regression TC Creator의 입력</strong> — Agent가 이 필드를 읽어 회귀 TC를 설계
+        <a href="agent.html">→ 04 AI Agent</a></li>
+    </ul>
+    <div class="callout"><b>핵심</b> — <strong>“제안하기 전에 전수를 본다”</strong>는 접근.
+      필드 하나를 추가하는 작은 프로세스 변경도 데이터 근거 위에서 제안하면 조직의 수용 속도가 달라집니다.</div>
+  </div>
+</details>
+</div><footer><div class="wrap wide">
+  <div class="pager"><a href="automation.html" style="text-align:right"><span class="k">다음</span><span class="t">MLOps 파이프라인 무인 회귀 검증 →</span></a></div>
+  <p style="margin-top:28px"><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer ·
+    <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
+    고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
+</div></footer>
+<script src="assets/site.js"></script>
+</body></html>
