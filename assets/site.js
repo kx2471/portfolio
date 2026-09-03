@@ -5,7 +5,7 @@
   var b=document.getElementById('tbtn');
   if(b) b.addEventListener('click', function(){
     var cur=root.getAttribute('data-theme');
-    if(!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    if(!cur) cur = 'light';   // 라이트가 기본
     var nx = cur==='dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', nx);
     try{ localStorage.setItem('pf-theme', nx); }catch(e){}
