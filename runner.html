@@ -17,10 +17,10 @@
 </div></nav>
 <header class="phead"><div class="wrap wide">
   <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 03 · QA Enablement</div>
-  <h1>테스트 러너 — 실행 권한을 팀 전체로</h1>
-  <p class="lede">자동화의 마지막 병목은 <strong>“실행 권한”</strong>이었습니다. 설치도 명령어도 없이 브라우저 주소 하나로 E2E를 돌리고 리포트까지 회수하는 셀프서비스 러너를 설계 · 구현 · 사용자 문서화까지 단독으로 진행했습니다.</p>
+  <h1>테스트 러너 — 누구나 검증할 수 있는 환경</h1>
+  <p class="lede">자동화를 잘 만들어도 <strong>돌릴 수 있는 사람이 정해져 있으면 팀의 검증 역량은 늘지 않습니다.</strong> 설치도 명령어도 없이 브라우저만 있으면 <strong>누구나 검증을 돌리고 결과를 확인할 수 있는 환경</strong>을 만들었습니다. 설계 · 구현 · 사용자 문서화까지 단독으로 진행했습니다.</p>
 </div></header>
-<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>스위트는 완성됐지만 돌리는 일은 터미널을 아는 한 사람의 몫이었고, 그 사람의 일정이 곧 검증 주기의 상한이었습니다.</p></div><div><h5>Action</h5><p>“도구를 모르는 사람이 눌러도 잘못될 수 없다”를 기준으로 설계했습니다.</p></div><div class="r"><h5>Result</h5><p>실행 주체가 QA 1인 → 개발·QA 팀원 전체. 설치 0단계 · 명령어 0줄.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>검증이 필요한 사람과 검증할 수 있는 사람이 달랐습니다. 스위트는 완성됐지만 터미널·환경 설정을 아는 사람만 돌릴 수 있었습니다.</p></div><div><h5>Action</h5><p>“도구를 모르는 사람이 눌러도 잘못될 수 없다”를 기준으로, 안전한 기본값과 자동 의존성 해결을 갖춘 실행 환경을 만들었습니다.</p></div><div class="r"><h5>Result</h5><p>개발자가 자기 수정 사항을 <strong>직접 확인</strong>하고, QA는 검증 설계에 집중할 수 있게 됐습니다.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>설계 판단 6가지 — 화면에 드러난 결정과 그 이유<span class="meta">실제 운영 중인 화면</span></summary>
   <div class="det">

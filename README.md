@@ -14,8 +14,8 @@ QA 프로세스 설계 · 테스트 자동화 · AI 도구 개발 기록.
 | `runner.html` | 테스트 러너 — 실행 권한을 팀 전체로 |
 | `agent.html` | AI Agent — Regression TC Creator |
 | `practice.html` | 검증 실무 — 산출물 · API 검증 · 업무 도구 |
-| `deck.html` | 슬라이드 버전 (발표용) |
-| `KimSangOk_QA_Portfolio.pdf` | PDF (A4 가로 77p) |
+
+| `KimSangOk_QA_Portfolio.pdf` | PDF (40p · 북마크 포함) |
 
 - 정적 HTML만 사용하며 외부 의존성이 없습니다.
 - 검색엔진 색인은 차단(`noindex`)되어 있습니다.

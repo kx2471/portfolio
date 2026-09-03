@@ -10,6 +10,32 @@
     root.setAttribute('data-theme', nx);
     try{ localStorage.setItem('pf-theme', nx); }catch(e){}
   });
+
+  /* ---- 랜딩 ↔ 상세 이동 시 스크롤 위치 복원 ---- */
+  (function(){
+    var path=location.pathname;
+    var isIndex = path.endsWith('/') || /(^|\/)index\.html?$/.test(path);
+    if(isIndex){
+      try{
+        var y=sessionStorage.getItem('pf-scroll');
+        if(y!==null){
+          sessionStorage.removeItem('pf-scroll');
+          var el=document.documentElement, prev=el.style.scrollBehavior;
+          el.style.scrollBehavior='auto';
+          window.scrollTo(0, parseInt(y,10)||0);
+          setTimeout(function(){ el.style.scrollBehavior=prev||''; }, 80);
+        }
+      }catch(e){}
+      document.addEventListener('click', function(e){
+        var a=e.target.closest && e.target.closest('a[href]');
+        if(!a) return;
+        var h=a.getAttribute('href')||'';
+        if(!h || h.charAt(0)==='#' || /^(https?:|mailto:|tel:)/.test(h)) return;
+        try{ sessionStorage.setItem('pf-scroll', String(window.scrollY||window.pageYOffset||0)); }catch(e){}
+      });
+    }
+  })();
+
   // scroll spy (랜딩 페이지에서만 동작)
   var links=[].slice.call(document.querySelectorAll('.menu a[href^="#"]'));
   if(!links.length) return;
