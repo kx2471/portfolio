@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>검증 실무 — 산출물 · API · 도구 · 김상옥</title>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-<meta name="googlebot" content="noindex, nofollow">
 <meta name="description" content="QA 표준 산출물, API 레벨 검증, 직접 만든 업무 자동화 도구.">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/report.css">
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
-  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
-  <div class="menu"><a href="process.html">Process Design</a><a href="automation.html">Test Automation</a><a href="runner.html">QA Enablement</a><a href="agent.html">AI in Workflow</a><a href="practice.html" class="on">Practice</a></div>
-  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html" class="on">CASE-05</a></div>
 </div></nav>
-<header class="phead"><div class="wrap wide">
-  <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 05 · Practice</div>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a> &nbsp;/&nbsp; CASE-05</div>
   <h1>검증 실무 — 산출물 · API 검증 · 업무 도구</h1>
   <p class="lede">SWR · TC · Defect · Xray 추적성 같은 QA 표준 산출물과, UI 뒤를 직접 두드리는 API 검증, 반복 업무를 줄이려고 만든 유틸리티들입니다.</p>
 </div></header>
-<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>요구사항–TC–결함이 따로 놀았고, UI에서 막히는 값이 서버에서도 막히는지는 확인되지 않았습니다.</p></div><div><h5>Action</h5><p>추적성 체계를 세우고, API 레벨로 내려가 검증하고, 반복은 도구로 줄였습니다.</p></div><div class="r"><h5>Result</h5><p>요구사항 커버리지와 결함 추적성 확보, 서버 측 검증 부재 발견·개선 주도.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>요구사항–TC–결함이 따로 놀았고, UI에서 막히는 값이 서버에서도 막히는지는 확인되지 않았습니다.</p></div><div><h5>Action</h5><p>추적성 체계를 세우고, API 레벨로 내려가 검증하고, 반복은 도구로 줄였습니다.</p></div><div class="r"><h5>Result</h5><p>요구사항 커버리지와 결함 추적성 확보, 서버 측 검증 부재 발견·개선 주도.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>QA 산출물 — 요구사항에서 결함까지 추적 가능하게<span class="meta">SWR · TC · Defect · Xray</span></summary>
   <div class="det">
@@ -43,7 +43,7 @@
             <td class="after">정형 기법으로 안 잡히는 <strong>엣지 케이스</strong></td></tr>
       </tbody>
     </table></div>
-    <div class="callout">
+    <div class="note">
       <b>기법을 나눠 관리한 이유</b> — 어떤 기법으로 만든 TC인지가 남아 있어야
       <strong>커버리지의 성격</strong>을 말할 수 있습니다.
       “TC 300개”보다 “요구사항 전 항목 대조 + 경계값 조합 + 과거 결함 기반 의심 영역”이
@@ -107,7 +107,7 @@
         <li>개선 방향까지 제안해 <strong>수정 주도</strong></li>
       </ul></div>
     </div>
-    <div class="callout">
+    <div class="note">
       화면 기준 테스트만 했다면 <strong>끝까지 발견되지 않았을 결함</strong>입니다.
       그 뒤로 폼이 있는 기능은 <strong>UI 통과와 API 통과를 별도의 검증 항목</strong>으로 나눠 씁니다.
     </div>
@@ -148,13 +148,13 @@
       그리고 만들 때는 실패 케이스(링크 누락, 경로 못 찾음, 무한 루프)를 설계 범위에 넣었습니다.</div>
   </div>
 </details>
-</div><footer><div class="wrap wide">
-  <div class="pager"><a href="agent.html"><span class="k">이전</span><span class="t">← AI Agent — Regression TC Creator</span></a></div>
-  <p style="margin-top:28px"><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer ·
-    <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+</div><footer><div class="wrap">
+  <div class="pager"><a href="agent.html"><span class="k">PREV · CASE-04</span><span class="t">← AI Agent — Regression TC Creator</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-05 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
     고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
 </div></footer>
-<script src="assets/site.js"></script>
+<script src="assets/report.js"></script>
 </body></html>

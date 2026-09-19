@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>테스트 러너 · 김상옥</title>
+<title>테스트 러너 — 모두가 검증할 수 있는 환경 · 김상옥</title>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-<meta name="googlebot" content="noindex, nofollow">
 <meta name="description" content="224 TC 규모 E2E 자동화를 팀 전체가 쓸 수 있게 만든 셀프서비스 실행 UI 설계 기록.">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/report.css">
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
-  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
-  <div class="menu"><a href="process.html">Process Design</a><a href="automation.html">Test Automation</a><a href="runner.html" class="on">QA Enablement</a><a href="agent.html">AI in Workflow</a><a href="practice.html">Practice</a></div>
-  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html" class="on">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
 </div></nav>
-<header class="phead"><div class="wrap wide">
-  <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 03 · QA Enablement</div>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a> &nbsp;/&nbsp; CASE-03</div>
   <h1>테스트 러너 — 모두가 검증할 수 있는 환경</h1>
   <p class="lede">전사가 <strong>같은 제품을 만들고 있는데, 그 제품을 검증할 수 있는 사람은 몇 명뿐</strong>이었습니다. 만드는 사람이라면 누구나 자기가 바꾼 것을 직접 확인할 수 있어야 한다고 봤습니다. 그래서 설치도 명령어도 없이 <strong>브라우저만 있으면 검증이 돌아가는 환경</strong>을 만들었고, 설계 · 구현 · 사용자 문서화까지 단독으로 진행했습니다.</p>
 </div></header>
-<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>같은 제품을 함께 만드는데 <strong>품질 확인은 QA를 거쳐야만</strong> 이뤄졌습니다. 스위트는 완성됐지만 터미널·환경 설정을 아는 사람만 돌릴 수 있었습니다.</p></div><div><h5>Action</h5><p>“도구를 모르는 사람이 눌러도 잘못될 수 없다”를 기준으로, 안전한 기본값과 자동 의존성 해결을 갖춘 검증 환경을 만들었습니다.</p></div><div class="r"><h5>Result</h5><p>만든 사람이 <strong>자기가 바꾼 것을 직접 검증</strong>하고, QA는 무엇을 어떻게 검증할지 <strong>설계하는 데 집중</strong>합니다.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
-<div class="callout" style="margin-bottom:18px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>같은 제품을 함께 만드는데 <strong>품질 확인은 QA를 거쳐야만</strong> 이뤄졌습니다. 스위트는 완성됐지만 터미널·환경 설정을 아는 사람만 돌릴 수 있었습니다.</p></div><div><h5>Action</h5><p>“도구를 모르는 사람이 눌러도 잘못될 수 없다”를 기준으로, 안전한 기본값과 자동 의존성 해결을 갖춘 검증 환경을 만들었습니다.</p></div><div class="r"><h5>Result</h5><p>만든 사람이 <strong>자기가 바꾼 것을 직접 검증</strong>하고, QA는 무엇을 어떻게 검증할지 <strong>설계하는 데 집중</strong>합니다.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="note" style="margin-bottom:18px">
   <b>제가 만들고 싶었던 것</b> — 전사가 하나의 제품을 만들고 있다면
   <strong>만드는 사람 누구나 자기가 바꾼 것을 확인할 수 있어야</strong> 하고,
   QA가 할 일은 그 확인을 <strong>가능하게 만드는 것</strong>이라고 봤습니다.
@@ -31,7 +31,7 @@
   제 목표는 도구 하나가 아니라 <strong>그런 검증 환경을 구축하는 것</strong>이었고,
   <strong>이 러너는 그 일환으로 만들었습니다.</strong>
 </div>
-<div class="callout warm" style="margin-bottom:20px">
+<div class="note warn" style="margin-bottom:20px">
   <b>환경은 도구 하나로 만들어지지 않습니다</b> — 누구나 검증하려면 세 가지가 함께 있어야 했습니다.<br>
   · <strong>실행</strong> — 설치·명령어 없이 돌릴 수 있는가 <span class="nb">(이 러너)</span><br>
   · <strong>해석</strong> — 결과를 보고 스스로 판단할 수 있는가 <span class="nb">(리포트 설계 · 아래)</span><br>
@@ -101,7 +101,7 @@
     <div class="shots2"><figure class="shot"><img src="assets/img/run-report1.jpg" alt="리포트 상단 요약. 네 상태의 합이 전체 건수와 일치한다." loading="lazy"><figcaption>리포트 상단 요약. 네 상태의 합이 전체 건수와 일치한다.</figcaption></figure><figure class="shot"><img src="assets/img/run-report2.jpg" alt="검증 포인트를 펼친 모습. 줄 끝의 “화면”을 누르면 그 시점 스크린샷이 열린다." loading="lazy"><figcaption>검증 포인트를 펼친 모습. 줄 끝의 “화면”을 누르면 그 시점 스크린샷이 열린다.</figcaption></figure></div>
     <p>각 테스트의 <strong>검증 포인트</strong>를 펼치면 무엇을 어떤 순서로 확인했는지가 나오고,
       줄 끝의 “화면”을 누르면 그 시점 스크린샷이 열립니다. <strong>통과한 테스트에도 동일하게 붙습니다.</strong></p>
-    <div class="callout">
+    <div class="note">
       실패 항목은 <strong>그 시점 화면이 리포트 파일 안에</strong> 들어 있습니다.
       링크나 별도 첨부 없이 리포트 하나만 전달해도 상대가 그대로 볼 수 있습니다 —
       개발자에게 재현 요청을 넘길 때의 <strong>왕복을 줄이기 위한 설계</strong>입니다.
@@ -137,7 +137,7 @@
       <li><strong>문서를 화면에 종속시킨다</strong> — 실제 화면 캡처를 그대로 담고,
         화면이 바뀌면 문서도 함께 갱신하는 것을 전제로 구성</li>
     </ul>
-    <div class="callout warm">
+    <div class="note warn">
       <b>이 문서 자체가 산출물입니다.</b> 도구를 만든 사람이 문서까지 책임지지 않으면
       결국 문의가 다시 그 사람에게 돌아오고, <strong>병목은 형태만 바꿔 유지</strong>됩니다.
     </div>
@@ -153,7 +153,7 @@
         <tr><td>결과 회수</td><td class="before">서버에 남고 개인 PC로 가져올 경로 없음</td><td class="after">리포트 · 스크린샷 zip 원클릭 다운로드</td></tr>
       </tbody>
     </table></div>
-    <div class="callout">
+    <div class="note">
       <b>이 작업에서 보여준 방식</b><br>
       · <strong>검증을 나눠 갖는 구조를 만든다</strong> — 품질 책임을 QA에 몰아두지 않고, 만든 사람이 직접 확인하게<br>
       · <strong>자동화는 돌아가는 순간이 아니라, 남이 쓸 수 있을 때 끝난다</strong> — 실행 UI와 사용자 문서를 자동화의 일부로 봄<br>
@@ -163,13 +163,13 @@
     </div>
   </div>
 </details>
-</div><footer><div class="wrap wide">
-  <div class="pager"><a href="automation.html"><span class="k">이전</span><span class="t">← MLOps 파이프라인 무인 회귀 검증</span></a><a href="agent.html" style="text-align:right"><span class="k">다음</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
-  <p style="margin-top:28px"><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer ·
-    <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+</div><footer><div class="wrap">
+  <div class="pager"><a href="automation.html"><span class="k">PREV · CASE-02</span><span class="t">← MLOps 파이프라인 무인 회귀 검증</span></a><a href="agent.html" style="text-align:right"><span class="k">NEXT · CASE-04</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-03 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
     고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
 </div></footer>
-<script src="assets/site.js"></script>
+<script src="assets/report.js"></script>
 </body></html>

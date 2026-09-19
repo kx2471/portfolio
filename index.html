@@ -5,379 +5,363 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>김상옥 · SW QA Engineer</title>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-<meta name="googlebot" content="noindex, nofollow">
 <meta name="description" content="QA 프로세스를 0에서 1로 만들고, 반복은 자동화하고, 필요한 도구는 직접 만드는 SW QA 엔지니어 김상옥의 포트폴리오.">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/report.css">
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
-  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
-  <div class="menu"><a href="#about">About</a><a href="#skills">Skills</a><a href="#work">Work</a><a href="#career">Career</a><a href="#side">Side</a><a href="#archiving">Archiving</a></div>
-  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu">
+    <a href="#summary">Summary</a><a href="#cases">Cases</a><a href="#checks">Verified</a>
+    <a href="#career">Career</a><a href="#side">Side</a><a href="#contact">Contact</a>
+  </div>
 </div></nav>
 
-<header class="hero" id="top">
-  <div class="wrap wide hero-in">
-    <div class="hero-main">
-      <h1 class="hello">
-        <span class="hi">안녕하세요,</span>
-        체계를 세우고 반복을 자동화하는<br><em>SW QA 엔지니어 김상옥</em>입니다.
-      </h1>
-      <p class="hero-lede">
-        표준이 있는 곳에선 정착시키고, 없는 곳에선 만듭니다.
-        자동차 임베디드에서 시작해 공공·교육 웹을 거쳐, 지금은 산업 AI 비전 검수 플랫폼
-        <strong>Daisy</strong>의 품질을 책임지고 있습니다.
-        도메인은 세 번 바뀌었지만 들어가서 한 일의 순서는 늘 같았습니다 —
-        <strong>체계를 세우고, 반복을 자동화하고, 프로세스로 풀리지 않는 것은 도구를 직접 만들어</strong> 풀었습니다.
-      </p>
-      <div class="chips">
-        <span class="chip">📱 010-4482-2033</span>
-        <a class="chip" href="mailto:kx2471@gmail.com">✉️ kx2471@gmail.com</a>
-        <a class="chip" href="https://github.com/kx2471" target="_blank" rel="noopener">💻 github.com/kx2471</a>
-      </div>
-      <a class="scrollcue" href="#about">더 알아보기 <i>↓</i></a>
+<header class="rpt" id="top">
+  <div class="wrap">
+    <div class="rpt-meta">
+      <span><b>Report</b> SW QA Engineer</span>
+      <span><b>Period</b> 2023.02 — 현재</span>
+      <span><b>Domain</b> 자동차 → 공공·교육 → 산업 AI</span>
     </div>
-    <div class="portrait"><img src="assets/img/profile.jpg" alt="김상옥"></div>
+    <div class="rpt-title">
+      <div class="rpt-title-main">
+        <h1>체계를 세우고,<br>반복을 자동화합니다.</h1>
+        <div class="sub">김상옥 · Kim Sang-Ok</div>
+      </div>
+      <figure class="rpt-photo"><img src="assets/img/profile.jpg" alt="김상옥"></figure>
+    </div>
+    <p class="lede">
+      표준이 있는 곳에선 정착시키고, 없는 곳에선 만듭니다.
+      지금은 산업 AI 비전 검수 플랫폼 <strong>Daisy</strong>의 품질을 책임지며,
+      <strong>프로세스 · 자동화 · 도구</strong>를 0에서 설계하고 있습니다.
+    </p>
+    <div class="summary" id="summary">
+      <div class="pass"><div class="n">4년</div><div class="k">SW QA 경력 · 3개 도메인</div></div>
+      <div class="pass"><div class="n">0 → 1</div><div class="k">QA 프로세스 부재 환경에서 체계 구축</div></div>
+      <div class="pass"><div class="n">1일 → 한 줄</div><div class="k">릴리스 회귀 검증 무인 자동화</div></div>
+      <div class="neutral"><div class="n">5</div><div class="k">직접 만들어 사내에 배포한 도구</div></div>
+    </div>
   </div>
 </header>
 
-<section id="about">
+<section id="cases">
   <div class="wrap">
-    <div class="sec-label">About me</div>
-    <h2 class="sec">어떻게 일하는 사람인가</h2>
-    <p class="sec-sub">정형화된 표준 아래에서 대규모 검증을 운영해봤고, 표준이 없는 곳에서는 직접 만들어봤습니다.
-      <strong>두 경험을 모두 가진 것</strong>이 제 강점입니다.</p>
-    <div class="grid g3">
-      <div class="card"><h3>🧭 프로세스 설계 — 정착과 구축</h3>
-        <p>ASPICE Level 1 SWE.6 인증 환경에서의 <strong>구조적 QA 수행</strong>과, 프로세스 부재 환경에서
-          이슈 트래커 워크플로우 · Git 브랜치 전략 · 자동화 규칙을 <strong>0에서 설계</strong>한 경험을 모두 보유.</p></div>
-      <div class="card"><h3>⚙️ 테스트 자동화 · 회귀 검증</h3>
-        <p>Playwright · Node.js 기반 MLOps E2E 회귀 시스템(실서버 3-worker 병렬) 1인 설계·구축·운영,
-          <strong>팀 셀프서비스 실행 러너 구축</strong>, Selenium UI 자동화, Postman API 검증, Jenkins · GitHub Actions 연계.</p></div>
-      <div class="card"><h3>🚗 자동차 임베디드 검증</h3>
-        <p>HILs 기반 IVI 시스템 검증, CAN 통신·CANoe 기반 네트워크 검증, 자율주행 제어 애플리케이션 검증,
-          <strong>KOLAS 공인 신뢰성 검사 통과</strong>.</p></div>
-      <div class="card"><h3>🔐 웹 품질 · 보안 점검</h3>
-        <p>KRDS 웹 접근성 검증, REST API 검증 과정에서 <strong>서버 측 검증 로직 부재를 지적하고 개선 주도</strong>,
-          Burp Suite · Lighthouse 기반 웹 보안·품질 진단.</p></div>
-      <div class="card"><h3>🤖 AI 활용 · 도구 직접 제작</h3>
-        <p>Claude Agent 기반 Regression TC Creator, Slack + AWS Lambda 기반 QA Request 봇,
-          Google Apps Script 기반 QA Test Run 관리 도구, OCR 매크로 · KPI Calculator 등 실무 유틸리티 직접 개발.</p></div>
-      <div class="card"><h3>📋 협업 · 문서화</h3>
-        <p>Jira · Xray · Jira Automation · ClickUp · Confluence 기반 테스트 관리, 애자일 스크럼 운영,
-          <strong>월간/분기 품질현황보고 경영진 보고</strong> 경험.</p></div>
-    </div>
-    <div class="callout" style="margin-top:26px">
-      <b>일하는 순서</b> — ① 체계를 세운다: 표준이 있으면 정착시키고, 없으면 만든다 ·
-      ② 반복을 자동화한다: 한 번 손으로 한 검증은 다시 손으로 하지 않는다 ·
-      ③ 필요한 도구를 직접 만든다: 프로세스로 안 풀리면 코드로 푼다
-    </div>
-  </div>
-</section>
+    <div class="sec-head"><span class="sec-id">CASES</span><h2 class="sec">대표 작업</h2></div>
+    <p class="sec-sub">각 작업은 <strong>문제 → 한 일 → 결과</strong>로 정리했고,
+      설계 판단과 실제 운영 화면은 상세 페이지에 있습니다. <span class="nb">(민감 정보는 비식별 처리)</span></p>
 
-<section id="skills">
-  <div class="wrap">
-    <div class="sec-label">Skills</div>
-    <h2 class="sec">기술 스택</h2>
-    <p class="sec-sub">실무에서 직접 쓴 것만 적었습니다.</p>
-    <div class="grid g3">
-      <div class="card"><h3>테스트 관리 · 협업</h3><div class="tags"><span>Jira</span><span>Jira Xray</span><span>Jira Automation</span><span>ClickUp</span><span>Confluence</span><span>Slack</span><span>Notion</span></div></div>
-      <div class="card"><h3>테스트 자동화 · 스크립팅</h3><div class="tags"><span>Playwright</span><span>Selenium</span><span>Postman</span><span>Python</span><span>Node.js</span><span>Shell Script</span><span>Jenkins</span><span>GitHub Actions</span></div></div>
-      <div class="card"><h3>AI · LLM 활용</h3><div class="tags"><span>Claude Agent</span><span>MCP (ClickUp · Google Sheets)</span><span>LLM 응답 정확도 검증</span></div></div>
-      <div class="card"><h3>자동차 HILs · 진단</h3><div class="tags"><span>Vector CANoe</span><span>CANalyzer</span><span>Monaco</span><span>ETFW</span><span>DCM 연동</span></div></div>
-      <div class="card"><h3>웹 보안 · 품질 진단</h3><div class="tags"><span>Burp Suite</span><span>Lighthouse</span><span>KRDS 웹 접근성</span></div></div>
-      <div class="card"><h3>로그 분석 · 모니터링</h3><div class="tags"><span>DLT Viewer</span><span>Android ADB</span><span>커스텀 로그 필터</span></div></div>
-      <div class="card"><h3>서버리스 · 백엔드 연동</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Google Sheets API</span><span>Google Apps Script</span></div></div>
-      <div class="card"><h3>검증 환경 · 플랫폼</h3><div class="tags"><span>Linux 기반 IVI</span><span>HILs 장비</span><span>실차 테스트</span><span>Web / Mobile</span><span>AI/ML Vision Inspection</span><span>LLM 기반 시스템</span></div></div>
-      <div class="card"><h3>기타</h3><div class="tags"><span>Git</span><span>GitHub</span><span>Figma</span><span>TypeScript</span></div></div>
-    </div>
-  </div>
-</section>
-
-<section id="work">
-  <div class="wrap wide">
-    <div class="sec-label">Work</div>
-    <h2 class="sec">대표 작업</h2>
-    <p class="sec-sub">각 항목은 <strong>문제 → 한 일 → 결과</strong>로 정리했고,
-      설계 판단과 실제 운영 화면은 상세 페이지에 담았습니다.
-      <span class="nb">(민감 정보는 비식별 처리)</span></p>
-    <div class="grid g2">
-      <a class="worklink" href="process.html">
-        <span class="wtag">01 · Process Design</span>
+    <div class="cases">
+      <a class="case" href="process.html">
+        <div class="case-top">
+          <span class="case-id">CASE-01</span>
+          <span class="chip-st st-pass">운영 중</span>
+        </div>
         <h3>QA 프로세스를 0에서 1로</h3>
         <p>이슈 관리 체계가 없던 환경에 워크플로우 · Priority 기준 · Root Cause 의무화 ·
           배포 게이트 · RC 검증 절차를 설계하고, 규칙이 실제로 동작하도록 자동화까지 붙였습니다.</p>
-        <div class="tags" style="margin-bottom:12px"><span>워크플로우 설계</span><span>QA Request 봇</span><span>배포 게이트</span><span>RC 검증</span><span>Test Run 도구</span><span>RCA</span></div>
-        <span class="more">자세히 보기 →</span>
+        <div class="metrics">
+          <div>워크플로우 <b>Git 연동</b></div>
+          <div>배포 게이트 <b>NO-GO 차단권</b></div>
+          <div>Exit Criteria <b>수치 판정</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
       </a>
-      <a class="worklink" href="automation.html">
-        <span class="wtag">02 · Test Automation</span>
+
+      <a class="case" href="automation.html">
+        <div class="case-top">
+          <span class="case-id">CASE-02</span>
+          <span class="chip-st st-pass">운영 중</span>
+        </div>
         <h3>MLOps 파이프라인 무인 회귀 검증</h3>
         <p>실서버 · 단일 공유 계정 · 고비용 학습이라는 제약 위에서 테스트가 서로를 깨뜨리지 않는 구조를 설계해,
           하루 이상 걸리던 릴리스 검증을 명령 한 줄로 바꿨습니다.</p>
-        <div class="tags" style="margin-bottom:12px"><span>Playwright</span><span>3-worker 병렬</span><span>픽스처 재사용</span><span>트러블슈팅</span><span>Slack 리포터</span></div>
-        <span class="more">자세히 보기 →</span>
+        <div class="metrics">
+          <div>병렬 <b>3 worker</b></div>
+          <div>전처리 <b>-39%</b></div>
+          <div>학습 <b>타입당 1회</b></div>
+          <div>확장 <b>아키텍처 무변경</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
       </a>
-      <a class="worklink" href="runner.html">
-        <span class="wtag">03 · QA Enablement</span>
+
+      <a class="case" href="runner.html">
+        <div class="case-top">
+          <span class="case-id">CASE-03</span>
+          <span class="chip-st st-pass">운영 중</span>
+        </div>
         <h3>테스트 러너 — 모두가 검증할 수 있는 환경</h3>
-        <p>전사가 <strong>같은 제품을 만드는데 그 제품을 검증할 수 있는 사람은 몇 명뿐</strong>이었습니다.
-          만드는 사람이라면 누구나 자기가 바꾼 것을 직접 확인할 수 있어야 한다고 봤습니다.
-          <strong>그런 검증 환경을 구축하는 것이 목표</strong>였고, 이 러너는 그 일환입니다.</p>
-        <div class="tags" style="margin-bottom:12px"><span>품질 책임의 분산</span><span>QA 이네이블먼트</span><span>셀프서비스 UI</span><span>안전한 기본값</span><span>의존성 자동 해결</span><span>사용자 문서화</span></div>
-        <span class="more">자세히 보기 →</span>
+        <p>전사가 같은 제품을 만드는데 검증할 수 있는 사람은 몇 명뿐이었습니다.
+          만드는 사람이라면 누구나 자기가 바꾼 것을 확인할 수 있어야 한다고 봤고,
+          그런 <strong>검증 환경을 구축하는 것이 목표</strong>였습니다. 이 러너는 그 일환입니다.</p>
+        <div class="metrics">
+          <div>설치 <b>0단계</b></div>
+          <div>명령어 <b>0줄</b></div>
+          <div>선행 의존 <b>자동 해결</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
       </a>
-      <a class="worklink" href="agent.html">
-        <span class="wtag">04 · AI in Workflow</span>
+
+      <a class="case" href="agent.html">
+        <div class="case-top">
+          <span class="case-id">CASE-04</span>
+          <span class="chip-st st-pass">사내 확산</span>
+        </div>
         <h3>AI Agent — Regression TC Creator</h3>
         <p>제가 의무화한 Root Cause 기록을 읽어 회귀 TC를 설계하고 시트·티켓까지 연결하는 Claude Agent.
-          정책을 만든 사람이 그 정책이 남긴 데이터를 쓰는 도구를 직접 만들었습니다.</p>
-        <div class="tags" style="margin-bottom:12px"><span>Claude Agent</span><span>MCP</span><span>3단계 게이팅</span><span>안전장치</span><span>사내 확산</span></div>
-        <span class="more">자세히 보기 →</span>
+          <strong>정책을 만든 사람이 그 정책이 남긴 데이터를 쓰는 도구를 직접 만들었습니다.</strong></p>
+        <div class="metrics">
+          <div>호출 <b>티켓 ID 한 줄</b></div>
+          <div>쓰기 <b>3단계 게이팅</b></div>
+          <div>타 팀 <b>개선 사례 공유</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
       </a>
-      <a class="worklink" href="practice.html">
-        <span class="wtag">05 · Practice</span>
+
+      <a class="case" href="practice.html">
+        <div class="case-top">
+          <span class="case-id">CASE-05</span>
+          <span class="chip-st st-pass">상시</span>
+        </div>
         <h3>검증 실무 — 산출물 · API 검증 · 업무 도구</h3>
         <p>SWR · TC · Defect · Xray 추적성 같은 QA 표준 산출물과, UI 뒤를 직접 두드리는 API 검증,
           반복 업무를 줄이려고 만든 유틸리티들.</p>
-        <div class="tags" style="margin-bottom:12px"><span>Xray 추적성</span><span>TC 설계 기법</span><span>API 검증</span><span>Postman</span><span>Python 도구</span></div>
-        <span class="more">자세히 보기 →</span>
+        <div class="metrics">
+          <div>추적성 <b>요구사항 ↔ TC ↔ 결함</b></div>
+          <div>API <b>서버 검증 부재 발견</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
       </a>
+    </div>
+  </div>
+</section>
+
+<section id="checks">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">VERIFIED</span><h2 class="sec">확인된 역량</h2></div>
+    <p class="sec-sub">직접 수행했고, 상세 페이지에 <strong>실제 화면과 판단 근거</strong>가 있는 항목들입니다.</p>
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">프로세스 설계 — 정착과 구축</div>
+        <div class="d">ASPICE Level 1 SWE.6 인증 환경의 구조적 QA 수행과, 프로세스 부재 환경에서
+          워크플로우 · Git 브랜치 전략 · 자동화 규칙을 0에서 설계한 경험을 모두 보유.</div></div>
+        <div class="tag">CASE-01</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">테스트 자동화 · 회귀 검증</div>
+        <div class="d">Playwright · Node.js 기반 MLOps E2E 회귀 시스템(실서버 3-worker 병렬) 1인 설계·구축·운영,
+          팀 셀프서비스 실행 러너 구축, Selenium UI 자동화, Jenkins · GitHub Actions 연계.</div></div>
+        <div class="tag">CASE-02·03</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">AI 활용 · 도구 직접 제작</div>
+        <div class="d">Claude Agent 기반 Regression TC Creator, Slack + AWS Lambda 기반 QA Request 봇,
+          Google Apps Script 기반 QA Test Run 관리 도구, OCR 매크로 · KPI Calculator 등 실무 유틸리티.</div></div>
+        <div class="tag">CASE-04</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">자동차 임베디드 검증</div>
+        <div class="d">HILs 기반 IVI 시스템 검증, CAN 통신 · CANoe 기반 네트워크 검증,
+          자율주행 제어 애플리케이션 검증, KOLAS 공인 신뢰성 검사 통과.</div></div>
+        <div class="tag">CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">웹 품질 · 보안 점검</div>
+        <div class="d">KRDS 웹 접근성 검증, REST API 검증 과정에서 서버 측 검증 로직 부재를 지적하고 개선 주도,
+          Burp Suite · Lighthouse 기반 웹 보안·품질 진단.</div></div>
+        <div class="tag">CASE-05</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">협업 · 문서화</div>
+        <div class="d">Jira · Xray · Jira Automation · ClickUp · Confluence 기반 테스트 관리,
+          애자일 스크럼 운영, 월간/분기 품질현황보고 경영진 보고 경험.</div></div>
+        <div class="tag">ALL</div></div>
+    </div>
+
+    <h4 class="h" style="margin-top:34px">기술 스택</h4>
+    <div class="grid g3">
+      <div class="card"><h3>테스트 관리 · 협업</h3><div class="tags"><span>Jira</span><span>Xray</span><span>Jira Automation</span><span>ClickUp</span><span>Confluence</span><span>Slack</span></div></div>
+      <div class="card"><h3>자동화 · 스크립팅</h3><div class="tags"><span>Playwright</span><span>Selenium</span><span>Postman</span><span>Python</span><span>Node.js</span><span>Shell</span><span>Jenkins</span><span>GitHub Actions</span></div></div>
+      <div class="card"><h3>AI · LLM</h3><div class="tags"><span>Claude Agent</span><span>MCP</span><span>LLM 정확도 검증</span></div></div>
+      <div class="card"><h3>자동차 HILs · 진단</h3><div class="tags"><span>Vector CANoe</span><span>CANalyzer</span><span>Monaco</span><span>ETFW</span><span>DCM</span></div></div>
+      <div class="card"><h3>웹 보안 · 품질</h3><div class="tags"><span>Burp Suite</span><span>Lighthouse</span><span>KRDS</span></div></div>
+      <div class="card"><h3>서버리스 · 연동</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Google Sheets API</span><span>Apps Script</span></div></div>
     </div>
   </div>
 </section>
 
 <section id="career">
-  <div class="wrap wide">
-    <div class="sec-label">Career &amp; Projects</div>
-    <h2 class="sec">경력과 프로젝트</h2>
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-id">CAREER</span><h2 class="sec">경력과 프로젝트</h2></div>
     <p class="sec-sub">도메인은 <strong>자동차 임베디드 → 공공·교육 웹 → 산업 AI 비전</strong>으로 바뀌었지만,
-      들어가서 한 일의 순서는 늘 같았습니다. 회사별로 맡은 프로젝트를 함께 정리했습니다.</p>
+      들어가서 한 일의 순서는 늘 같았습니다.</p>
 
     <div class="tl">
-
-      <!-- ===== 아하랩스 ===== -->
       <div class="tl-item">
         <div class="tl-d">2026.02 — 현재</div>
-        <div class="tl-t">아하랩스</div>
+        <div class="tl-t">아하랩스 <span class="chip-st st-pass" style="margin-left:6px;vertical-align:middle">재직 중</span></div>
         <div class="tl-r">QA Engineer · SW QA 담당</div>
-        <div class="tl-n">산업 AI 비전 검수 플랫폼 Daisy의 품질 검증 총괄.
-          QA 프로세스 0 → 1 구축, MLOps E2E 회귀 자동화 1인 구축·운영, 다수 고객사 배포 QA 동시 운영.<br>
+        <div class="tl-n">산업 AI 비전 검수 플랫폼 Daisy의 품질 검증 총괄.<br>
           <strong>프로세스와 자동화를 둘 다 0에서 설계하고, AI를 워크플로우에 편입시킨 경험.</strong></div>
-
         <details class="prj" open>
           <summary>프로젝트 6건<span class="meta">Daisy · 대한송유관공사 · 부천 · 기아자동차 · LG U+ · 뉴퍼마켓</span></summary>
-          <div class="det">
-            <div class="grid g3">
-          <div class="card"><h3>🏭 Daisy AI Ops Platform</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2026.02 ~ 현재 · QA Engineer</p>
-            <p>스마트팩토리 AI 비전 검사 플랫폼. 기능 검증·배포 QA와 함께 <strong>QA 프로세스를 0에서 구축</strong>했습니다.</p>
-            <ul style="margin-bottom:8px">
-              <li>워크플로우 · 배포 게이트 · RC 검증 · RCA 체계 설계 <a href="process.html">→</a></li>
-              <li>MLOps 무인 회귀 검증 · 셀프서비스 러너 <a href="automation.html">→</a></li>
-              <li>Claude Agent 기반 회귀 TC 자동 생성 <a href="agent.html">→</a></li>
-            </ul>
-            <p style="margin-bottom:0">요구사항 ↔ TC ↔ 결함 <strong>추적성 체계를 구축</strong>해 신규 기능
-              <strong>요구사항 커버리지 100%</strong> 달성.</p></div>
-
-          <div class="card"><h3>🛢️ 대한송유관공사 — AI 누유 검출</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2026.04 ~ · 검증 담당 · 호서 구간 시범</p>
-            <p>배관 감시 시스템의 <strong>오알람 저감</strong>을 위한 AI 누유 예측 모델과 대시보드 검증.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>지표를 어떻게 세는지부터 확인</strong> — 누유감지율·오알람률의 1분 단위 집계 기준 검증.
-                모델이 맞았는지보다 <em>맞았다고 판정하는 방식</em>이 먼저</li>
-              <li>압력 <strong>초당 1,000건</strong> 시계열 처리와 TCP 소켓 준실시간 수집 연동</li>
-              <li><strong>통신 단절·재연결 데이터 유실</strong> 시나리오와 캐시 보존 제약 반영 장애 대응</li>
-            </ul></div>
-
-          <div class="card"><h3>🧵 부천 — 필터 원단 불량 검출</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2026.05 ~ 2026.07 · 검증 담당 · 3개 라인</p>
-            <p>광학계와 AI PC로 <strong>불량을 실시간 검출하고 검단기를 정지</strong>시키는 솔루션 도입 검증.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>설비가 실제로 멈추는지까지가 검증 범위</strong> — 촬영 → 이상 감지 →
-                <strong>정지 트리거 전송·수신</strong> → 검출 내역 확인 → 재구동 E2E</li>
-              <li>AI PC 1대 : 검단기 1대 구성에서 3개 라인 동시 운영 실시간 처리</li>
-              <li><strong>조명·광학계 고정 상태가 흔들릴 때의 검출 편차</strong> 확인</li>
-            </ul></div>
-
-          <div class="card"><h3>🔧 기아자동차 — 토크 검사 ABS</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2026.06 ~ 2026.08 · 검증 담당 · PoC</p>
-            <p>토크 스패너 측정값이 <strong>차량의 어느 체결부에서 측정된 것인지</strong>를 영상 딥러닝으로 판별하는 과제의 타당성 검증.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>목적에 맞는 판정 기준을 세웠습니다</strong> — 완전 판별이 아니라 실현 가능성 확인이 목적인 PoC라,
-                통과/실패가 아닌 <em>가능 여부의 근거</em>를 산출물로</li>
-              <li>촬영 <strong>각도 · 조명 · 거리</strong>를 달리한 영상 세트로 판별 가능 여부 검증</li>
-              <li>오판 케이스 분류, 작업 순서 오류 시나리오로 <strong>기존 순서 기반 저장 방식의 한계</strong> 확인</li>
-            </ul></div>
-
-          <div class="card"><h3>🔗 LG U+ — KLK 온톨로지 대시보드</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2026.06 ~ · 검증 담당</p>
-            <p>데이터 · 메타데이터 · 비즈니스 용어를 <strong>AI 온톨로지로 구조화</strong>해 관리·운영하는 대시보드 검증.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>한 곳을 바꿨을 때 연결된 것이 따라오는지</strong> — 용어 등록·수정·삭제 시
-                연결된 온톨로지 반영 <strong>정합성</strong> 검증</li>
-              <li>데이터 · 메타데이터 · 비즈니스 용어 간 관계 매핑 결과 검증</li>
-            </ul></div>
-
-          <div class="card"><h3>🛒 뉴퍼마켓 — LLM 기반 ERP 매칭</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2026.02 ~ 2026.04 · QA Engineer</p>
-            <p>LLM으로 ERP 품목을 자동 매칭하는 시스템의 기능 검증과 <strong>응답 정확도 검증</strong>.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>LLM 매칭 결과의 정확도 검증 기준을 수립</strong> — 정답이 하나로 정해지지 않는 출력을 판정 가능한 형태로</li>
-              <li>Figma Export 기반 UI 요구사항 분석 → TC 설계</li>
-              <li>HTTP 통신 보안 취약점 조사 → 개선 사항 도출</li>
-            </ul></div>
-          </div>
-        </div>
-      </details>
+          <div class="det"><div class="grid g3">
+            <div class="card"><h3>🏭 Daisy AI Ops Platform</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.02 ~ 현재 · QA Engineer</p>
+              <p>스마트팩토리 AI 비전 검사 플랫폼. 기능 검증·배포 QA와 함께 <strong>QA 프로세스를 0에서 구축</strong>.</p>
+              <ul style="margin-bottom:7px">
+                <li>워크플로우 · 배포 게이트 · RC · RCA 설계 <a href="process.html">→</a></li>
+                <li>MLOps 무인 회귀 검증 · 셀프서비스 러너 <a href="automation.html">→</a></li>
+                <li>Claude Agent 기반 회귀 TC 자동 생성 <a href="agent.html">→</a></li>
+              </ul>
+              <p style="margin-bottom:0">추적성 체계 구축으로 신규 기능 <strong>요구사항 커버리지 100%</strong> 달성.</p></div>
+            <div class="card"><h3>🛢️ 대한송유관공사 — AI 누유 검출</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.04 ~ · 검증 담당</p>
+              <ul style="margin-bottom:0">
+                <li><strong>지표를 어떻게 세는지부터 확인</strong> — 누유감지율·오알람률의 1분 단위 집계 기준 검증</li>
+                <li>압력 <strong>초당 1,000건</strong> 시계열 처리, TCP 소켓 준실시간 수집 연동</li>
+                <li>통신 단절·재연결 <strong>데이터 유실</strong> 시나리오 검증</li>
+              </ul></div>
+            <div class="card"><h3>🧵 부천 — 필터 원단 불량 검출</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.05 ~ 2026.07 · 3개 라인</p>
+              <ul style="margin-bottom:0">
+                <li><strong>설비가 실제로 멈추는지까지가 검증 범위</strong> — 촬영 → 감지 → 정지 트리거 → 재구동 E2E</li>
+                <li>3개 라인 동시 운영 실시간 처리 검증</li>
+                <li>조명·광학계 변화에 따른 <strong>검출 편차</strong> 확인</li>
+              </ul></div>
+            <div class="card"><h3>🔧 기아자동차 — 토크 검사 ABS</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.06 ~ 2026.08 · PoC</p>
+              <ul style="margin-bottom:0">
+                <li><strong>목적에 맞는 판정 기준 수립</strong> — 통과/실패가 아닌 <em>가능 여부의 근거</em>를 산출물로</li>
+                <li>촬영 각도·조명·거리별 판별 가능 여부 검증</li>
+                <li>오판 케이스 분류, 기존 순서 기반 저장 방식의 한계 규명</li>
+              </ul></div>
+            <div class="card"><h3>🔗 LG U+ — KLK 온톨로지</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.06 ~ · 검증 담당</p>
+              <ul style="margin-bottom:0">
+                <li><strong>한 곳을 바꿨을 때 연결된 것이 따라오는지</strong> — 온톨로지 반영 정합성</li>
+                <li>데이터 · 메타데이터 · 비즈니스 용어 관계 매핑 검증</li>
+              </ul></div>
+            <div class="card"><h3>🛒 뉴퍼마켓 — LLM ERP 매칭</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.02 ~ 2026.04 · QA Engineer</p>
+              <ul style="margin-bottom:0">
+                <li><strong>LLM 정확도 검증 기준 수립</strong> — 정답이 하나로 정해지지 않는 출력을 판정 가능한 형태로</li>
+                <li>Figma Export 기반 요구사항 분석 → TC 설계</li>
+                <li>HTTP 보안 취약점 조사 → 개선 도출</li>
+              </ul></div>
+          </div></div>
+        </details>
       </div>
 
-      <!-- ===== 소디스 ===== -->
       <div class="tl-item past">
         <div class="tl-d">2025.06 — 2026.01</div>
         <div class="tl-t">소디스</div>
         <div class="tl-r">기술연구소 주임연구원 · SW QA 담당</div>
-        <div class="tl-n">QA 조직이 부재한 환경에 애자일 스크럼 · Git 브랜치 전략 · Jenkins CI/CD 직접 수립.
-          Playwright 자동화 최초 도입, 자율주행 · 커넥티드카 국책과제 검증 수행.<br>
+        <div class="tl-n">QA 조직이 부재한 환경에 애자일 스크럼 · Git 브랜치 전략 · Jenkins CI/CD 직접 수립.<br>
           <strong>표준이 없는 곳에 프로세스와 CI/CD를 세워본 경험.</strong></div>
-
         <details class="prj">
           <summary>프로젝트 3건<span class="meta">커넥티드카 CCU · 대전 자율주행 · 공간정보진흥원 LMS</span></summary>
-          <div class="det">
-            <div class="grid g3">
-          <div class="card"><h3>📡 커넥티드카 CCU 국책과제</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2025.08 ~ 2026.01 · QA Engineer</p>
-            <p>차량 텔레매틱스 CCU의 원격제어 · 데이터 송수신 검증과 소프트웨어 신뢰성 검사.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>KOLAS 공인 소프트웨어 신뢰성 검사 통과</strong></li>
-              <li>CANoe 기반 HILs 장비 네트워크 송수신 검증, DCM 연동 CAN 통신 검증</li>
-              <li>Linux 기반 보안 테스트 · 사이버보안 검증 절차서/결과서 작성</li>
-            </ul></div>
-
-          <div class="card"><h3>🚌 대전 자율주행 상용화지구</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2025.06 ~ 2026.01 · QA Engineer · ETRI 주관</p>
-            <p>자율주행 버스 애플리케이션의 기능 검증 및 보안 취약점 분석.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>실차 검증에 직접 참여</strong> — 현장에서 품질 이슈 대응 및 개선</li>
-              <li>CAN 통신 · ETRI 서버 프로토콜 기반 송수신 검증</li>
-              <li>Jira 기반 결함/테스트 이슈 관리 체계 구축·운영</li>
-            </ul></div>
-
-          <div class="card"><h3>🏫 공간정보진흥원 LMS</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2025.06 ~ 2026.01 · QA</p>
-            <p>교육포털 학습관리시스템 개발·유지보수. <strong>자동화를 처음 도입한 프로젝트</strong>입니다.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>Playwright 기반 UI 자동화 도입</strong> · <strong>Jenkins CI/CD 구축</strong></li>
-              <li><strong>Xray 도입</strong>으로 TC–결함 추적성 확보 <a href="practice.html">→</a></li>
-              <li>KRDS 웹 접근성 반영 UI 요구사항 정의서, REST API 검증 <a href="practice.html">→</a></li>
-            </ul></div>
-          </div>
-        </div>
-      </details>
+          <div class="det"><div class="grid g3">
+            <div class="card"><h3>📡 커넥티드카 CCU 국책과제</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2025.08 ~ 2026.01</p>
+              <ul style="margin-bottom:0">
+                <li><strong>KOLAS 공인 소프트웨어 신뢰성 검사 통과</strong></li>
+                <li>CANoe 기반 HILs 네트워크 송수신, DCM 연동 CAN 통신 검증</li>
+                <li>Linux 기반 보안 테스트 · 사이버보안 검증 절차서 작성</li>
+              </ul></div>
+            <div class="card"><h3>🚌 대전 자율주행 상용화지구</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2025.06 ~ 2026.01 · ETRI 주관</p>
+              <ul style="margin-bottom:0">
+                <li><strong>실차 검증에 직접 참여</strong> — 현장에서 품질 이슈 대응</li>
+                <li>CAN 통신 · ETRI 서버 프로토콜 송수신 검증</li>
+                <li>Jira 기반 결함/테스트 관리 체계 구축·운영</li>
+              </ul></div>
+            <div class="card"><h3>🏫 공간정보진흥원 LMS</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2025.06 ~ 2026.01 · QA</p>
+              <p><strong>자동화를 처음 도입한 프로젝트</strong>입니다.</p>
+              <ul style="margin-bottom:0">
+                <li><strong>Playwright UI 자동화 도입</strong> · <strong>Jenkins CI/CD 구축</strong></li>
+                <li><strong>Xray 도입</strong>으로 TC–결함 추적성 확보 <a href="practice.html">→</a></li>
+                <li>KRDS 웹 접근성 · REST API 검증 <a href="practice.html">→</a></li>
+              </ul></div>
+          </div></div>
+        </details>
       </div>
 
-      <!-- ===== 와이드넷 ===== -->
       <div class="tl-item past">
         <div class="tl-d">2023.02 — 2025.06</div>
         <div class="tl-t">와이드넷 엔지니어링</div>
         <div class="tl-r">미러링검증1팀 주임 · 모빌리티 검증 테스트 엔지니어</div>
-        <div class="tl-n">TMAP AUTO for Mercedes-Benz 내비게이션 시스템 검증.
-          ASPICE Level 1 SWE.6 인증 획득 기여, HILS 기반 조기 검증 환경 구축.<br>
+        <div class="tl-n">TMAP AUTO for Mercedes-Benz 내비게이션 시스템 검증.<br>
           <strong>정형화된 표준을 지키며 대규모 검증을 굴려본 경험.</strong></div>
-
         <details class="prj">
           <summary>프로젝트 1건<span class="meta">TMAP AUTO for Mercedes-Benz</span></summary>
-          <div class="det">
-            <div class="grid g3">
-          <div class="card"><h3>🚗 TMAP AUTO for Mercedes-Benz</h3>
-            <p style="font-size:12px;color:var(--faint);margin-bottom:8px">2023.03 ~ 2025.06 · Test Engineer</p>
-            <p>TMAP MOBILITY와 협업해 Benz 차량에 탑재되는 내비게이션 시스템 검증.
-              <strong>정형화된 표준 아래에서 대규모 검증을 굴려본 경험</strong>입니다.</p>
-            <ul style="margin-bottom:0">
-              <li><strong>ASPICE Level 1 SWE.6 인증 획득에 기여</strong></li>
-              <li>2주 스프린트 기준 <strong>700건 이상 TC 작성 및 검증</strong></li>
-              <li><strong>HILS 테스트 환경 구축</strong> — 실차 대비 조기 검증 구조 마련</li>
-              <li>비기능 KPI 측정 스크립트 개발로 <strong>검증 리소스 30% 절감</strong> <a href="practice.html">→</a></li>
-            </ul></div>
-          </div>
-        </div>
-      </details>
+          <div class="det"><div class="grid g3">
+            <div class="card"><h3>🚗 TMAP AUTO for Mercedes-Benz</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2023.03 ~ 2025.06 · Test Engineer</p>
+              <ul style="margin-bottom:0">
+                <li><strong>ASPICE Level 1 SWE.6 인증 획득에 기여</strong></li>
+                <li>2주 스프린트 기준 <strong>700건 이상 TC 작성·검증</strong></li>
+                <li><strong>HILS 테스트 환경 구축</strong> — 실차 대비 조기 검증</li>
+                <li>비기능 KPI 스크립트로 <strong>검증 리소스 30% 절감</strong> <a href="practice.html">→</a></li>
+              </ul></div>
+          </div></div>
+        </details>
       </div>
-
     </div>
   </div>
 </section>
 
 <section id="side">
   <div class="wrap">
-    <div class="sec-label">Side Projects</div>
-    <h2 class="sec">토이 프로젝트</h2>
-    <p class="sec-sub">회사 업무와 무관하게 <strong>궁금해서 만들어 본 것들</strong>입니다.
-      업무 성과로 내세울 것은 아니지만, 앞의 실무 도구들이 어디서 왔는지를 보여주는 자리라 남겨둡니다.</p>
-
+    <div class="sec-head"><span class="sec-id">SIDE</span><h2 class="sec">토이 프로젝트</h2></div>
+    <p class="sec-sub">업무와 무관하게 <strong>궁금해서 만들어 본 것들</strong>입니다.
+      업무 성과는 아니지만, 앞의 실무 도구들이 어디서 왔는지를 보여주는 자리라 남겨둡니다.</p>
     <div class="grid g2">
       <div class="card">
-        <h3>📈 NASDAQ AUTO — Multi-Agent AI 시스템</h3>
-        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">TypeScript · Node.js · 개인 프로젝트</p>
-        <p>서로 다른 AI 모델 3종(GPT · Gemini · Claude)이 각자의 관점에서 분석하고,
-          <strong>Manager Agent가 세 보고서를 통합해 최종 결론을 내리는</strong> Multi-Agent 협력 구조를 설계·구현했습니다.
-          스케줄러 → 데이터 수집 → 병렬 분석 → 통합 → 리포트 발송까지 22개 모듈의 자동화 파이프라인입니다.</p>
-        <div class="callout" style="margin-bottom:12px">
-          <b>QA 관점에서 남은 것</b> — 서로 다른 모델의 관점을 <strong>교차 검증해 편향을 줄이는 구조</strong>와,
-          <strong>자동 판단에는 반드시 근거 기록이 따라와야 한다</strong>는 원칙.
-          이 감각이 <a href="agent.html">Regression TC Creator의 안전장치 설계</a>로 이어졌습니다.
-        </div>
+        <h3>📈 NASDAQ AUTO — Multi-Agent AI</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">TypeScript · Node.js</p>
+        <p>AI 모델 3종(GPT · Gemini · Claude)이 각자 분석하고 <strong>Manager Agent가 통합해 결론을 내리는</strong>
+          Multi-Agent 구조. 22개 모듈의 자동화 파이프라인.</p>
+        <div class="note" style="margin-bottom:10px"><b>남은 것</b> — 교차 검증으로 <strong>편향을 줄이는 구조</strong>와
+          <strong>자동 판단에는 근거 기록이 따라와야 한다</strong>는 원칙.
+          <a href="agent.html">TC Creator의 안전장치</a>로 이어졌습니다.</div>
         <p style="margin-bottom:0"><a href="https://github.com/kx2471/NASDAQ_AUTO" target="_blank" rel="noopener">github.com/kx2471/NASDAQ_AUTO →</a></p>
       </div>
-
       <div class="card">
         <h3>🔍 OCR 활용 매크로</h3>
-        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · Pillow · pytesseract · 개인 프로젝트</p>
-        <p>OCR 기술이 궁금해서 만들어 본 도구입니다. 지정한 화면 영역을 일정 간격으로 캡처하고
-          그 영역에서 텍스트를 자동 추출합니다. 캡처 이미지를 로컬에 보존해 <strong>추출 실패 시 원인을 되짚을 수 있게</strong> 했습니다.</p>
-        <div class="callout" style="margin-bottom:12px">
-          <b>여기서 이어진 것</b> — 이때 익힌 OCR 파이프라인이 그대로 실무 도구로 넘어갔습니다.
-          <a href="practice.html">Clipboard Translate</a>의 이미지 텍스트 추출부가 이 실험에서 출발했고,
-          <em>OCR 기반 비정형 UI 테스트 자동화</em>라는 아이디어도 여기서 얻었습니다.
-        </div>
-        <p style="margin-bottom:0;font-size:13px;color:var(--muted)">실시간 로그 화면 모니터링, UI 내 특정 텍스트 인식 등에 활용했습니다.</p>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · pytesseract</p>
+        <p>OCR이 궁금해서 만든 도구. 지정 영역을 주기적으로 캡처해 텍스트를 추출하고,
+          캡처 이미지를 보존해 <strong>실패 시 원인을 되짚을 수 있게</strong> 했습니다.</p>
+        <div class="note" style="margin-bottom:0"><b>이어진 것</b> — 이때 익힌 파이프라인이
+          <a href="practice.html">Clipboard Translate</a>의 텍스트 추출부가 됐고,
+          <em>OCR 기반 비정형 UI 테스트</em> 아이디어도 여기서 얻었습니다.</div>
       </div>
     </div>
-
-    <div class="why" style="margin-top:20px">
-      <b>이 둘을 남겨두는 이유</b>
-      업무 성과가 아니라 <strong>“궁금하면 만들어 본다”는 습관 자체가 실무 도구의 출처</strong>이기 때문입니다.
-      OCR 매크로 → 클립보드 번역기, Multi-Agent 실험 → QA 워크플로우용 Agent로 이어졌습니다.
-    </div>
-    <p class="disclaimer" style="margin-top:18px">NASDAQ AUTO는 개인 학습 목적의 프로젝트이며 투자 참고용으로만 제작되었습니다. 투자자문이 아닙니다.</p>
+    <div class="why" style="margin-top:18px"><b>남겨두는 이유</b>
+      업무 성과가 아니라 <strong>“궁금하면 만들어 본다”는 습관 자체가 실무 도구의 출처</strong>이기 때문입니다.</div>
   </div>
 </section>
 
-<section id="archiving">
-  <div class="wrap">
-    <div class="sec-label">Archiving</div>
-    <h2 class="sec">더 보기</h2>
+<section id="contact">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">CONTACT</span><h2 class="sec">연락처</h2></div>
     <div class="grid g3">
+      <div class="card"><h3>✉️ Email</h3>
+        <p style="margin-bottom:0"><a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a></p></div>
+      <div class="card"><h3>📱 Phone</h3>
+        <p style="margin-bottom:0">010-4482-2033</p></div>
       <div class="card"><h3>💻 GitHub</h3>
-        <p>직접 만든 자동화 도구와 개인 프로젝트 저장소.</p>
-        <p style="margin-bottom:0"><a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471 →</a></p></div>
-      <div class="card"><h3>📄 포트폴리오 (PDF)</h3>
-        <p>인쇄·오프라인 열람용. 이 사이트 전체를 담았습니다.</p>
-        <p style="margin-bottom:0"><a href="KimSangOk_QA_Portfolio.pdf">PDF 내려받기 →</a></p></div>
-    </div>
-    <div class="callout" style="margin-top:26px">
-      <b>연락처</b> — 010-4482-2033 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a>
+        <p style="margin-bottom:0"><a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p></div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer</p>
+    <p style="font-family:var(--mono);font-size:12px;color:var(--faint)">
+      END OF REPORT · 김상옥 · SW QA Engineer</p>
     <p class="disclaimer">본 포트폴리오의 문서와 화면은 실제 업무 경험을 바탕으로 재구성·가공되었으며,
       회사 기밀 보호를 위해 고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
   </div>
 </footer>
-<script src="assets/site.js"></script>
+<script src="assets/report.js"></script>
 </body>
 </html>

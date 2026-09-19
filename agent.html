@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Regression TC Creator · 김상옥</title>
+<title>AI Agent — Regression TC Creator · 김상옥</title>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-<meta name="googlebot" content="noindex, nofollow">
 <meta name="description" content="Root Cause 기록을 읽어 회귀 TC를 설계하고 시트·티켓까지 연결하는 Claude Agent 구현 기록.">
-<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="assets/report.css">
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
-  <a class="brand" href="index.html">김상옥 <span>· SW QA Engineer</span></a>
-  <div class="menu"><a href="process.html">Process Design</a><a href="automation.html">Test Automation</a><a href="runner.html">QA Enablement</a><a href="agent.html" class="on">AI in Workflow</a><a href="practice.html">Practice</a></div>
-  <button class="tbtn" id="tbtn" type="button" aria-label="라이트/다크 전환">◐</button>
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html" class="on">CASE-04</a><a href="practice.html">CASE-05</a></div>
 </div></nav>
-<header class="phead"><div class="wrap wide">
-  <div class="crumb"><a href="index.html">← 포트폴리오</a> &nbsp;·&nbsp; 04 · AI in Workflow</div>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a> &nbsp;/&nbsp; CASE-04</div>
   <h1>AI Agent — Regression TC Creator</h1>
   <p class="lede">제가 의무화한 Root Cause 기록을 읽어 회귀 TC를 설계하고, Google Sheets에 기록하고, 티켓에 코멘트와 필드까지 연결하는 Claude 기반 Agent입니다. <strong>정책을 만든 사람이 그 정책이 남긴 데이터를 쓰는 도구를 직접 만들었습니다.</strong></p>
 </div></header>
-<div class="wrap wide"><div class="psr"><div><h5>Problem</h5><p>RCA 기록은 쌓이는데 활용이 안 되는 자산이 될 위험이 있었고, 회귀 TC 설계·기록·연결은 매 스프린트 반복되는 수작업이었습니다.</p></div><div><h5>Action</h5><p>MCP 도구 조합 · 3단계 게이팅 · 안전장치를 포함한 시스템으로 구현했습니다.</p></div><div class="r"><h5>Result</h5><p>티켓 ID 한 줄이면 TC 설계·시트 기록·티켓 연결이 자동으로 끝납니다. 타 팀이 사내 업무 개선 사례로 공유했습니다.</p></div></div></div><div class="wrap wide" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>RCA 기록은 쌓이는데 활용이 안 되는 자산이 될 위험이 있었고, 회귀 TC 설계·기록·연결은 매 스프린트 반복되는 수작업이었습니다.</p></div><div><h5>Action</h5><p>MCP 도구 조합 · 3단계 게이팅 · 안전장치를 포함한 시스템으로 구현했습니다.</p></div><div class="r"><h5>Result</h5><p>티켓 ID 한 줄이면 TC 설계·시트 기록·티켓 연결이 자동으로 끝납니다. 타 팀이 사내 업무 개선 사례로 공유했습니다.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>왜 만들었는가 · 동작 흐름<span class="meta">정책이 남긴 데이터를 쓰는 도구</span></summary>
   <div class="det">
@@ -29,7 +29,7 @@
       매 스프린트마다 버그 티켓을 일일이 읽고, 회귀 TC를 손으로 설계하고, 시트에 기록하고,
       원본 티켓에 연결하는 과정이 <strong>단순 반복의 연속</strong>이었습니다.</p>
     <figure class="shot"><img src="assets/img/tc-flow.jpg" alt="설계 단계에서 그린 실제 동작 흐름. 티켓 본문·Custom Fields와 댓글·쓰레드를 병렬 조회한 뒤 설계하고, 세 개의 쓰기를 순차 게이팅으로 묶었다." loading="lazy"><figcaption>설계 단계에서 그린 실제 동작 흐름. 티켓 본문·Custom Fields와 댓글·쓰레드를 병렬 조회한 뒤 설계하고, 세 개의 쓰기를 순차 게이팅으로 묶었다.</figcaption></figure>
-    <div class="callout">
+    <div class="note">
       세 가지 쓰기 작업은 <strong>앞 단계가 성공해야 다음이 진행</strong>됩니다.
       일부만 게시되는 <strong>불완전 상태를 원천적으로 차단</strong>하기 위함입니다.
     </div>
@@ -73,7 +73,7 @@
       <li><strong>확장</strong>: Corrective Action이 여러 기능 영역에 걸치거나, Frequency가 Always이고 부하 케이스가 본질일 때</li>
       <li><strong>금지</strong>: 형식적 happy-path나 의미 없는 변형으로 빈자리 채우기</li>
     </ul>
-    <div class="callout">
+    <div class="note">
       시트에 넘기기 애매한 <em>보조 검증 아이디어</em>는 시트가 아닌
       <strong>코멘트의 “추가로 검증되어야 할 점”</strong> 블록에 담아 시트와 코멘트의 역할을 분리했습니다.
     </div>
@@ -94,7 +94,7 @@
       생성한 TC_ID는 티켓의 Related TC 필드에 <strong>기존값 보존한 채 append</strong>해
       양방향 추적성이 자동으로 남습니다.</p>
     <figure class="shot"><img src="assets/img/tc-ticket.jpg" alt="Step 2·3 — 티켓에 분석 코멘트가 게시되고(오른쪽), Related TC 필드에 TC_871이 연결된다(왼쪽 하단). Agent가 읽는 입력인 Root Cause · Corrective Action 필드도 같은 화면에 보인다." loading="lazy"><figcaption>Step 2·3 — 티켓에 분석 코멘트가 게시되고(오른쪽), Related TC 필드에 TC_871이 연결된다(왼쪽 하단). Agent가 읽는 입력인 Root Cause · Corrective Action 필드도 같은 화면에 보인다.</figcaption></figure>
-    <div class="callout">
+    <div class="note">
       이는 제가 설계한 QA 워크플로우의 세 번째 원칙(<strong>Root Cause 의무화</strong>)에서 끝나지 않고,
       <em>그 기록이 검증 자산으로 이어지는 고리</em>를 만드는 단계입니다.
       <a href="process.html">→ 01 프로세스 설계</a>
@@ -154,7 +154,7 @@
         “돌렸는데 뭐가 달라졌는지 모르겠다”가 없도록</li>
       <li><strong>사용 가이드 동봉</strong> — 할 수 있는 일 · 기본 사용법 · 옵션을 사내 문서로 함께 배포</li>
     </ul>
-    <div class="callout">
+    <div class="note">
       <b>이 반응이 의미하는 것</b><br>
       · 도구가 <strong>QA 팀 밖에서도 이해 가능한 형태</strong>였다는 것<br>
       · AI 활용이 개인 실험이 아니라 <strong>팀이 따라 할 수 있는 사례</strong>가 됐다는 것<br>
@@ -167,13 +167,13 @@
       그래서 이제는 도구를 만들 때 <strong>사용 가이드와 첫 실행 경험을 같은 작업으로</strong> 취급합니다.</div>
   </div>
 </details>
-</div><footer><div class="wrap wide">
-  <div class="pager"><a href="runner.html"><span class="k">이전</span><span class="t">← 테스트 러너 — 모두가 검증할 수 있는 환경</span></a><a href="practice.html" style="text-align:right"><span class="k">다음</span><span class="t">검증 실무 — 산출물 · API · 도구 →</span></a></div>
-  <p style="margin-top:28px"><strong>김상옥 · Kim Sang-Ok</strong> — SW QA Engineer ·
-    <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+</div><footer><div class="wrap">
+  <div class="pager"><a href="runner.html"><span class="k">PREV · CASE-03</span><span class="t">← 테스트 러너 — 모두가 검증할 수 있는 환경</span></a><a href="practice.html" style="text-align:right"><span class="k">NEXT · CASE-05</span><span class="t">검증 실무 — 산출물 · API · 도구 →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-04 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
     고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>
 </div></footer>
-<script src="assets/site.js"></script>
+<script src="assets/report.js"></script>
 </body></html>
