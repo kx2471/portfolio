@@ -400,3 +400,15 @@ body.tm-open{overflow:hidden}
 .tm-next:hover b, .tm-next:hover em, .tm-next:hover .a{color:#fff}
 .tm-next:hover .a{transform:translateX(3px)}
 
+
+/* 시연 영상 */
+.demo{margin:0 0 16px; border:1px solid var(--line); border-radius:var(--r-sm);
+  overflow:hidden; background:#101317; box-shadow:var(--shadow)}
+.demo video{display:block; width:100%; height:auto; background:#101317}
+.demo figcaption{font-size:11.8px; color:var(--muted); padding:9px 12px;
+  border-top:1px solid var(--line-soft); line-height:1.5; background:var(--card);
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.demo figcaption .badge{font-family:var(--mono); font-size:10px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--pass);
+  background:var(--pass-soft); border:1px solid var(--pass-line);
+  border-radius:4px; padding:2px 7px; flex:none}

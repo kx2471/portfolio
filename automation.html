@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MLOps 파이프라인 무인 회귀 검증 · 김상옥</title>
+<title>Playwright 기반 자동화 구축 · 김상옥</title>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
-<meta name="description" content="Playwright 기반 MLOps 파이프라인 무인 회귀 검증 시스템 1인 설계·구축·운영 기록.">
+<meta name="description" content="Playwright 기반 MLOps E2E 회귀 검증 시스템 1인 설계·구축·운영 기록.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="assets/report.css">
@@ -17,10 +17,20 @@
 </div></nav>
 <header class="phead"><div class="wrap">
   <div class="crumb"><a href="index.html">← REPORT</a> &nbsp;/&nbsp; CASE-02</div>
-  <h1>MLOps 파이프라인 무인 회귀 검증</h1>
+  <h1>Playwright 기반 자동화 구축</h1>
   <p class="lede">데이터셋 업로드부터 7종 AI 모델 학습·배포까지, 비전 AI 학습 플랫폼의 전체 파이프라인을 Playwright로 자동 검증하는 회귀 시스템을 <strong>1인으로 설계·구축·운영</strong>하고 있습니다.</p>
 </div></header>
 <div class="wrap"><div class="psr"><div><h5>Problem</h5><p>릴리스마다 수동으로 하루 이상 걸리던 회귀 검증. 실서버 · 단일 공유 계정 · 30분~3시간짜리 학습이라는 제약까지 걸려 있었습니다.</p></div><div><h5>Action</h5><p>제약을 먼저 정의하고, 테스트가 서로를 깨뜨리지 않는 구조를 설계했습니다.</p></div><div class="r"><h5>Result</h5><p>명령 한 줄 무인 실행 + Slack 자동 보고. 스위트가 2배 이상 늘어나는 동안 아키텍처는 다시 쓰지 않았습니다.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<figure class="demo" style="margin-bottom:22px">
+  <video src="assets/video/runner-demo.mp4" poster="assets/video/runner-poster.jpg"
+         autoplay loop muted playsinline preload="metadata"
+         aria-label="E2E 자동화 실행 시연"></video>
+  <figcaption><span class="badge">DEMO</span>
+    환경·테스트 선택 → 실행 → 실시간 로그 → 검사 결과 확인 → 리포트까지.
+    AD 라벨링 스위트를 실제로 돌린 기록입니다.
+    <span class="nb">(내부 주소 · 계정 정보는 비식별 처리)</span></figcaption>
+</figure>
+
 <details open>
   <summary>먼저 제약을 정의했다 — 아키텍처의 모든 결정이 여기서 나왔습니다<span class="meta">5가지 제약</span></summary>
   <div class="det">
@@ -102,13 +112,33 @@
           <li>가설과 모순되는 사실을 끝까지 파고들기</li>
         </ul></div>
     </div>
+    <h4 class="h">판정의 근거를 리포트에 남긴다</h4>
+    <div class="shots2">
+      <figure class="shot"><img src="assets/img/run-report1.jpg" alt="리포트 상단 요약. 네 상태의 합이 전체 건수와 일치한다." loading="lazy"><figcaption>리포트 상단 요약. 네 상태의 합이 전체 건수와 일치한다.</figcaption></figure>
+      <figure class="shot"><img src="assets/img/run-report2.jpg" alt="검증 포인트를 펼친 모습. 줄 끝의 “화면”을 누르면 그 시점 스크린샷이 열린다." loading="lazy"><figcaption>검증 포인트를 펼친 모습. 줄 끝의 “화면”을 누르면 그 시점 스크린샷이 열린다.</figcaption></figure>
+    </div>
+    <div class="note">
+      <b>통과한 것도 “무엇을 봤는지”를 남깁니다</b> — CASE 3처럼 <strong>통과한 TC가 범인</strong>인 경우가 있기 때문에,
+      PASS/FAIL 숫자만으로는 결과를 신뢰할 수 없습니다. 검증 포인트와 그 시점 화면을 함께 남겨
+      <strong>판정 자체를 검증 가능하게</strong> 만들었습니다.
+      <span class="nb">(리포트 설계 상세는 <a href="runner.html">CASE-03</a>)</span>
+    </div>
   </div>
 </details>
 
 <details>
   <summary>리포팅과 성과 — 결과가 팀에 도달해야 자동화가 완성된다<span class="meta">커스텀 Slack 리포터 자작</span></summary>
   <div class="det">
-    <figure class="shot"><img src="assets/img/e2e-slack.jpg" alt="실행이 끝나면 리포터가 결과 카드를 채널에 올린다. PASS/FAIL/FLAKY/SKIP 네 상태와 소요 시간, 검증한 스위트명이 함께 남는다." loading="lazy"><figcaption>실행이 끝나면 리포터가 결과 카드를 채널에 올린다. PASS/FAIL/FLAKY/SKIP 네 상태와 소요 시간, 검증한 스위트명이 함께 남는다.</figcaption></figure>
+    <div class="shots2">
+      <figure class="shot"><img src="assets/img/run-notify.jpg" alt="실행을 걸면 요청자·환경·규모·예상 시간이 채널에 공지되고, 끝나면 같은 스레드에 실제 소요 시간이 달린다." loading="lazy"><figcaption>실행을 걸면 요청자·환경·규모·예상 시간이 채널에 공지되고, 끝나면 같은 스레드에 실제 소요 시간이 달린다.</figcaption></figure>
+      <figure class="shot"><img src="assets/img/e2e-slack.jpg" alt="실행이 끝나면 리포터가 결과 카드를 채널에 올린다. PASS/FAIL/FLAKY/SKIP 네 상태와 소요 시간, 검증한 스위트명이 함께 남는다." loading="lazy"><figcaption>실행이 끝나면 리포터가 결과 카드를 채널에 올린다. PASS/FAIL/FLAKY/SKIP 네 상태와 소요 시간, 검증한 스위트명이 함께 남는다.</figcaption></figure>
+    </div>
+    <div class="note" style="margin-bottom:16px">
+      <b>예상과 실제가 맞는다</b> — 위 실행은 <strong>예상 1시간 33분 → 실제 1시간 25분 34초</strong>입니다.
+      단순 합산이 아니라 <strong>3-worker 병렬 실행을 반영해 계산</strong>하기 때문에 나오는 오차 범위입니다.
+      아래 결과 카드의 소요 시간(<strong>1시간 30분 28초</strong>)과 함께 보면
+      스위트가 확장돼도 예측 가능한 시간 안에 끝난다는 것이 드러납니다.
+    </div>
     <ul>
       <li><strong>경량 첨부 설계</strong> — video·trace 제외 zip만 첨부(<strong>수 GB → 1~2MB</strong>),
         로컬에는 전체 아티팩트를 실행별 폴더로 보존</li>
