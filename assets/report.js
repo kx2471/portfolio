@@ -278,3 +278,83 @@
     if(back) back.classList.remove('on');
   });
 })();
+
+/* ==========================================================
+   Lightbox — 사진·영상을 누르면 확대, 다시 누르면 닫힘
+   모달 안에 나중에 들어온 사진에도 동작하도록 문서 전체에서 위임 처리
+   ========================================================== */
+(function(){
+  var lb = null, last = null;
+
+  function build(){
+    lb = document.createElement('div');
+    lb.className = 'zoom';
+    lb.setAttribute('role','dialog');
+    lb.setAttribute('aria-modal','true');
+    lb.setAttribute('aria-label','확대 보기');
+    lb.innerHTML = '<button type="button" class="x" aria-label="닫기">✕</button>' +
+                   '<div class="media"></div><div class="cap"></div>' +
+                   '<div class="hint">← 옆으로 밀어서 보기 →</div>';
+    document.body.appendChild(lb);
+    lb.addEventListener('click', function(e){
+      // 영상 컨트롤바를 누른 경우는 닫지 않음
+      if(e.target.tagName === 'VIDEO' && e.offsetY > e.target.clientHeight - 48) return;
+      close();
+    });
+  }
+
+  function open(el){
+    if(!lb) build();
+    last = document.activeElement;
+    var media = lb.querySelector('.media'), fig = el.closest('figure');
+    var cap = fig && fig.querySelector('figcaption');
+    media.innerHTML = '';
+    var node;
+    if(el.tagName === 'VIDEO'){
+      node = document.createElement('video');
+      node.src = el.currentSrc || el.src;
+      node.muted = true; node.loop = true; node.autoplay = true;
+      node.playsInline = true; node.controls = true;
+      try{ node.currentTime = el.currentTime || 0; }catch(e){}
+      if(el.poster) node.poster = el.poster;
+    } else {
+      node = document.createElement('img');
+      node.src = el.currentSrc || el.src;
+      node.alt = el.alt || '';
+    }
+    media.appendChild(node);
+    lb.querySelector('.cap').textContent = cap ? cap.textContent.trim() : '';
+    // 휴대폰에서 가로로 긴 사진은 옆으로 밀어서 보게
+    var w = el.naturalWidth || el.videoWidth || 0, h = el.naturalHeight || el.videoHeight || 1;
+    lb.classList.toggle('wide', node.tagName === 'IMG' && w / h > 1.25 && window.innerWidth <= 640);
+    lb.classList.add('on');
+    lb.scrollTop = 0; lb.scrollLeft = 0;
+    document.body.classList.add('zoom-open');
+    lb.querySelector('.x').focus();
+  }
+
+  function close(){
+    if(!lb || !lb.classList.contains('on')) return;
+    lb.classList.remove('on');
+    var v = lb.querySelector('video'); if(v) v.pause();
+    lb.querySelector('.media').innerHTML = '';
+    document.body.classList.remove('zoom-open');   // 태스크 모달의 스크롤 잠금(tm-open)은 따로 유지됨
+    if(last && last.focus) last.focus();
+  }
+
+  document.addEventListener('click', function(e){
+    var t = e.target;
+    if(!t || !t.closest) return;
+    var el = t.closest('.shot img, .demo video');
+    if(!el || (lb && lb.contains(el))) return;
+    e.preventDefault(); e.stopPropagation();
+    open(el);
+  });
+
+  // ESC는 확대 보기를 먼저 닫고, 뒤의 태스크 모달까지 닫히지 않게 막음
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && lb && lb.classList.contains('on')){
+      e.stopImmediatePropagation(); e.preventDefault(); close();
+    }
+  }, true);
+})();
