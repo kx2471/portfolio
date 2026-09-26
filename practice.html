@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>검증 실무 — 산출물 · API · 도구 · 김상옥</title>
+<title>검증 실무 — API 검증 · 추적성 · 도구 · 김상옥</title>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="description" content="QA 표준 산출물, API 레벨 검증, 직접 만든 업무 자동화 도구.">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -17,51 +17,11 @@
 </div></nav>
 <header class="phead"><div class="wrap">
   <div class="crumb"><a href="index.html">← REPORT</a> &nbsp;/&nbsp; CASE-05</div>
-  <h1>검증 실무 — 산출물 · API 검증 · 업무 도구</h1>
-  <p class="lede">SWR · TC · Defect · Xray 추적성 같은 QA 표준 산출물과, UI 뒤를 직접 두드리는 API 검증, 반복 업무를 줄이려고 만든 유틸리티들입니다.</p>
+  <h1>검증 실무 — API 검증 · 추적성 · 업무 도구</h1>
+  <p class="lede">UI를 거치지 않고 API를 직접 두드려 <strong>프론트만 막고 있던 유효성 검증과 XSS 경로</strong>를 찾아낸 사례, 요구사항–TC–결함 추적성 체계, 반복 업무를 줄이려고 만든 도구들입니다.</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>요구사항–TC–결함이 따로 놀았고, UI에서 막히는 값이 서버에서도 막히는지는 확인되지 않았습니다.</p></div><div><h5>Action</h5><p>추적성 체계를 세우고, API 레벨로 내려가 검증하고, 반복은 도구로 줄였습니다.</p></div><div class="r"><h5>Result</h5><p>요구사항 커버리지와 결함 추적성 확보, 서버 측 검증 부재 발견·개선 주도.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>UI에서 막히는 값이 서버에서도 막히는지는 확인되지 않았고, 요구사항–TC–결함이 따로 놀았습니다.</p></div><div><h5>Action</h5><p>API 레벨로 내려가 검증하고, 추적성 체계를 세우고, 반복은 도구로 줄였습니다.</p></div><div class="r"><h5>Result</h5><p>서버 측 검증 부재와 XSS 경로를 발견해 개선 주도, 요구사항 커버리지와 결함 추적성 확보.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
-  <summary>QA 산출물 — 요구사항에서 결함까지 추적 가능하게<span class="meta">SWR · TC · Defect · Xray</span></summary>
-  <div class="det">
-    <h4 class="h">Test Case 설계 기법</h4>
-    <p>기법 정의보다 <strong>실제로 무엇을 만들어 관리했는지</strong>를 남깁니다.</p>
-    <div class="tw"><table>
-      <thead><tr><th style="width:140px">기법</th><th>적용한 방식</th><th style="width:210px">남긴 것</th></tr></thead>
-      <tbody>
-        <tr><td><strong>요구사항 기반</strong></td>
-            <td>요구사항 문서를 항목 단위로 쪼개 <strong>빠진 기능이 없는지</strong> 대조</td>
-            <td class="after">Jira 등록 후 <strong>요구사항 ID와 매핑</strong></td></tr>
-        <tr><td><strong>동등 클래스 분할</strong></td>
-            <td>입력값 범위·조건을 분석해 <strong>유효/무효 클래스</strong>로 나누고 대표값 선정</td>
-            <td class="after">필드별 클래스 정의 — <strong>최소 TC로 최대 결함</strong></td></tr>
-        <tr><td><strong>경곗값 분석</strong></td>
-            <td>각 필드의 최솟값·최댓값과 <strong>직전/직후</strong>를 도출. <strong>off-by-one</strong> 방지</td>
-            <td class="after"><code>min</code> · <code>min-1</code> · <code>max</code> · <code>max+1</code></td></tr>
-        <tr><td><strong>오류 추정</strong></td>
-            <td><strong>과거 결함 이력 · 복잡한 로직 · 사용자 오용 시나리오</strong>로 의심 영역을 좁힘</td>
-            <td class="after">정형 기법으로 안 잡히는 <strong>엣지 케이스</strong></td></tr>
-      </tbody>
-    </table></div>
-    <div class="note">
-      <b>기법을 나눠 관리한 이유</b> — 어떤 기법으로 만든 TC인지가 남아 있어야
-      <strong>커버리지의 성격</strong>을 말할 수 있습니다.
-      “TC 300개”보다 “요구사항 전 항목 대조 + 경계값 조합 + 과거 결함 기반 의심 영역”이
-      훨씬 정확한 진술이고, 회귀 대상을 고를 때도 이 축이 기준이 됩니다.
-    </div>
-
-    <h4 class="h">Xray 기반 추적성</h4>
-    <p>요구사항과 TC의 연결로 추적성을 확보하고, 결함 관리 연동으로 양방향 추적이 가능합니다.</p>
-    <div class="shots2"><figure class="shot"><img src="assets/img/xray-req.png" alt="Requirement Traceability — 요구사항 하나에서 연결된 TC와 각 버전의 실행 결과까지 한 줄로 따라간다." loading="lazy"><figcaption>Requirement Traceability — 요구사항 하나에서 연결된 TC와 각 버전의 실행 결과까지 한 줄로 따라간다.</figcaption></figure><figure class="shot"><img src="assets/img/xray-defect.jpg" alt="Defect Traceability — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 되짚는다. (담당자명 비식별 처리)" loading="lazy"><figcaption>Defect Traceability — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 되짚는다. (담당자명 비식별 처리)</figcaption></figure></div>
-    <ul style="margin-bottom:0">
-      <li><strong>Requirement Traceability</strong> — 모든 요구사항이 TC로 연결되어 충족 여부 판단 가능</li>
-      <li><strong>Defect Traceability</strong> — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 추적</li>
-      <li>Test Set(기능별 TC 관리) · Test Plan(스케줄) · Test Execution(실행 결과)로 라이프사이클 통합 관리</li>
-    </ul>
-  </div>
-</details>
-
-<details>
   <summary>API 검증 — UI 뒤를 직접 두드린다<span class="meta">서버 측 검증 부재 발견</span></summary>
   <div class="det">
     <p>프론트엔드 유효성 검증은 <strong>사용자에게 친절한 장치일 뿐 품질 보증이 아닙니다.</strong>
@@ -110,6 +70,24 @@
     <div class="note">
       화면 기준 테스트만 했다면 <strong>끝까지 발견되지 않았을 결함</strong>입니다.
       그 뒤로 폼이 있는 기능은 <strong>UI 통과와 API 통과를 별도의 검증 항목</strong>으로 나눠 씁니다.
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>QA 산출물 — 요구사항에서 결함까지 추적 가능하게<span class="meta">SWR · TC · Defect · Xray</span></summary>
+  <div class="det">
+    <h4 class="h">Xray 기반 추적성</h4>
+    <p>요구사항과 TC의 연결로 추적성을 확보하고, 결함 관리 연동으로 양방향 추적이 가능합니다.</p>
+    <div class="shots2"><figure class="shot"><img src="assets/img/xray-req.png" alt="Requirement Traceability — 요구사항 하나에서 연결된 TC와 각 버전의 실행 결과까지 한 줄로 따라간다." loading="lazy"><figcaption>Requirement Traceability — 요구사항 하나에서 연결된 TC와 각 버전의 실행 결과까지 한 줄로 따라간다.</figcaption></figure><figure class="shot"><img src="assets/img/xray-defect.jpg" alt="Defect Traceability — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 되짚는다. (담당자명 비식별 처리)" loading="lazy"><figcaption>Defect Traceability — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 되짚는다. (담당자명 비식별 처리)</figcaption></figure></div>
+    <ul style="margin-bottom:0">
+      <li><strong>Requirement Traceability</strong> — 모든 요구사항이 TC로 연결되어 충족 여부 판단 가능</li>
+      <li><strong>Defect Traceability</strong> — 결함에서 역방향으로 실행 이력 · TC · 요구사항까지 추적</li>
+      <li>Test Set(기능별 TC 관리) · Test Plan(스케줄) · Test Execution(실행 결과)로 라이프사이클 통합 관리</li>
+    </ul>
+    <div class="note" style="margin-top:14px;margin-bottom:0">
+      <b>개수보다 성격</b> — “TC 300개”보다 <strong>“요구사항 전 항목 대조 + 경계값 조합 + 과거 결함 기반 의심 영역”</strong>이
+      정확한 진술입니다. TC마다 어떤 근거로 만들었는지를 남겨, 회귀 대상을 고를 때 기준으로 씁니다.
     </div>
   </div>
 </details>

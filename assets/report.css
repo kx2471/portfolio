@@ -412,3 +412,85 @@ body.tm-open{overflow:hidden}
   letter-spacing:.06em; text-transform:uppercase; color:var(--pass);
   background:var(--pass-soft); border:1px solid var(--pass-line);
   border-radius:4px; padding:2px 7px; flex:none}
+
+/* ==========================================================
+   Mobile
+   ========================================================== */
+@media (max-width:860px){
+  /* 메뉴를 숨기지 않고 가로 스크롤 한 줄로 */
+  .nav{height:auto}
+  .nav-in{flex-wrap:wrap; height:auto; padding:8px 18px 0; gap:0}
+  .brand{padding:6px 10px 6px 8px}
+  .menu{display:flex; order:3; width:100%; margin:0 -18px; padding:4px 14px 8px;
+    width:calc(100% + 36px); gap:4px;
+    -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);
+            mask-image:linear-gradient(90deg,#000 88%,transparent)}
+  .menu a{padding:7px 12px; font-size:13.5px; background:var(--sunken); border-radius:999px}
+  .menu a.on{background:var(--accent-soft)}
+  html{scroll-padding-top:120px}
+}
+@media (max-width:640px){
+  body{font-size:15.5px; line-height:1.75}
+  section{padding:44px 0}
+  /* 작은 글자 하한 11px */
+  .chip-st, .case-id, .rpt-meta b, .psr h5, .tm-psr h5, .why b, .pager .k,
+  .demo figcaption .badge, .tm-chips .f.state{font-size:11px}
+  .shot figcaption, .demo figcaption{font-size:12.5px}
+  .tl-d, .check .tag, summary .meta{font-size:12px}
+
+  /* 카드 여백 */
+  .case{padding:18px 18px 18px 20px}
+  .case h3{font-size:17px}
+  .case p{font-size:14.5px}
+  .card{padding:16px 16px}
+  .det{padding:16px 14px 18px}
+
+  /* 아코디언 제목: 보조 정보는 아래 줄로 */
+  summary{flex-wrap:wrap; row-gap:4px; padding:13px 14px}
+  summary .meta{margin-left:26px; padding-left:0; white-space:normal; flex-basis:100%}
+
+  /* 타임라인 */
+  .tl{padding-left:22px}
+  .tl-item::before{left:-21px}
+
+  /* 흐름도: 세로로 쌓일 때 화살표 간격 */
+  .flow{gap:4px}
+  .flow .node{min-width:0}
+
+  /* 표는 가로 스크롤 유지 + 힌트 */
+  .tw{position:relative; -webkit-overflow-scrolling:touch}
+
+  /* 페이저 */
+  .pager a{flex-basis:100%}
+  .pager a[style*="text-align:right"]{text-align:left!important}
+
+  /* ---- 모달 → 전체 화면 시트 ---- */
+  .tm-back{padding:0; backdrop-filter:none; -webkit-backdrop-filter:none}
+  .tm{max-width:none; min-height:100%; max-height:100dvh; height:100dvh;
+    border-radius:0; border:0}
+  .tm-tabs{padding:10px 12px; gap:8px; padding-top:max(10px, env(safe-area-inset-top))}
+  .tm-seg{gap:6px}
+  .tm-seg button{padding:10px 10px; gap:7px}
+  .tm-seg button .ic{font-size:18px}
+  .tm-seg button .tt{font-size:14px; white-space:nowrap}
+  .tm-seg button .ct{font-size:11.5px; padding:2px 7px}
+  .tm-x{width:36px; height:36px; flex:none}
+  .tm-body{padding:16px 16px 20px}
+  .tm-foot{padding:10px 14px; padding-bottom:max(10px, env(safe-area-inset-bottom)); gap:8px}
+  .tm-foot .meta{display:none}
+  .tm-btn{white-space:nowrap; padding:10px 14px}
+  .tm-close{flex:none}
+  .tm-full{flex:1; justify-content:center}
+}
+/* 터치 기기에선 hover 들뜸 효과 제거 (탭 후 들뜬 채로 남는 현상 방지) */
+@media (hover:none){
+  .case:hover, .pager a:hover{transform:none}
+}
+@media (max-width:600px){
+  .flow .node{flex:0 0 auto; padding:9px 12px}
+  .flow .arrow{line-height:1; margin:-1px 0}
+}
+@media (max-width:640px){
+  .tl-item details.prj .det{padding:10px 8px 12px}
+  .tl-item details.prj .card{padding:14px 13px}
+}
