@@ -17,6 +17,8 @@
     }
     try{
       var raw=sessionStorage.getItem(KEY);
+      // 주소에 목적지(#direction 등)가 있으면 그곳이 우선 — 저장 위치는 버림
+      if(raw!==null && location.hash){ sessionStorage.removeItem(KEY); raw=null; }
       if(raw!==null){
         sessionStorage.removeItem(KEY);
         var st; try{ st=JSON.parse(raw); }catch(e){ st={y:parseInt(raw,10)||0}; }
