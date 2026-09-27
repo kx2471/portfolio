@@ -262,13 +262,25 @@ footer a{color:var(--muted)}
 }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important; scroll-behavior:auto!important} }
 
-/* 리포트 헤더 — 인물 사진 */
-.rpt-title{display:flex; gap:clamp(20px,4vw,44px); align-items:flex-start}
-.rpt-title-main{flex:1 1 auto; min-width:0}
-.rpt-photo{flex:0 0 auto; margin:0; width:clamp(104px,13vw,146px)}
-.rpt-photo img{display:block; width:100%; border-radius:12px; border:1px solid var(--line);
-  box-shadow:var(--shadow); filter:grayscale(.15)}
-@media (max-width:640px){ .rpt-photo{display:none} }
+/* 리포트 헤더 — 글 / 사진 두 칸 */
+.rpt-hero{display:grid; grid-template-columns:minmax(0,1fr) clamp(220px,25vw,292px);
+  gap:clamp(28px,5vw,64px); align-items:end; margin-bottom:clamp(26px,3.5vw,38px)}
+.rpt-text .lede{margin-bottom:0}
+.rpt-photo{margin:0 14px 14px 0; position:relative}
+.rpt-photo img{display:block; width:100%; height:auto; aspect-ratio:720/953; object-fit:cover;
+  border-radius:18px; border:1px solid var(--line); background:var(--sunken);
+  box-shadow:0 2px 6px rgba(20,22,26,.06), 0 28px 60px -30px rgba(20,22,26,.35)}
+/* 리포트 메타포: 사진 뒤에 초록 톤 판 하나 */
+.rpt-photo::before{content:""; position:absolute; inset:14px -14px -14px 14px; border-radius:18px;
+  background:var(--pass-soft); border:1px solid var(--pass-line); z-index:-1}
+@media (max-width:860px){
+  .rpt-hero{grid-template-columns:minmax(0,1fr) clamp(170px,30vw,220px); align-items:center}
+}
+@media (max-width:640px){
+  .rpt-hero{grid-template-columns:1fr; gap:22px}
+  .rpt-photo{order:-1; width:min(40vw,156px); margin:0 10px 10px 0}
+  .rpt-photo::before{inset:10px -10px -10px 10px}
+}
 
 /* ==========================================================
    Task Modal — 이슈 트래커 태스크 창 형태
