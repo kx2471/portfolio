@@ -1,24 +1,51 @@
 (function(){
-  /* ---- 스크롤 위치 복원 ---- */
+  /* ---- 스크롤 위치 복원 ----
+     목록(index)에서 다른 페이지로 갈 때 위치와 펼친 아코디언을 저장하고,
+     브레드크럼 등 링크로 돌아와도 그 자리로 복원한다.
+     (브라우저 뒤로가기는 브라우저가 자체 복원) */
   (function(){
     var p=location.pathname, isIndex = p.endsWith('/') || /(^|\/)index\.html?$/.test(p);
     if(!isIndex) return;
+    var KEY='pf2-scroll', html=document.documentElement;
+    var details=function(){ return [].slice.call(document.querySelectorAll('details')); };
+
+    function restore(state){
+      var prev=html.style.scrollBehavior;
+      html.style.scrollBehavior='auto';
+      window.scrollTo(0, state.y||0);
+      setTimeout(function(){ html.style.scrollBehavior=prev||''; }, 80);
+    }
     try{
-      var y=sessionStorage.getItem('pf2-scroll');
-      if(y!==null){
-        sessionStorage.removeItem('pf2-scroll');
-        var el=root, prev=el.style.scrollBehavior;
-        el.style.scrollBehavior='auto';
-        window.scrollTo(0, parseInt(y,10)||0);
-        setTimeout(function(){ el.style.scrollBehavior=prev||''; }, 80);
+      var raw=sessionStorage.getItem(KEY);
+      if(raw!==null){
+        sessionStorage.removeItem(KEY);
+        var st; try{ st=JSON.parse(raw); }catch(e){ st={y:parseInt(raw,10)||0}; }
+        if(typeof st==='number') st={y:st};
+        if(st.open) details().forEach(function(d,i){ d.open = st.open.indexOf(i)>=0; });
+        if('scrollRestoration' in history) history.scrollRestoration='manual';
+        restore(st);
+        // 웹폰트·이미지 로드 후 줄 높이가 바뀌면 한 번 더 맞춤
+        window.addEventListener('load', function(){ restore(st); }, {once:true});
+        if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ restore(st); });
       }
     }catch(e){}
+
+    function save(){
+      try{
+        var open=[]; details().forEach(function(d,i){ if(d.open) open.push(i); });
+        sessionStorage.setItem(KEY, JSON.stringify({y:Math.round(window.scrollY||0), open:open}));
+      }catch(e){}
+    }
     document.addEventListener('click', function(e){
       var a=e.target.closest && e.target.closest('a[href]');
       if(!a) return;
       var h=a.getAttribute('href')||'';
       if(!h || h.charAt(0)==='#' || /^(https?:|mailto:|tel:)/.test(h)) return;
-      try{ sessionStorage.setItem('pf2-scroll', String(window.scrollY||0)); }catch(e){}
+      save();
+    });
+    // 뒤로가기(bfcache)로 돌아온 경우 남은 저장값을 비워, 나중에 엉뚱한 위치로 가지 않게
+    window.addEventListener('pageshow', function(e){
+      if(e.persisted){ try{ sessionStorage.removeItem(KEY); }catch(_){} }
     });
   })();
 
