@@ -150,7 +150,7 @@
     <div class="grid g2">
       <div class="card"><h3>🧪 AI 제품을 검증한다</h3>
         <p>정답이 하나로 정해지지 않는 출력을 판정할 기준을 세웁니다.
-          LLM 매칭의 정확도 기준, 비전 검출의 가능 여부 근거, 이상 탐지 지표의 집계 기준이 그것입니다.
+          LLM 매칭을 데이터셋 정확도(%) 기준으로 판정한 것, 비전 검출의 가능 여부 근거, 이상 탐지 지표의 집계 기준이 그것입니다.
           <span class="nb">(<a href="#career">경력</a>)</span></p></div>
       <div class="card"><h3>🤖 AI로 검증한다</h3>
         <p>AI와 자동화가 일을 맡되, 그 결과를 사람이 검증할 수 있는 형태로 남깁니다.
@@ -216,7 +216,7 @@
         <div class="tag">CASE-02·03</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">AI 제품 검증 — 판정 기준 수립</div>
-        <div class="d">LLM 기반 ERP 매칭의 정확도 판정 기준 수립, 비전 검사 PoC의 판별 가능 여부 근거 도출,
+        <div class="d">LLM 기반 ERP 매칭을 데이터셋 정확도(%) 합격 기준으로 판정(ISO/IEC TR 29119-11의 테스트 오라클 문제 참고), 비전 검사 PoC의 판별 가능 여부 근거 도출,
           AI 누유 검출의 감지율·오알람률 집계 기준 검증, 조명·광학 변화에 따른 검출 편차 확인.</div></div>
         <div class="tag">CAREER</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
@@ -308,7 +308,8 @@
             <div class="card"><h3>🛒 뉴퍼마켓 — LLM ERP 매칭</h3>
               <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.02 ~ 2026.04 · QA Engineer</p>
               <ul style="margin-bottom:0">
-                <li><strong>LLM 정확도 검증 기준 수립</strong> — 정답이 하나로 정해지지 않는 출력을 판정 가능한 형태로</li>
+                <li><strong>데이터셋 기반 정확도 판정</strong> — 검증 데이터셋을 TC로 넣고, 응답 정확도를 %로 수치화해 <strong>기준 비율 이상이면 PASS</strong></li>
+                <li>ISO/IEC TR 29119-11:2020(AI 기반 시스템 테스트 지침)이 짚는 <strong>테스트 오라클 문제</strong>를 참고 — 응답마다 기대 결과를 하나로 정하기 어려운 출력을, 개별 응답이 아니라 <strong>데이터셋 단위 합격 기준</strong>으로 판정</li>
                 <li>Figma Export 기반 요구사항 분석 → TC 설계</li>
                 <li>HTTP 보안 취약점 조사 → 개선 도출</li>
               </ul></div>
