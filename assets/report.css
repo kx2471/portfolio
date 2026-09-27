@@ -530,3 +530,13 @@ body.tm-open{overflow:hidden}
   padding:6px 12px; border-radius:99px; pointer-events:none; white-space:nowrap}
 .zoom:not(.wide) .hint{display:none!important}
 body.zoom-open{overflow:hidden}
+
+/* 경력 — 프로젝트 구분 (인하우스 / 수주) */
+.pgrp{display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 10px; margin:4px 0 10px}
+.pgrp + .grid{margin-bottom:22px}
+.det > .grid:last-child{margin-bottom:0}
+.pgrp-t{font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.06em;
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--pass-line);
+  border-radius:5px; padding:2px 9px}
+.pgrp-d{font-size:12.5px; color:var(--muted)}
+.card.own{border-color:var(--pass-line); box-shadow:0 0 0 3px color-mix(in srgb, var(--pass) 8%, transparent)}
