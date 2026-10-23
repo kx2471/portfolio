@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>キム・サンオク · SW QA Engineer</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="AI時代の品質を、検証できるものに。人が何を見るべきかを決め、素早く正しく確認できる仕組みをつくるSW QAエンジニア、キム・サンオクのポートフォリオ。">
+<link rel="alternate" hreflang="ko" href="../index.html">
+<link rel="alternate" hreflang="ja" href="index.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu">
+    <a href="#summary">Summary</a><a href="#cases">Cases</a><a href="#direction">Direction</a><a href="#checks">Verified</a>
+    <a href="#career">Career</a><a href="#side">Side</a><a href="#contact">Contact</a>
+  </div>
+  <a class="lang" href="../index.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+
+<header class="rpt" id="top">
+  <div class="wrap">
+    <div class="rpt-hero">
+      <div class="rpt-text">
+        <div class="rpt-meta">
+          <span><b>Report</b> SW QA Engineer</span>
+          <span><b>Period</b> 2023.02 — 現在</span>
+          <span><b>Domain</b> 自動車 → 公共・教育 → 産業AI</span>
+        </div>
+        <h1>AI時代の品質を、<br>検証できるものに。</h1>
+        <div class="sub">キム・サンオク · Kim Sang-Ok</div>
+        <p class="lede">
+          人が<strong>何を見るべきか</strong>を決め、<strong>素早く、正しく確認できる</strong>仕組みをつくるQAエンジニアです。
+          現在は産業向けAIビジョン検査プラットフォーム<strong>Daisy</strong>の品質を担当し、
+          AIプロダクトの出力を判定する基準を定め、検証プロセス・自動化・ツールをゼロから設計しています。
+        </p>
+      </div>
+      <figure class="rpt-photo"><img src="../assets/img/profile.jpg" alt="キム・サンオクのプロフィール写真" width="720" height="953"></figure>
+    </div>
+    <div class="summary" id="summary">
+      <div class="pass"><div class="n">4年目</div><div class="k">SW QA経験 · 3つのドメイン</div></div>
+      <div class="pass"><div class="n">0 → 1</div><div class="k">QAプロセスがない環境で体制を構築</div></div>
+      <div class="pass"><div class="n">1日 → 1.5時間</div><div class="k">リリース回帰テスト · コマンド1行で無人実行</div></div>
+      <div class="pass"><div class="n">6</div><div class="k">産業AIプロジェクトの検証 · 自社1 · 受託5</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-id">CASES</span><h2 class="sec">代表的な取り組み</h2></div>
+    <p class="sec-sub">各取り組みは<strong>課題 → 取り組み → 成果</strong>の順に整理し、
+      設計上の判断と実際の運用画面は詳細ページに掲載しています。<span class="nb">（機密情報は匿名化）</span></p>
+
+    <div class="cases">
+      <a class="case" href="process.html">
+        <div class="case-top">
+          <span class="case-id">CASE-01</span>
+          <span class="chip-st st-pass">運用中</span>
+        </div>
+        <h3>QAプロセスを0から1へ</h3>
+        <p>課題管理の仕組みがなかった環境に、ワークフロー・Priority基準・Root Causeの記入必須化・
+          デプロイゲート・RC検証手順を設計し、ルールが実際に機能するよう自動化まで組み込みました。</p>
+        <div class="metrics">
+          <div>ワークフロー <b>Git連携</b></div>
+          <div>デプロイゲート <b>NO-GOによる差し止め権</b></div>
+          <div>Exit Criteria <b>数値で判定</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+
+      <a class="case" href="automation.html">
+        <div class="case-top">
+          <span class="case-id">CASE-02</span>
+          <span class="chip-st st-pass">運用中</span>
+        </div>
+        <h3>Playwrightによるテスト自動化の構築</h3>
+        <p>本番相当の実サーバー・単一の共有アカウント・高コストなモデル学習という制約の上で、テスト同士が干渉しない構造を設計し、
+          1日以上かかっていたリリース検証を、コマンド1行・約1.5時間の無人実行に置き換えました。</p>
+        <div class="metrics">
+          <div>並列 <b>3 worker</b></div>
+          <div>前処理 <b>-39%</b></div>
+          <div>学習 <b>タイプごとに1回</b></div>
+          <div>拡張 <b>アーキテクチャ変更なし</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+
+      <a class="case" href="runner.html">
+        <div class="case-top">
+          <span class="case-id">CASE-03</span>
+          <span class="chip-st st-pass">運用中</span>
+        </div>
+        <h3>テストランナー — 誰でも検証できる環境</h3>
+        <p>全社で同じプロダクトをつくっているのに、それを検証できる人はごく一部でした。
+          つくる人なら誰でも自分の変更を確認できるべきだと考え、
+          そうした<strong>検証環境を構築することを目標</strong>にしました。このランナーはその一環です。</p>
+        <div class="metrics">
+          <div>インストール <b>0ステップ</b></div>
+          <div>コマンド <b>0行</b></div>
+          <div>前提テスト <b>自動で解決</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+
+      <a class="case" href="agent.html">
+        <div class="case-top">
+          <span class="case-id">CASE-04</span>
+          <span class="chip-st st-pass">社内展開</span>
+        </div>
+        <h3>AI Agent — Regression TC Creator</h3>
+        <p>私が記入を必須化したRoot Causeの記録を読み取り、回帰テストケースを設計してシート・チケットまで連携するClaude Agentです。
+          <strong>ルールを定めた本人が、そのルールが残したデータを活用するツールを自らつくりました。</strong></p>
+        <div class="metrics">
+          <div>呼び出し <b>チケットID 1行</b></div>
+          <div>書き込み <b>3段階ゲーティング</b></div>
+          <div>他チーム <b>改善事例として共有</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+
+      <a class="case" href="practice.html">
+        <div class="case-top">
+          <span class="case-id">CASE-05</span>
+          <span class="chip-st st-pass">常時</span>
+        </div>
+        <h3>検証実務 — API検証・トレーサビリティ・業務ツール</h3>
+        <p>UIを経由せずAPIを直接叩き、<strong>フロントエンドでしか防げていなかった入力チェックとXSSの経路</strong>を発見しました。
+          要件–テストケース–不具合のトレーサビリティ体制と、繰り返し作業を減らしたツールもまとめています。</p>
+        <div class="metrics">
+          <div>API <b>サーバー側検証の欠如・XSSを発見</b></div>
+          <div>トレーサビリティ <b>要件 ↔ TC ↔ 不具合</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="direction">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">DIRECTION</span><h2 class="sec">目指す方向 — AIがつくった結果を信頼できるものに</h2></div>
+    <p class="sec-sub">AIが成果物を安く速くつくるほど、ボトルネックは<strong>「それを信頼してよいのか」</strong>に移ります。
+      かといって人がすべてを確認すれば、今度は人が新たなボトルネックになり、レビューは形だけのものになります。
+      だから私の目標は、レビューを自分で抱え込むことではなく、<strong>人の判断が最も必要な場所で正しく使われる検証の仕組み</strong>を設計することです。</p>
+
+    <h4 class="h">2つの軸、同じ仕事</h4>
+    <div class="grid g2">
+      <div class="card"><h3>🧪 AIプロダクトを検証する</h3>
+        <p>正解が1つに定まらない出力を判定する基準をつくります。
+          LLMマッチングをデータセットの正解率（%）で判定したこと、ビジョン検出の可否の根拠、異常検知指標の集計基準がそれにあたります。
+          <span class="nb">（<a href="#career">職歴</a>）</span></p></div>
+      <div class="card"><h3>🤖 AIで検証する</h3>
+        <p>AIと自動化に作業を任せつつ、その結果を人が検証できる形で残します。
+          判定の根拠を残すレポートや、AIが書いたテストケースを見分ける目印がそれにあたります。
+          <span class="nb">（<a href="automation.html">CASE-02</a> · <a href="agent.html">CASE-04</a>）</span></p></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b>どちらも同じ力です</b> — <strong>判定できないものを、判定できる形にする仕事</strong>。
+      AIプロダクトの出力でも、AIがこなした作業でも同じです。
+    </div>
+
+    <h4 class="h" style="margin-top:30px">3つの層で設計します — これまでの実践</h4>
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">① 振り分け — 人が何を見るべきかを決める</div>
+        <div class="d">すべての結果を人が見るわけではありません。リトライで通ったテストは緑ではなく「不安定」として分けて人に回し、
+          RCの終了は数値基準で判定して、議論が必要なものだけを人が見ます。Priorityも4段階の判断フローで、誰が付けても同じ結果になるようにしました。</div></div>
+        <div class="tag">CASE-01·02</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">② 根拠 — 素早く、正しく確認できるようにする</div>
+        <div class="d">自動化が「合格」としたものも、何をどの順序で確認したかをその時点の画面とともに残します。
+          TC CreatorはRoot Causeを根拠にテストケースを設計し、AIが書いた行はオレンジ色で残して、レビュー対象がすぐ分かるようにしました。</div></div>
+        <div class="tag">CASE-02·03·04</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">③ フィードバック — 人が確認した結果が仕組みを直す</div>
+        <div class="d">不具合ごとにRoot Causeを選択式で残すようにし、原因の分布が自動で蓄積され、その記録が回帰テストケースの入力になります。
+          未検証ビルドのデプロイというインシデントも、責任追及ではなくデプロイゲートという仕組みに変えました。</div></div>
+        <div class="tag">CASE-01·04</div></div>
+    </div>
+
+    <h4 class="h" style="margin-top:30px">次の目標 — レビューが必ず行われるループ</h4>
+    <div class="grid g2">
+      <div class="card"><h3>① レビューゲート</h3>
+        <p>AIの結果がそのまま正式版にならず、リスクに応じて<strong>レビュー待ち</strong>に入り、人が承認して初めて正式版になる仕組み。</p></div>
+      <div class="card"><h3>② 根拠付きの結果</h3>
+        <p>結果ごとに<strong>どの根拠から導かれたか</strong>が付いていて、自分でつくるよりレビューのほうが速くなるように。</p></div>
+      <div class="card"><h3>③ 差し戻し理由の反映</h3>
+        <p>差し戻し理由を分類して記録し、<strong>ルールに反映</strong>することで、次からは人が見る量そのものが減るように。</p></div>
+      <div class="card"><h3>④ 計測</h3>
+        <p>承認率・修正後の承認率・自作した場合と比べたレビュー時間、そして<strong>誰が承認したか</strong>まで記録。</p></div>
+    </div>
+    <div class="note" style="margin-top:18px">
+      <b>まとめると</b> — これまではAIと自動化がつくった結果を<strong>人が検証できるようにする設計</strong>をしてきました。
+      次の目標は、これを<strong>レビューが必ず行われ、レビューするほど人が見る量が減っていくループ</strong>として完成させることです。
+    </div>
+  </div>
+</section>
+
+<section id="checks">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">VERIFIED</span><h2 class="sec">実績で示せるスキル</h2></div>
+    <p class="sec-sub">自ら担当し、詳細ページに<strong>実際の画面と判断の根拠</strong>がある項目です。</p>
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">プロセス設計 — 定着と構築</div>
+        <div class="d">ASPICE Level 1（SWE.6）認証環境での体系的なQAと、プロセスのない環境で
+          ワークフロー・Gitブランチ戦略・自動化ルールをゼロから設計した経験の両方があります。</div></div>
+        <div class="tag">CASE-01</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">テスト自動化・回帰テスト</div>
+        <div class="d">Playwright・Node.jsによるMLOps E2E回帰テストシステム（実サーバー・3 worker並列）を1人で設計・構築・運用。
+          チーム向けセルフサービス実行ランナーの構築、Selenium UI自動化、Jenkins・GitHub Actions連携。</div></div>
+        <div class="tag">CASE-02·03</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">AIプロダクトの検証 — 判定基準の策定</div>
+        <div class="d">LLMによるERPマッチングをデータセット正解率（%）の合格基準で判定（ISO/IEC TR 29119-11のテストオラクル問題を参考）、ビジョン検査PoCにおける判別可否の根拠づくり、
+          AI漏油検知の検知率・誤報率の集計基準の検証、照明・光学系の変化による検出ばらつきの確認。</div></div>
+        <div class="tag">CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">AI活用・ツール開発</div>
+        <div class="d">Claude AgentによるRegression TC Creator、Slack + AWS LambdaによるQA Requestボット、
+          Google Apps ScriptによるQA Test Run管理ツール、総合抽出ツール・KPI Calculatorなどの業務ユーティリティ。</div></div>
+        <div class="tag">CASE-04</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">車載組込みの検証</div>
+        <div class="d">HILSによるIVIシステムの検証、CAN通信・CANoeによるネットワーク検証、
+          自動運転制御アプリケーションの検証、KOLAS認定のソフトウェア信頼性試験に合格。</div></div>
+        <div class="tag">CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">Web品質・セキュリティ診断</div>
+        <div class="d">KRDS（韓国政府デザインシステム）準拠のWebアクセシビリティ検証、REST API検証でサーバー側の検証ロジック欠如を指摘し改善を主導、
+          Burp Suite・LighthouseによるWebセキュリティ・品質診断。</div></div>
+        <div class="tag">CASE-05</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">協働・ドキュメンテーション</div>
+        <div class="d">Jira・Xray・Jira Automation・ClickUp・Confluenceによるテスト管理、
+          アジャイル・スクラムの運用、月次・四半期の品質状況報告を経営陣に報告した経験。</div></div>
+        <div class="tag">ALL</div></div>
+    </div>
+
+    <h4 class="h" style="margin-top:34px">技術スタック</h4>
+    <div class="grid g3">
+      <div class="card"><h3>テスト管理・協働</h3><div class="tags"><span>Jira</span><span>Xray</span><span>Jira Automation</span><span>ClickUp</span><span>Confluence</span><span>Slack</span></div></div>
+      <div class="card"><h3>自動化・スクリプト</h3><div class="tags"><span>Playwright</span><span>Selenium</span><span>Postman</span><span>Python</span><span>Node.js</span><span>Shell</span><span>Jenkins</span><span>GitHub Actions</span></div></div>
+      <div class="card"><h3>AI・LLM</h3><div class="tags"><span>Claude Agent</span><span>MCP</span><span>LLMの正解率検証</span></div></div>
+      <div class="card"><h3>車載HILS・診断</h3><div class="tags"><span>Vector CANoe</span><span>CANalyzer</span><span>Monaco</span><span>ETFW</span><span>DCM</span></div></div>
+      <div class="card"><h3>Webセキュリティ・品質</h3><div class="tags"><span>Burp Suite</span><span>Lighthouse</span><span>KRDS</span></div></div>
+      <div class="card"><h3>サーバーレス・連携</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Google Sheets API</span><span>Apps Script</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="career">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-id">CAREER</span><h2 class="sec">職歴とプロジェクト</h2></div>
+    <p class="sec-sub">ドメインは<strong>車載組込み → 公共・教育Web → 産業AIビジョン</strong>と変わりましたが、
+      取り組みの順序はいつも同じでした。<strong>判定基準のない場所に基準をつくり、その基準が守られる仕組みをつくること</strong>です。</p>
+
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-d">2026.02 — 現在</div>
+        <div class="tl-t">AHHA Labs <span class="chip-st st-pass" style="margin-left:6px;vertical-align:middle">在籍中</span></div>
+        <div class="tl-r">QA Engineer · SW QA担当</div>
+        <div class="tl-n">産業向けAIビジョン検査プラットフォームDaisyの品質検証を統括。<br>
+          <strong>AIプロダクトの出力を判定する基準をつくり、AIを検証ワークフローに組み込んだ経験。</strong></div>
+        <details class="prj" open>
+          <summary>プロジェクト6件<span class="meta">自社1 · 受託5 — Daisy · 大韓送油管公社 · 富川 · 起亜自動車 · LG U+ · ニューパーマーケット</span></summary>
+          <div class="det">
+            <div class="pgrp"><span class="pgrp-t">自社プロダクト</span><span class="pgrp-d">自社製品 — 品質の仕組みを一から設計し、継続して運用</span></div>
+            <div class="grid g3">
+            <div class="card own"><h3>🏭 Daisy AI Ops Platform</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.02 ~ 現在 · QA Engineer</p>
+              <p>スマートファクトリー向けAIビジョン検査プラットフォーム。機能検証・リリースQAに加え、<strong>QAプロセスをゼロから構築</strong>。</p>
+              <ul style="margin-bottom:7px">
+                <li>ワークフロー・デプロイゲート・RC・RCAの設計 <a href="process.html">→</a></li>
+                <li>MLOpsの無人回帰テスト・セルフサービスランナー <a href="automation.html">→</a></li>
+                <li>Claude Agentによる回帰テストケースの自動生成 <a href="agent.html">→</a></li>
+              </ul>
+              <p style="margin-bottom:0">トレーサビリティ体制の構築により、新機能の<strong>要件カバレッジ100%</strong>を達成。</p></div>
+            </div>
+            <div class="pgrp"><span class="pgrp-t">受託プロジェクト</span><span class="pgrp-d">顧客案件 — 要件と判定基準を顧客の現場に合わせて策定</span></div>
+            <div class="grid g3">
+            <div class="card"><h3>🛢️ 大韓送油管公社 — AI漏油検知</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.04 ~ · 検証担当</p>
+              <ul style="margin-bottom:0">
+                <li><strong>指標の数え方から確認</strong> — 漏油検知率・誤報率の1分単位の集計基準を検証</li>
+                <li>圧力データ<strong>毎秒1,000件</strong>の時系列処理、TCPソケットによる準リアルタイム収集の連携</li>
+                <li>通信の切断・再接続時の<strong>データ欠損</strong>シナリオを検証</li>
+              </ul></div>
+            <div class="card"><h3>🧵 富川 — フィルター生地の不良検出</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.05 ~ 2026.07 · 3ライン</p>
+              <ul style="margin-bottom:0">
+                <li><strong>設備が実際に止まるかまでを検証範囲に</strong> — 撮影 → 検知 → 停止トリガー → 再稼働のE2E</li>
+                <li>3ライン同時稼働のリアルタイム処理を検証</li>
+                <li>照明・光学系の変化による<strong>検出ばらつき</strong>を確認</li>
+              </ul></div>
+            <div class="card"><h3>🔧 起亜自動車 — トルク検査ABS</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.06 ~ 2026.08 · PoC</p>
+              <ul style="margin-bottom:0">
+                <li><strong>目的に合った判定基準を策定</strong> — 合否ではなく<em>可否の根拠</em>を成果物に</li>
+                <li>撮影角度・照明・距離ごとの判別可否を検証</li>
+                <li>誤判定ケースを分類し、既存の順序ベースの保存方式の限界を特定</li>
+              </ul></div>
+            <div class="card"><h3>🔗 LG U+ — KLKオントロジー</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.06 ~ · 検証担当</p>
+              <ul style="margin-bottom:0">
+                <li><strong>1か所を変えたとき、つながるものが追従するか</strong> — オントロジー反映の整合性</li>
+                <li>データ・メタデータ・ビジネス用語の関係マッピングを検証</li>
+              </ul></div>
+            <div class="card"><h3>🛒 ニューパーマーケット — LLM ERPマッチング</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2026.02 ~ 2026.04 · QA Engineer</p>
+              <ul style="margin-bottom:0">
+                <li><strong>データセットによる正解率判定</strong> — 検証用データセットをテストケースとして投入し、応答の正解率を%で数値化して<strong>基準値以上ならPASS</strong></li>
+                <li>ISO/IEC TR 29119-11:2020（AIベースシステムのテストに関するガイドライン）が指摘する<strong>テストオラクル問題</strong>を参考に、応答ごとに期待結果を1つに定めにくい出力を、個々の応答ではなく<strong>データセット単位の合格基準</strong>で判定</li>
+                <li>Figma Exportをもとに要件を分析 → テストケース設計</li>
+                <li>HTTPのセキュリティ脆弱性を調査 → 改善策を提示</li>
+              </ul></div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="tl-item past">
+        <div class="tl-d">2025.06 — 2026.01</div>
+        <div class="tl-t">ソディス</div>
+        <div class="tl-r">技術研究所 主任研究員 · SW QA担当</div>
+        <div class="tl-n">QA組織のない環境で、アジャイル・スクラム、Gitブランチ戦略、Jenkins CI/CDを自ら整備。<br>
+          <strong>標準のない場所にプロセスとCI/CDを立ち上げた経験。</strong></div>
+        <details class="prj">
+          <summary>プロジェクト3件<span class="meta">コネクテッドカーCCU · 大田 自動運転 · 空間情報振興院 LMS</span></summary>
+          <div class="det"><div class="grid g3">
+            <div class="card"><h3>📡 コネクテッドカーCCU 国家プロジェクト</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2025.08 ~ 2026.01</p>
+              <ul style="margin-bottom:0">
+                <li><strong>KOLAS認定のソフトウェア信頼性試験に合格</strong></li>
+                <li>CANoeによるHILSネットワークの送受信、DCM連携のCAN通信を検証</li>
+                <li>Linuxベースのセキュリティテスト・サイバーセキュリティ検証手順書を作成</li>
+              </ul></div>
+            <div class="card"><h3>🚌 大田（テジョン）自動運転 商用化地区</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2025.06 ~ 2026.01 · ETRI主管</p>
+              <ul style="margin-bottom:0">
+                <li><strong>実車検証に直接参加</strong> — 現場で品質課題に対応</li>
+                <li>CAN通信・ETRIサーバープロトコルの送受信を検証</li>
+                <li>Jiraによる不具合・テスト管理の仕組みを構築・運用</li>
+              </ul></div>
+            <div class="card"><h3>🏫 空間情報振興院 LMS</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2025.06 ~ 2026.01 · QA</p>
+              <p><strong>初めて自動化を導入したプロジェクト</strong>です。</p>
+              <ul style="margin-bottom:0">
+                <li><strong>Playwright UI自動化を導入</strong> · <strong>Jenkins CI/CDを構築</strong></li>
+                <li><strong>Xrayを導入</strong>し、テストケース–不具合のトレーサビリティを確保 <a href="practice.html">→</a></li>
+                <li>KRDS Webアクセシビリティ・REST APIの検証 <a href="practice.html">→</a></li>
+              </ul></div>
+          </div></div>
+        </details>
+      </div>
+
+      <div class="tl-item past">
+        <div class="tl-d">2023.02 — 2025.06</div>
+        <div class="tl-t">ワイドネットエンジニアリング</div>
+        <div class="tl-r">ミラーリング検証1チーム 主任 · モビリティ検証テストエンジニア</div>
+        <div class="tl-n">TMAP AUTO for Mercedes-Benzのナビゲーションシステムを検証。<br>
+          <strong>定められた標準を守りながら、大規模な検証を回した経験。</strong></div>
+        <details class="prj">
+          <summary>プロジェクト1件<span class="meta">TMAP AUTO for Mercedes-Benz</span></summary>
+          <div class="det"><div class="grid g3">
+            <div class="card"><h3>🚗 TMAP AUTO for Mercedes-Benz</h3>
+              <p style="font-size:12px;color:var(--faint);margin-bottom:7px">2023.03 ~ 2025.06 · Test Engineer</p>
+              <ul style="margin-bottom:0">
+                <li><strong>ASPICE Level 1（SWE.6）認証の取得に貢献</strong></li>
+                <li>2週間スプリントあたり<strong>700件以上のテストケースを作成・実施</strong></li>
+                <li><strong>HILSテスト環境を構築</strong> — 実車より前の早期検証</li>
+                <li>非機能KPIのスクリプトで<strong>検証工数を30%削減</strong> <a href="practice.html">→</a></li>
+              </ul></div>
+          </div></div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="side">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-id">SIDE</span><h2 class="sec">個人プロジェクト</h2></div>
+    <p class="sec-sub">業務とは関係なく、<strong>気になってつくってみたもの</strong>です。
+      業務上の成果ではありませんが、前述の業務ツールがどこから生まれたかを示すために載せています。</p>
+    <div class="grid g2">
+      <div class="card">
+        <h3>📈 NASDAQ AUTO — Multi-Agent AI</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">TypeScript · Node.js</p>
+        <p>3種類のAIモデル（GPT・Gemini・Claude）がそれぞれ分析し、<strong>Manager Agentが統合して結論を出す</strong>
+          Multi-Agent構成。22モジュールからなる自動化パイプライン。</p>
+        <div class="note" style="margin-bottom:10px"><b>得たもの</b> — クロスチェックで<strong>偏りを減らす構造</strong>と、
+          <strong>自動判断には根拠の記録が伴うべき</strong>という原則。
+          <a href="agent.html">TC Creatorの安全策</a>につながりました。</div>
+        <p style="margin-bottom:0"><a href="https://github.com/kx2471/NASDAQ_AUTO" target="_blank" rel="noopener">github.com/kx2471/NASDAQ_AUTO →</a></p>
+      </div>
+      <div class="card">
+        <h3>🔍 OCRを活用したマクロ</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · pytesseract</p>
+        <p>OCRに興味を持ってつくったツール。指定領域を定期的にキャプチャしてテキストを抽出し、
+          キャプチャ画像を保存して<strong>失敗時に原因をさかのぼれるように</strong>しました。</p>
+        <div class="note" style="margin-bottom:0"><b>つながったもの</b> — このとき身につけたパイプラインが
+          <a href="#side-clip">Clipboard Translate</a>のテキスト抽出部になり、
+          <em>OCRを使った非定型UIテスト</em>のアイデアもここから得ました。</div>
+      </div>
+      <div class="card" id="side-clip">
+        <h3>🌐 Clipboard Translate</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · Tesseract OCR</p>
+        <p>クリップボードに画像やテキストが入るとリアルタイムで検知し、<strong>OCR + 翻訳</strong>まで一度に処理します。
+          OCRで分断された改行を<strong>文末を基準に結合し直し</strong>、
+          技術文書にそのまま貼れるよう<strong>体言止めに自動変換</strong>します。</p>
+        <div class="note" style="margin-bottom:0"><b>出発点</b> — 前述のOCRマクロで身につけたテキスト抽出パイプラインに翻訳を加えました。
+          一度つくったものが、次のツールの部品になった例です。</div>
+      </div>
+    </div>
+    <div class="why" style="margin-top:18px"><b>掲載している理由</b>
+      業務上の成果ではなく、<strong>「気になったらつくってみる」という習慣そのものが業務ツールの出どころ</strong>だからです。</div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">CONTACT</span><h2 class="sec">連絡先</h2></div>
+    <div class="grid g2">
+      <div class="card"><h3>✉️ Email</h3>
+        <p style="margin-bottom:0"><a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a></p></div>
+      <div class="card"><h3>💻 GitHub</h3>
+        <p style="margin-bottom:0"><a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p style="font-family:var(--mono);font-size:12px;color:var(--faint)">
+      END OF REPORT · キム・サンオク · SW QA Engineer</p>
+    <p class="disclaimer">本ポートフォリオの資料と画面は実際の業務経験をもとに再構成・加工したものです。
+      企業機密の保護のため、顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。
+      画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>
+  </div>
+</footer>
+<script src="../assets/report.js"></script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QAプロセスを0から1へ · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="QAプロセスのない環境に、ワークフロー・デプロイゲート・RC検証手順・RCAの仕組みをゼロから設計した記録。">
+<link rel="alternate" hreflang="ko" href="../process.html">
+<link rel="alternate" hreflang="ja" href="process.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html" class="on">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <a class="lang" href="../process.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-01</span></div>
+  <h1>QAプロセスを0から1へ</h1>
+  <p class="lede">課題管理の仕組みがなかった環境に、ワークフロー・Priority基準・Root Causeの記入必須化・デプロイゲート・RC検証手順を自ら設計し、ルールが実際に機能するよう自動化まで組み込みました。</p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>優先度は起票者の主観に任され、不具合の原因は記録されず、未検証のビルドが現場にデプロイされる事故もありました。</p></div><div><h5>Action</h5><p>判断基準を明文化し、守られなければ自動で差し戻すルールをトラッカーに設定しました。</p></div><div class="r"><h5>Result</h5><p>「これ、QAに回していいですか？」がフィールドの条件に置き換わり、デプロイを差し止める権限がQAに明示的に与えられました。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>開発・QAワークフロー — コードの流れと仕事の流れをつなぐ<span class="meta">Git × 課題トラッカー × Automation</span></summary>
+  <div class="det">
+    <h4 class="h">設計した全体の流れ</h4>
+    <div class="flow">
+      <div class="node git"><b>ブランチ作成</b><em>Gitイベント</em></div><div class="arrow">→</div>
+      <div class="node"><b>In Development</b><em>自動で遷移</em></div><div class="arrow">→</div>
+      <div class="node"><b>In Review</b><em>PR · Fix Versionを記入</em></div><div class="arrow">→</div>
+      <div class="node"><b>Dev Complete</b><em>バージョンブランチへマージ</em></div><div class="arrow">→</div>
+      <div class="node"><b>In QA</b><em>RCA記入 + Version確認</em></div><div class="arrow">→</div>
+      <div class="node"><b>Resolved</b><em>修正完了</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>Closed</b><em>QAの最終確認</em></div>
+    </div>
+    <div class="note">
+      <b>最後の扉はQAが閉じる</b> — <code>Resolved</code>は開発が「直した」と宣言した状態にすぎません。
+      <strong>QAが最終確認して初めて<code>Closed</code></strong>に進みます。
+      チケットを開く人と閉じる人を分け、<em>「直した」という申告</em>と<em>「直っている」という確認</em>が混ざらないようにしました。
+    </div>
+    <div class="note warn">
+      <b>差し戻しの道も設計</b> — 検証で差し戻すと<code>In QA → In Development</code>に戻ります。
+      RCA未記入のまま<code>Dev Complete</code>にしようとすると、Automationが自動で<strong>In Developmentに戻します</strong>。
+    </div>
+
+    <h4 class="h">変えたこと</h4>
+    <div class="tw"><table>
+      <thead><tr><th>領域</th><th>以前</th><th>導入した変化</th></tr></thead>
+      <tbody>
+        <tr><td>Priorityの判断</td><td class="before">起票者の主観に依存</td><td class="after">4段階の判断フロー + 主要機能リスト・等級別の対応SLA</td></tr>
+        <tr><td>チケット種別</td><td class="before">Bug/Taskが混在し、集計不可</td><td class="after">Task Typeを分離 → BugだけにRCAの自動化を連携</td></tr>
+        <tr><td>不具合の記録</td><td class="before">「修正完了」だけが残り、原因が失われる</td><td class="after">Root Cause / Corrective Actionの記入を必須化</td></tr>
+        <tr><td>ステータス遷移</td><td class="before">手動で遷移し、漏れや逆行が多発</td><td class="after">Gitイベント → トラッカーのステータスを自動遷移</td></tr>
+        <tr><td>QA開始の条件</td><td class="before">口頭での確認が必要</td><td class="after">Fix/RC Versionの記入を条件に自動化</td></tr>
+        <tr><td>ブランチ運用</td><td class="before">命名規則がなく、削除タイミングも曖昧</td><td class="after">4種類のブランチを定義 + 命名・ライフサイクルのルール</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="h">Priority — 誰が付けても同じ結果になるように</h4>
+    <div class="flow">
+      <div class="node no"><b>Urgent</b><em>システム自体が使えない？</em></div><div class="arrow">→</div>
+      <div class="node"><b>High</b><em>主要機能に影響？</em></div><div class="arrow">→</div>
+      <div class="node"><b>Medium</b><em>ユーザーが不便を感じる？</em></div><div class="arrow">→</div>
+      <div class="node"><b>Low</b><em>それ以外</em></div>
+    </div>
+    <p>「自分のチケットは全部Urgent」が繰り返される状況でした。<strong>主要機能リスト</strong>（検査の実行・判定、結果の照会、
+      モデルの学習・デプロイ、ユーザー認証、データの保存・照会）を別途定義し、等級別の対応SLAまで約束することで、
+      Priorityが単なるラベルではなく<strong>実際の対応フロー</strong>につながるようにしました。</p>
+
+    <h4 class="h">ルールは実際に動いています</h4>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/wf-auto-1.png" alt="ステータス・カスタムフィールドの変更をトリガーに、ステータス遷移とコメントを自動実行する。一番下がRoot Cause未入力時にステータスを差し戻すルール。" loading="lazy"><figcaption>ステータス・カスタムフィールドの変更をトリガーに、ステータス遷移とコメントを自動実行する。一番下がRoot Cause未入力時にステータスを差し戻すルール。</figcaption></figure><figure class="shot"><img src="../assets/img/wf-auto-2.png" alt="優先度・タグ・種別の変更もトリガーとして活用する。Urgentに上がると即座にSlackで告知し、Epicに変わるとサブタスクを自動生成する。" loading="lazy"><figcaption>優先度・タグ・種別の変更もトリガーとして活用する。Urgentに上がると即座にSlackで告知し、Epicに変わるとサブタスクを自動生成する。</figcaption></figure></div>
+    <div class="note">
+      <b>前の表と照らし合わせると</b><br>
+      · <code>Root Cause 입력 하지 않으면 → 상태 변경 및 코멘트</code> — RCA未記入時に差し戻すルール<br>
+      · <code>fix, rc 버전 작성 시 → In QA 상태 변경</code> — バージョンフィールドをQA開始の条件に<br>
+      · <code>Ticket이 Urgent로 변경되면 SLACK Noti</code> — Priority SLAの「即時に全体共有」をルールで担保
+      <br><span style="font-size:12px;color:var(--muted)">（コード表記は画面上の実際のルール名のまま掲載しています）</span>
+    </div>
+    <p style="font-size:13px;color:var(--muted)">画面は運用中のルール一覧の一部です。
+      Epic化したときのサブタスク3種の自動生成、Reopenタグ付与時のRCバージョン初期化、フォルダ単位のチケットID自動採番など、
+      <strong>チケットのライフサイクル全体で手作業が発生していた箇所をルールに移しました。</strong></p>
+  </div>
+</details>
+
+<details>
+  <summary>QA Requestボット — 依頼の受付を仕組みに<span class="meta">Slack · AWS Lambda · ClickUp API</span></summary>
+  <div class="det">
+    <p>複数プロジェクトのQA依頼がDM・口頭・複数チャンネルに散らばって届き、バージョン・日程・範囲が抜けていることも少なくありませんでした。
+      <strong>スラッシュコマンド1つで受付を一元化</strong>し、その後の通知まで自動化しました。</p>
+    <div class="flow">
+      <div class="node git"><b>/qa-request</b><em>Slack Slash Command</em></div><div class="arrow">→</div>
+      <div class="node"><b>AWS Lambda</b><em>モーダル表示 → 検証 → API</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>チケット作成 + チャンネル告知</b><em>以降の通知は同じスレッドに蓄積</em></div>
+    </div>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/bot-modal.png" alt="Slackで/qa-requestと入力すると表示される依頼フォーム。件名・プロダクト・目的・バージョン・変更範囲・日程・デプロイ予定日・顧客へのデプロイ日を受け付ける。" loading="lazy"><figcaption>Slackで/qa-requestと入力すると表示される依頼フォーム。件名・プロダクト・目的・バージョン・変更範囲・日程・デプロイ予定日・顧客へのデプロイ日を受け付ける。</figcaption></figure><figure class="shot"><img src="../assets/img/bot-validate.png" alt="形式が正しくないとリアルタイムで警告が出て、送信できない。" loading="lazy"><figcaption>形式が正しくないとリアルタイムで警告が出て、送信できない。</figcaption></figure><figure class="shot"><img src="../assets/img/bot-deploydate.png" alt="デプロイ予定時刻。この値がリマインダーの基準になることを、入力欄のすぐ下に説明として添えた。" loading="lazy"><figcaption>デプロイ予定時刻。この値がリマインダーの基準になることを、入力欄のすぐ下に説明として添えた。</figcaption></figure><figure class="shot"><img src="../assets/img/bot-ticket.jpg" alt="送信と同時に作成されたClickUpチケット。本文が[依頼フォーム]ブロックに整理され、日付・カスタムフィールドが自動入力される。" loading="lazy"><figcaption>送信と同時に作成されたClickUpチケット。本文が[依頼フォーム]ブロックに整理され、日付・カスタムフィールドが自動入力される。</figcaption></figure></div><h4 class="h">送信後 — 約束が守られるかまで見守る</h4><div class="shots2"><figure class="shot"><img src="../assets/img/bot-schedule.png" alt="日程が変わると、関係者へのメンションとともに変更前 → 変更後がスレッドに自動で告知される。" loading="lazy"><figcaption>日程が変わると、関係者へのメンションとともに変更前 → 変更後がスレッドに自動で告知される。</figcaption></figure><figure class="shot"><img src="../assets/img/bot-deployed.png" alt="予定時刻より前にビルドが確認できれば「デプロイ確認済み」として自ら完了する。" loading="lazy"><figcaption>予定時刻より前にビルドが確認できれば「デプロイ確認済み」として自ら完了する。</figcaption></figure><figure class="shot"><img src="../assets/img/bot-warn.png" alt="予定時刻までにビルドが見つからなければ警告 + 関係者へのメンション。デプロイされるまで2時間おきに再通知。" loading="lazy"><figcaption>予定時刻までにビルドが見つからなければ警告 + 関係者へのメンション。デプロイされるまで2時間おきに再通知。</figcaption></figure></div>
+
+    <h4 class="h">チケットをつくって終わりにしない</h4>
+    <p>ボットが<code>release</code>チャンネルの<strong>Jenkinsのビルドメッセージを監視</strong>し、
+      チケットに書かれたバージョンのRC1ビルドが上がったかを自ら確認します。
+      予定時刻を過ぎても見つからなければ警告 + 関係者へのメンション、<strong>2時間おきの再通知</strong>、
+      <strong>24時間後に自動終了</strong>。</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:170px">状況</th><th>素朴につくると</th><th>実際の設計</th></tr></thead>
+      <tbody>
+        <tr><td>日付を<strong>初めて</strong>設定</td><td class="before">変更とみなして通知</td><td class="after">通知しない — 変更・削除のときだけ</td></tr>
+        <tr><td>開始日と期日を同時に変更</td><td class="before">通知が2件</td><td class="after">1件にまとめる</td></tr>
+        <tr><td>予定時刻より前にデプロイ</td><td class="before">予定時刻まで待つ</td><td class="after">確認次第すぐ✅で完了</td></tr>
+        <tr><td>未デプロイが続く</td><td class="before">1回警告して放置</td><td class="after">2時間おきに再通知</td></tr>
+        <tr><td>いつまでも出てこない</td><td class="before">無限に繰り返す → 通知疲れ</td><td class="after"><strong>24時間後に自動終了</strong></td></tr>
+        <tr><td>デプロイ日が変更された</td><td class="before">古い時刻を基準に誤検知</td><td class="after"><strong>1分以内に検知</strong> → 新しい基準で再始動</td></tr>
+        <tr><td>チケットが削除された</td><td class="before">孤立したリマインダーが鳴り続ける</td><td class="after">1分以内に自動で片付ける</td></tr>
+        <tr><td>判定ルールのないプロダクト</td><td class="before">誤検知の通知</td><td class="after">チケットのみ作成 · リマインダーは動かさない</td></tr>
+      </tbody>
+    </table></div>
+    <div class="why"><b>ここで学んだこと</b>
+      通知システムの本当の難しさは<strong>「いつ送らないか」</strong>にあります。
+      自動通知はつくるのは簡単ですが、嫌われるのも簡単です。チームにボットを止められないようにすることが設計の目標でした。</div>
+  </div>
+</details>
+
+<details>
+  <summary>デプロイゲート — QAのNO-GO差し止め権<span class="meta">インシデントから生まれたプロセス</span></summary>
+  <div class="det">
+    <p>未検証のビルドが顧客の現場にデプロイされるインシデントがありました。原因を追うと、個人のミスではなく
+      <strong>仕組みの空白</strong>でした — デプロイ対象の確認がバージョンラベルだけで行われ、
+      QAの検証完了とデプロイの決定の間に<strong>明示的なつながりがなかったのです。</strong></p>
+    <div class="flow">
+      <div class="node"><b>1. ビルド成果物の一致</b><em>バージョンラベルではなくビルド番号単位</em></div><div class="arrow">→</div>
+      <div class="node"><b>2. QA検証完了のチェック</b><em>デプロイの前提条件</em></div><div class="arrow">→</div>
+      <div class="node"><b>3. 開発チームの承認</b><em></em></div><div class="arrow">→</div>
+      <div class="node ok"><b>4. PMの最終GO</b><em>デプロイの決定権限</em></div>
+    </div>
+    <div class="note">
+      <b>権限を分けました</b> — QAは品質の状態を報告し、<strong>NO-GOでデプロイを差し止める</strong>ことができ、
+      <strong>GO/NO-GOの最終決定はPM</strong>に置きます。品質を報告する責任とデプロイを決める権限が混ざらないようにした設計です。
+    </div>
+    <div class="note warn">
+      <b>例外をプロセスの中へ</b> — 緊急デプロイを認めないプロセスは迂回されます。
+      緊急レーンを別に設けたうえで、<strong>リスク受容の承認・未検証範囲の文書化・事後QAの義務化</strong>を付けました。
+    </div>
+    <p>インシデントを<strong>責任追及ではなくプロセス改善</strong>に転換し、
+      QAがリリースパイプラインの形式的な参加者ではなく、<strong>明示的な権限を持つゲートキーパー</strong>になりました。</p>
+  </div>
+</details>
+
+<details>
+  <summary>RC検証手順 — 「いつ終わるか」を数字で<span class="meta">Exit Criteria · 役割の分離</span></summary>
+  <div class="det">
+    <p>「状況によって毎回違う」進め方だったRC検証を、<strong>繰り返し使える手順</strong>として確立しました。
+      QAの検証と開発の修正を並行させ、準備ができ次第デプロイ（上限は1営業日以内）して早期に収束させます。</p>
+    <div class="flow">
+      <div class="node"><b>RC1</b><em>Full Test · 全テストケース</em></div><div class="arrow">→</div>
+      <div class="node git"><b>課題の修正</b><em>Urgent→Highの順</em></div><div class="arrow">→</div>
+      <div class="node"><b>RC2</b><em>Retest + Regression</em></div><div class="arrow">→</div>
+      <div class="node"><b>RC3</b><em>検証</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>リリース判定</b><em>PM GO / NO-GO</em></div>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Exit Criteria</th><th>基準</th></tr></thead>
+      <tbody>
+        <tr><td>残存Urgent</td><td class="after">0件（最優先のゲート）</td></tr>
+        <tr><td>残存High</td><td class="after">5件未満（1件ごとにPM・PLと協議）</td></tr>
+        <tr><td>Pass Rate</td><td class="after">95%以上</td></tr>
+        <tr><td>Normal / Low</td><td>個別のゲートは設けずPass Rateに含める → Known Issueとして管理</td></tr>
+      </tbody>
+    </table></div>
+    <p>個々の案件で毎回議論する代わりに、<strong>数字で判定できる基準</strong>を定義して判定コストを下げました。
+      <strong>QAは基準を満たしているかを報告</strong>し、<strong>GO/NO-GOの決定はPM</strong>が行います —
+      QAがビジネス判断を抱え込まず、品質の事実に集中できるようにするための分離です。
+      本番の緊急修正は、Full Testを省いて自動化による迅速な検証だけを行う<strong>Hotfix専用トラック</strong>に分け、
+      緊急対応が通常の手順を崩さないようにしました。</p>
+  </div>
+</details>
+
+<details>
+  <summary>QA Test Run管理ツール — 結果を1つの履歴に<span class="meta">Google Sheets + Apps Script</span></summary>
+  <div class="det">
+    <p>バージョンごとにマスターシートからテストケースをコピーし、結果を各バージョンのシートに散らばって記録していたため、
+      <strong>「このテストケースはバージョンを経てどうなったか」</strong>を見るには複数のシートを目で追う必要がありました。
+      回帰対象の選定・バージョン別のサマリー・トレーサビリティの根拠づくりも、毎回手作業でした。</p>
+    <div class="flow">
+      <div class="node git"><b>マスターTC</b><em>要件と連携</em></div><div class="arrow">→</div>
+      <div class="node"><b>Test Runシート</b><em>実行 · 結果入力</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>Test Run History</b><em>蓄積 · 参照の元データ</em></div>
+    </div>
+    <div class="note">
+      <b>貯める場所と見る場所の分離</b> — Historyは結果を縦に積み続ける元データで、
+      人はその上に載せた参照ビューで見ます。
+      <strong>DBの元テーブルを直接探さず、クエリで参照するのと同じ構造</strong>です。
+    </div>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/tr-menu.jpg" alt="スプレッドシートに追加したQAメニュー。作成・参照・整理・完了の記録が1か所にまとまる。" loading="lazy"><figcaption>スプレッドシートに追加したQAメニュー。作成・参照・整理・完了の記録が1か所にまとまる。</figcaption></figure><figure class="shot"><img src="../assets/img/tr-summary.jpg" alt="📊 バージョン別サマリー — 総テストケース数・PASS・FAIL・NA・Pass Rateがバージョンごとに自動集計される。表をコピーしてそのまま報告書に貼れる。" loading="lazy"><figcaption>📊 バージョン別サマリー — 総テストケース数・PASS・FAIL・NA・Pass Rateがバージョンごとに自動集計される。表をコピーしてそのまま報告書に貼れる。</figcaption></figure><figure class="shot"><img src="../assets/img/tr-history.jpg" alt="🔎 テストケースの履歴照会 — 1つのテストケースがバージョンを経てどうなったかを、縦に積まれたHistoryから取り出して表示する。" loading="lazy"><figcaption>🔎 テストケースの履歴照会 — 1つのテストケースがバージョンを経てどうなったかを、縦に積まれたHistoryから取り出して表示する。</figcaption></figure><figure class="shot"><img src="../assets/img/tr-guide.jpg" alt="ツールと一緒に作成したユーザーガイド。概要・メニュー構成・初期設定・作成/実行/完了/照会・注意事項で構成。" loading="lazy"><figcaption>ツールと一緒に作成したユーザーガイド。概要・メニュー構成・初期設定・作成/実行/完了/照会・注意事項で構成。</figcaption></figure></div>
+
+    <h4 class="h">回帰の引き継ぎ — RC2のつくり方</h4>
+    <p>ソースを<strong>既存のTest Runシート</strong>のRC1にし、フィルターを<code>P/F = FAIL, NA</code>にすると、
+      <strong>RC1で失敗した、または未検証の項目だけ</strong>がP/F空欄のまま引き継がれます。
+      RC検証手順の「Retest + Regression」を、手作業ではなくツールが計算します。</p>
+    <h4 class="h">このツールで答えられるようになった問い</h4>
+    <div class="tw"><table>
+      <thead><tr><th>問い</th><th>答え方</th></tr></thead>
+      <tbody>
+        <tr><td><strong>カバレッジ</strong> — 今回のバージョンで何を検証したか？</td><td>Test Runシート + 統計ブロック</td></tr>
+        <tr><td><strong>回帰対象</strong> — 過去にFAILしたテストケースは？</td><td>Historyのフィルター / 引き継ぎ作成</td></tr>
+        <tr><td><strong>デプロイ判断</strong> — このバージョンのPass率は？</td><td class="after">バージョン別サマリー（Exit Criteriaに直結）</td></tr>
+        <tr><td><strong>トレーサビリティ</strong> — このテストケースはバージョンごとにどうだったか？</td><td class="after">テストケースの履歴照会</td></tr>
+      </tbody>
+    </table></div>
+    <div class="why"><b>定着まで設計</b>
+      自動入力のトリガーは<strong>スプレッドシート自体にインストール</strong>されており、誰が編集しても動作します。
+      メンバーが各自で有効にする必要はありません。ツールを配ることと、チームに実際に使ってもらうことは別の問題です。</div>
+  </div>
+</details>
+
+<details>
+  <summary>根本原因分析 — 原因が蓄積される仕組み<span class="meta">全件レビュー · 10カテゴリー</span></summary>
+  <div class="det">
+    <p>不具合チケットは増える一方で、根本原因は自由記述で散らばるか、まったく記録されていませんでした。
+      「どの種類の原因が繰り返されているか」に定量的に答えられる人はおらず、
+      構造化したフィールドの導入を提案しても<strong>説得材料がありませんでした。</strong></p>
+    <div class="flow">
+      <div class="node no"><b>自由記述 · 未記録</b><em>集計できない</em></div><div class="arrow">→</div>
+      <div class="node git"><b>全件分析（1回）</b><em>帰納的に10カテゴリーを導出</em></div><div class="arrow">→</div>
+      <div class="node"><b>選択式フィールド + 記入の必須化</b><em>Automationで強制</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>原因分布の自動蓄積</b><em>以後すべての不具合がデータになる</em></div>
+    </div>
+    <div class="note warn">
+      <b>「何件分析したか」は重要ではありません。</b>
+      分析時点の件数は増え続けますし、それこそがこの仕組みの狙いです。
+      目的は一度きりの正確な集計ではなく、
+      <strong>不具合が増えていく間も、原因の分布が自動で最新に保たれること</strong>でした。
+    </div>
+    <p><strong>サンプルではなく全件を見ました。</strong>分類体系を先に決めてチケットを当てはめたのではなく、
+      実際のチケットから繰り返しのパターンを抽出してカテゴリーをつくったため、現場の不具合の傾向がそのまま反映されています。</p>
+    <h4 class="h">このデータの行き先</h4>
+    <ul>
+      <li>品質状況報告の<strong>定量的な根拠</strong> — 繰り返し発生する原因の上位カテゴリーから改善の優先順位を導出</li>
+      <li>定期トリアージ・Known Issueバックログ管理の基礎データ</li>
+      <li><strong>Regression TC Creatorの入力</strong> — Agentがこのフィールドを読んで回帰テストケースを設計
+        <a href="agent.html">→ 04 AI Agent</a></li>
+    </ul>
+    <div class="note"><b>要点</b> — <strong>「提案する前に全件を見る」</strong>という姿勢。
+      フィールドを1つ追加するような小さなプロセス変更でも、データの根拠をもとに提案すれば組織の受け入れの速さが変わります。</div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="automation.html" style="text-align:right"><span class="k">NEXT · CASE-02</span><span class="t">Playwrightによるテスト自動化の構築 →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-01 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャは韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>

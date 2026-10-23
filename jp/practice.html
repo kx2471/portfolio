@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>検証実務 — API検証・トレーサビリティ・ツール · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="APIレベルの検証、要件–テストケース–不具合のトレーサビリティ、自作の業務自動化ツール。">
+<link rel="alternate" hreflang="ko" href="../practice.html">
+<link rel="alternate" hreflang="ja" href="practice.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html" class="on">CASE-05</a></div>
+  <a class="lang" href="../practice.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-05</span></div>
+  <h1>検証実務 — API検証・トレーサビリティ・業務ツール</h1>
+  <p class="lede">UIを経由せずAPIを直接叩いて<strong>フロントエンドでしか防げていなかった入力チェックとXSSの経路</strong>を見つけた事例、要件–テストケース–不具合のトレーサビリティ体制、繰り返し作業を減らすためにつくったツールです。</p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>UIで弾かれる値がサーバーでも弾かれるかは確認されておらず、要件–テストケース–不具合がばらばらに管理されていました。</p></div><div><h5>Action</h5><p>APIレベルまで掘り下げて検証し、トレーサビリティの体制を整え、繰り返し作業はツールで減らしました。</p></div><div class="r"><h5>Result</h5><p>サーバー側検証の欠如とXSSの経路を発見して改善を主導し、要件カバレッジと不具合のトレーサビリティを確保。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>API検証 — UIの裏側を直接叩く<span class="meta">サーバー側検証の欠如を発見</span></summary>
+  <div class="det">
+    <p>フロントエンドの入力チェックは<strong>ユーザーへの親切な仕掛けにすぎず、品質保証ではありません。</strong>
+      そこでUIを経由せず<strong>REST APIを直接呼び出し</strong>、同じルールがサーバーでも守られているかを確認しました。</p>
+    <div class="flow">
+      <div class="node git"><b>1. リクエストの取得</b><em>DevToolsで実際のパケットを抽出</em></div><div class="arrow">→</div>
+      <div class="node"><b>2. 構造・認証の分析</b><em>パラメーター · Cookie · CSRF</em></div><div class="arrow">→</div>
+      <div class="node"><b>3. 改ざんしたリクエスト</b><em>Postman · cURL</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>4. 結果の検証</b><em>レスポンス · DB保存 · 管理画面まで</em></div>
+    </div>
+    <div class="why"><b>なぜこうしたか</b>
+      UIの自動化は<strong>「弾かれること」しか確認しません</strong>。画面で弾かれたという事実は、
+      サーバーが弾いた証拠ではなく、<strong>画面がリクエストを送らなかった証拠</strong>にすぎません。</div>
+
+    <h4 class="h">画面を経由しないからこそできること</h4>
+    <figure class="shot"><img src="../assets/img/api-postman.png" alt="API層で型・精度の境界値を直接入れ、サーバーの受け入れ範囲を確認する。（ホストは匿名化）" loading="lazy"><figcaption>API層で型・精度の境界値を直接入れ、サーバーの受け入れ範囲を確認する。（ホストは匿名化）</figcaption></figure>
+    <ul>
+      <li><strong>型・精度の境界をそのまま通してみる</strong> — 整数のフィールドに小数を、真偽値に文字列を入れたとき、
+        サーバーが何を保存するか</li>
+      <li><strong>到達しにくい状態をつくってから始める</strong> — デプロイ状態などの値を直接PUTで設定し、
+        UIでは何段階も経る前提条件を一度に整える</li>
+      <li><strong>拒否されるべきリクエストをつくって送る</strong> — 認証ヘッダーを外したり変えたりして、
+        通るケースではなく<strong>弾かれるべきケース</strong>を確認</li>
+    </ul>
+
+    <h4 class="h">発見事例 — フロントエンドでしか防げていなかった入力チェック</h4>
+    <div class="grid g3">
+      <div class="card"><h3>手順</h3><ul style="margin-bottom:0">
+        <li>DevToolsで会員登録・会員情報変更のリクエストパケットを抽出</li>
+        <li>パラメーター構造と認証方式を分析</li>
+        <li>Postman・cURLで形式に違反する値と<code>&lt;script&gt;</code>タグを挿入して送信</li>
+        <li>レスポンスだけでなく、<strong>DBへの保存と管理画面への反映まで</strong>追跡</li>
+      </ul></div>
+      <div class="card"><h3>発見</h3><ul style="margin-bottom:0">
+        <li><strong>サーバー側の入力値検証が欠如</strong> — フロントエンドの検証のみ</li>
+        <li>形式・ルールに違反したデータが<strong>そのままDBに保存</strong></li>
+        <li>挿入したスクリプトが<strong>管理画面で実行される</strong>経路を確認 → XSS</li>
+      </ul></div>
+      <div class="card"><h3>報告</h3><ul style="margin-bottom:0">
+        <li><strong>再現手順をそのままたどれるよう</strong>整理</li>
+        <li><strong>スクリーンショットとパケットログを証拠として確保</strong></li>
+        <li>UIの不具合ではなく<strong>サーバーの検証ロジックの欠如</strong>と原因を特定</li>
+        <li>改善の方向性まで提案し、<strong>修正を主導</strong></li>
+      </ul></div>
+    </div>
+    <div class="note">
+      画面ベースのテストだけなら<strong>最後まで見つからなかった不具合</strong>です。
+      それ以降、フォームのある機能では<strong>UIでの合格とAPIでの合格を別の検証項目</strong>として扱っています。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>QA成果物 — 要件から不具合まで追跡できるように<span class="meta">SWR · TC · Defect · Xray</span></summary>
+  <div class="det">
+    <h4 class="h">Xrayによるトレーサビリティ</h4>
+    <p>要件とテストケースを紐づけてトレーサビリティを確保し、不具合管理との連携で双方向に追跡できます。</p>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/xray-req.png" alt="Requirement Traceability — 1つの要件から、紐づくテストケースと各バージョンの実行結果まで1行でたどれる。" loading="lazy"><figcaption>Requirement Traceability — 1つの要件から、紐づくテストケースと各バージョンの実行結果まで1行でたどれる。</figcaption></figure><figure class="shot"><img src="../assets/img/xray-defect.jpg" alt="Defect Traceability — 不具合から逆方向に、実行履歴・テストケース・要件までさかのぼる。（担当者名は匿名化）" loading="lazy"><figcaption>Defect Traceability — 不具合から逆方向に、実行履歴・テストケース・要件までさかのぼる。（担当者名は匿名化）</figcaption></figure></div>
+    <ul style="margin-bottom:0">
+      <li><strong>Requirement Traceability</strong> — すべての要件がテストケースに紐づき、充足しているかを判断できる</li>
+      <li><strong>Defect Traceability</strong> — 不具合から逆方向に、実行履歴・テストケース・要件まで追跡</li>
+      <li>Test Set（機能別のテストケース管理）・Test Plan（スケジュール）・Test Execution（実行結果）でライフサイクルを一元管理</li>
+    </ul>
+    <div class="note" style="margin-top:14px;margin-bottom:0">
+      <b>数より性質</b> — 「テストケース300件」より<strong>「要件の全項目との照合 + 境界値の組み合わせ + 過去の不具合にもとづく重点領域」</strong>のほうが
+      正確な説明です。テストケースごとにどの根拠でつくったかを残し、回帰対象を選ぶときの基準にしています。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>業務自動化ツール — 繰り返しを減らすために自作したもの<span class="meta">Python · Apps Script</span></summary>
+  <div class="det">
+    <figure class="shot"><img src="../assets/img/tool-extract.jpg" alt="IPを選んでボタン1つでログ・スクリーンショット・CoreDumpを取得する。サービスの停止・再起動とバイナリのデプロイも同じ画面で行える。（機器のIPは匿名化）" loading="lazy"><figcaption>IPを選んでボタン1つでログ・スクリーンショット・CoreDumpを取得する。サービスの停止・再起動とバイナリのデプロイも同じ画面で行える。（機器のIPは匿名化）</figcaption></figure>
+    <div class="grid g3">
+      <div class="card"><h3>📦 総合抽出ツール</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · paramiko · Tkinter</p>
+        <p>リモートサーバーにSSHで接続し、ログ・スクリーンショット・CoreDump・バイナリを自動収集するGUIツール。
+          サービスの停止・再起動とバイナリのデプロイも同じ画面で行えます。</p></div>
+      <div class="card"><h3>📊 KPI Calculator</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · re · threading</p>
+        <p>DLTログからKPIイベントを正規表現で解析し、区間ごとの時間差を計算。
+          <strong>手作業と比べて検証工数を30%削減</strong>することに貢献しました。</p></div>
+      <div class="card"><h3>🗺️ Positioning Viewer</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · pandas · folium</p>
+        <p>GNSSログから座標を抽出・検証してCSVに保存し、地図上に走行経路をポリラインで可視化します。</p></div>
+      <div class="card"><h3>⏰ 工数表リマインダー</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Google Apps Script × Slack</p>
+        <p>「毎月忘れずに共有すべきリンク」を、人の記憶から仕組みに移しました。
+          <strong>リンク漏れの警告、月末の事前チェック</strong>まで含め、失敗するケースを設計に組み込みました。</p></div>
+      <div class="card"><h3>🖥️ Selenium レスポンシブUIツール</h3>
+        <p style="font-size:12px;color:var(--faint);margin-bottom:8px">Python · Selenium · Tkinter</p>
+        <p>複数のブレークポイントで自動ログインしてページを巡回し、スクリーンショットを一括取得。
+          GitHub Releasesで実行ファイルを配布し、<strong>エンジニアでなくても使えるように</strong>しました。</p></div>
+    </div>
+    <div class="why"><b>共通点</b>
+      どれも<strong>「同じ作業を2回している」という気づきから始まりました</strong>。
+      そしてつくるときには、失敗するケース（リンク漏れ、パスが見つからない、無限ループ）を設計の範囲に含めました。</div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="agent.html"><span class="k">PREV · CASE-04</span><span class="t">← AI Agent — Regression TC Creator</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-05 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャは韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>

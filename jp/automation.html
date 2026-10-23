@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playwrightによるテスト自動化の構築 · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="PlaywrightによるMLOps E2E回帰テストシステムを1人で設計・構築・運用した記録。">
+<link rel="alternate" hreflang="ko" href="../automation.html">
+<link rel="alternate" hreflang="ja" href="automation.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html" class="on">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <a class="lang" href="../automation.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-02</span></div>
+  <h1>Playwrightによるテスト自動化の構築</h1>
+  <p class="lede">データセットのアップロードから7種類のAIモデルの学習・デプロイまで、ビジョンAI学習プラットフォームのパイプライン全体をPlaywrightで自動検証する回帰テストシステムを、<strong>1人で設計・構築・運用</strong>しています。</p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>リリースのたびに手作業で1日以上かかっていた回帰テスト。実サーバー・単一の共有アカウント・30分〜3時間かかるモデル学習という制約もありました。</p></div><div><h5>Action</h5><p>まず制約を定義し、テスト同士が干渉しない構造を設計しました。</p></div><div class="r"><h5>Result</h5><p>コマンド1行で無人実行 + Slackへの自動報告。スイートが2倍以上に増える間も、アーキテクチャは書き直していません。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<figure class="demo" style="margin-bottom:22px">
+  <video src="../assets/video/runner-demo.mp4" poster="../assets/video/runner-poster.jpg"
+         autoplay loop muted playsinline preload="metadata"
+         aria-label="E2E自動化の実行デモ"></video>
+  <figcaption><span class="badge">DEMO</span>
+    環境・テストの選択 → 実行 → リアルタイムログ → 検査結果の確認 → レポートまで。
+    ADラベリングのスイートを実際に実行した記録です。
+    <span class="nb">（内部アドレス・アカウント情報は匿名化 · 画面は韓国語UI）</span></figcaption>
+</figure>
+
+<details open>
+  <summary>まず制約を定義した — アーキテクチャのすべての判断はここから<span class="meta">5つの制約</span></summary>
+  <div class="det">
+    <p>テストを書く前に、<strong>このプロダクトが自動化に対して何を許さないか</strong>から整理しました。</p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:190px">制約</th><th>そのため何が難しくなるか</th><th>設計での答え</th></tr></thead>
+      <tbody>
+        <tr><td><strong>成果物の所属</strong><br><span class="before">すべてのノードは自分のプロジェクト内でのみ有効</span></td>
+            <td class="before">固定プロジェクトを使い回すと、実行のたびにノードが溜まり、いずれ壊れる</td>
+            <td class="after">テストごとに<strong>専用プロジェクトを作成 → 終了時に削除</strong>を共通ヘルパーで強制</td></tr>
+        <tr><td><strong>実サーバーが対象</strong><br><span class="before">モックなしの実環境3つ</span></td>
+            <td class="before">失敗を意図的につくれず、サーバーの状態が結果に影響する</td>
+            <td class="after">サーバーの挙動を<strong>実験で突き止めて</strong>前提にし、障害はリクエストの遮断・注入で再現</td></tr>
+        <tr><td><strong>単一の共有アカウント + SSO</strong></td>
+            <td class="before">同時ログインが前のセッションを切るため、並列実行が成り立たない</td>
+            <td class="after">セッションの単位がアカウントではなく<strong>端末（User-Agent）</strong>であることを突き止め → workerごとにUAを分離</td></tr>
+        <tr><td><strong>高コストな処理</strong><br><span class="before">モデル学習に30分〜3時間</span></td>
+            <td class="before">利用するテストのたびに再学習すると、スイートを運用できない</td>
+            <td class="after">学習結果を<strong>フィクスチャに記録して再利用</strong> — タイプごとに1回に固定</td></tr>
+        <tr><td><strong>非同期の長時間処理</strong><br><span class="before">完了の合図が一時的なUI</span></td>
+            <td class="before">トーストを基準にすると、高負荷時に<strong>誤ったPASS</strong>が出る</td>
+            <td class="after">ノードの状態・ダウンロードファイル・<strong>リクエストペイロード</strong>を判定の根拠に</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">
+      <b>画面ではなくデータをアサートする</b> — レポートの検証は画面表示だけを見ず、
+      <strong>ダウンロードしたzipを解析してサーバーの元データと突き合わせます</strong>。
+      画像数・モデルサイズ・Thresholdが<strong>UI・ファイル・リクエストペイロード</strong>の3か所で一致するかを確認します。
+      「表示されているもの」と<strong>「実際に行われたもの」</strong>を区別することが判定の基準です。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>並列実行 — 単一アカウントの実サーバーで成り立たせる<span class="meta">最大の難所</span></summary>
+  <div class="det">
+    <div class="grid g3">
+      <div class="card"><h3>🔑 workerごとにUser-Agentを分離</h3>
+        <p>SSOが「同じUAでの同時ログイン = 同じ端末での再ログイン」とみなして前のセッションを切ることを
+          <strong>実験で突き止め</strong>、workerごとにUAトークンを付与して<strong>3 workerの同時ログイン</strong>を実現。</p></div>
+      <div class="card"><h3>⚡ ファイル内での並列化</h3>
+        <p>直列だった前処理スイートを3グループに分割し、各グループが専用プロジェクトを持ってworkerに分散。<br>
+          <strong>19.3分 → 11.8分（-39%）</strong></p></div>
+      <div class="card"><h3>🧮 サーバーとの整合</h3>
+        <p>サーバーの<strong>同時処理の上限（3）</strong>にworker数と待機ポリシーを合わせ、
+          完了待ちの上限を「最長の学習残り時間 + 余裕」で算出して、キュー待ちによる誤検知をなくしました。</p></div>
+    </div>
+    <div class="why"><b>捨てたものも記録します</b>
+      セッション問題を回避するためにつくったタブのオーケストレーション構造は、<strong>単一障害点になるため廃止</strong>しました。
+      よりシンプルな正解が見つかれば、すでにつくったものでも捨てます。</div>
+  </div>
+</details>
+
+<details>
+  <summary>トラブルシューティング — 証拠で原因を確定した5件<span class="meta">推測で直したものはありません</span></summary>
+  <div class="det">
+    <div class="grid g2">
+      <div class="card"><h3>CASE 1 — ログインできたのに、ログイン画面に戻される</h3>
+        <p>ログイン直後に<code>goto</code>で割り込むとSSOのリダイレクトチェーンが切れて未認証になることを、
+          段階ごとのURL診断で確定。画面遷移を禁止して自動到達だけを待つよう変更し、
+          新旧のログイン方式を自動で分岐して<strong>3つの環境で1つのヘルパーを共有</strong>。</p></div>
+      <div class="card"><h3>CASE 2 —「手動ではできるのに、なぜ自動化だけ失敗するのか？」</h3>
+        <p>「アカウントごとに1セッション」というもっともらしい仮説で止まらず、<strong>矛盾を実験で掘り下げ</strong>、
+          セッションがアカウントではなく端末単位であることを突き止めました。cloudでの並列を<strong>1 → 3 workerに復旧</strong>。</p></div>
+      <div class="card"><h3>CASE 3 — 6分かかる学習が26秒で「完了」</h3>
+        <p><strong>合格したテストケースが犯人</strong>だったケース。レポートのタイムライン再構成 + DOMスナップショットで、
+          高負荷時に準備区間が長引き、完了判定を誤っていたことを確認。進捗トーストを判定に加えて全区間を保護。</p></div>
+      <div class="card"><h3>CASE 4 — キャンバスが真っ白になるグリッチ</h3>
+        <p>trace DOMスナップショットの追跡で、React Flowにインラインの<code>visibility:hidden</code>が残り続けることを確認し、
+          トリガー（モーダルを閉じた直後のソケット通知）まで特定。<strong>単独の再現スクリプト</strong>をつくってプロダクトの不具合として報告。</p></div>
+      <div class="card"><h3>CASE 5 — 40秒足りずに失敗した検証</h3>
+        <p>「再現しないflaky」を、全テストの開始・終了時刻からサーバーのスロット占有を再構成して解明 —
+          コードの不具合ではなく<strong>構造的な待ち</strong>でした。flakyを「運」ではなく、原因のある欠陥として扱いました。</p></div>
+      <div class="card" style="background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 30%,transparent)">
+        <h3>🔍 共通のアプローチ</h3>
+        <ul style="margin-bottom:0">
+          <li>trace DOMスナップショットを時点ごとに追跡</li><li>レポートのタイムラインを再構成</li>
+          <li>リクエストペイロードをインターセプト</li><li>単独の再現スクリプトを作成</li>
+          <li>仮説と矛盾する事実を最後まで掘り下げる</li>
+        </ul></div>
+    </div>
+    <h4 class="h">判定の根拠をレポートに残す</h4>
+    <div class="shots2">
+      <figure class="shot"><img src="../assets/img/run-report1.jpg" alt="レポート上部のサマリー。4つの状態の合計が全件数と一致する。" loading="lazy"><figcaption>レポート上部のサマリー。4つの状態の合計が全件数と一致する。</figcaption></figure>
+      <figure class="shot"><img src="../assets/img/run-report2.jpg" alt="検証ポイントを展開したところ。行末の「画面」を押すと、その時点のスクリーンショットが開く。" loading="lazy"><figcaption>検証ポイントを展開したところ。行末の「画面」を押すと、その時点のスクリーンショットが開く。</figcaption></figure>
+    </div>
+    <div class="note">
+      <b>合格したものも「何を確認したか」を残します</b> — CASE 3のように<strong>合格したテストケースが犯人</strong>のこともあるため、
+      PASS/FAILの数字だけでは結果を信頼できません。検証ポイントとその時点の画面を一緒に残し、
+      <strong>判定そのものを検証できるように</strong>しました。
+      <span class="nb">（レポート設計の詳細は<a href="runner.html">CASE-03</a>）</span>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>レポーティングと成果 — 結果がチームに届いて自動化は完成する<span class="meta">Slackレポーターを自作</span></summary>
+  <div class="det">
+    <div class="shots2">
+      <figure class="shot"><img src="../assets/img/run-notify.jpg" alt="実行を始めると依頼者・環境・規模・予想時間がチャンネルに告知され、終わると同じスレッドに実際の所要時間が付く。" loading="lazy"><figcaption>実行を始めると依頼者・環境・規模・予想時間がチャンネルに告知され、終わると同じスレッドに実際の所要時間が付く。</figcaption></figure>
+      <figure class="shot"><img src="../assets/img/e2e-slack.jpg" alt="実行が終わるとレポーターが結果カードをチャンネルに投稿する。PASS/FAIL/FLAKY/SKIPの4状態と所要時間、検証したスイート名が残る。" loading="lazy"><figcaption>実行が終わるとレポーターが結果カードをチャンネルに投稿する。PASS/FAIL/FLAKY/SKIPの4状態と所要時間、検証したスイート名が残る。</figcaption></figure>
+    </div>
+    <div class="note" style="margin-bottom:16px">
+      <b>予想と実際が合う</b> — 上の実行は<strong>予想1時間33分 → 実際1時間25分34秒</strong>です。
+      単純な合計ではなく<strong>3 workerの並列実行を反映して計算</strong>しているからこそ収まる誤差です。
+      下の結果カードの所要時間（<strong>1時間30分28秒</strong>）と合わせて見ると、
+      スイートが拡張されても予測可能な時間内に終わることが分かります。
+    </div>
+    <ul>
+      <li><strong>軽量な添付設計</strong> — video・traceを除いたzipだけを添付（<strong>数GB → 1〜2MB</strong>）、
+        ローカルには全アーティファクトを実行ごとのフォルダに保存</li>
+      <li><strong>対話型の実行ツール</strong> — コマンド1行でテスト名・Slack送信の有無を尋ねて実行。
+        CIでは質問なしで自動実行し、部分実行でチームのチャンネルが埋もれないよう<strong>送信はopt-in</strong></li>
+      <li><strong>セキュリティ</strong> — traceに平文で記録される認証情報に気づき、
+        アカウントポリシー・gitignore・添付からの除外で漏えい経路を遮断</li>
+    </ul>
+    <h4 class="h">成果</h4>
+    <div class="tw"><table>
+      <thead><tr><th>項目</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr><td>リリース回帰テスト</td><td class="before">手作業 · 1日以上</td><td class="after">コマンド1行 · 無人実行 + Slackへ自動報告</td></tr>
+        <tr><td>cloudでの並列実行</td><td class="before">SSO刷新後は1 worker</td><td class="after">3 workerに復旧</td></tr>
+        <tr><td>前処理スイート</td><td class="before">直列で19.3分</td><td class="after">グループ並列で11.8分（-39%）</td></tr>
+        <tr><td>モデル学習のコスト</td><td class="before">利用するテストのたびに再学習</td><td class="after">タイプごとに1回 · フィクスチャを再利用</td></tr>
+        <tr><td>スイートの拡張</td><td class="before">追加するたびに構造の修正が必要</td><td class="after">規模を2倍以上に拡張 · <strong>アーキテクチャ変更なし</strong></td></tr>
+        <tr><td>検証の問い</td><td class="before">機能が動くか</td><td class="after">+ 結果の品質が保たれているか · 直したものが保たれているか</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">
+      <b>拡張コストを下げる設計</b> — 初期構築後に<strong>モデル性能の比較・回帰テスト</strong>の領域が加わり、
+      スイートの規模は2倍以上になりました。そのときに行ったのは構造の修正ではなく、
+      <strong>既存の構造の上にスイートを載せること</strong>でした。
+      自動化の本当のコストは最初につくるときではなく<strong>増やしていくとき</strong>に生じるため、その点を先に設計しました。
+    </div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="process.html"><span class="k">PREV · CASE-01</span><span class="t">← QAプロセスを0から1へ</span></a><a href="runner.html" style="text-align:right"><span class="k">NEXT · CASE-03</span><span class="t">テストランナー — 誰でも検証できる環境 →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-02 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>

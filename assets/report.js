@@ -1,3 +1,23 @@
+/* ---- UI 문구 (페이지 언어에 따라) ---- */
+var PF_JA = (document.documentElement.lang || '').toLowerCase().indexOf('ja') === 0;
+var PF_T = PF_JA ? {
+  overview:'概要', overviewSub:'課題 · 取り組み · 成果',
+  detail:'詳細な記録', detailSub:'設計判断 · 運用画面',
+  close:'閉じる', openFull:'ページ全体で開く →', loading:'読み込み中…',
+  cantShow:'内容を表示できません。', assignee:'キム・サンオク',
+  detailCount:function(n){ return '詳細な記録 ' + n + '件'; },
+  detailNext:'設計判断 · 実際の運用画面 · トラブルシューティング',
+  zoom:'拡大表示', swipe:'← 横にスワイプして表示 →'
+} : {
+  overview:'개요', overviewSub:'문제 · 한 일 · 결과',
+  detail:'상세 기록', detailSub:'설계 판단 · 운영 화면',
+  close:'닫기', openFull:'전체 페이지로 열기 →', loading:'불러오는 중…',
+  cantShow:'내용을 표시할 수 없습니다.', assignee:'김상옥',
+  detailCount:function(n){ return '상세 기록 ' + n + '개'; },
+  detailNext:'설계 판단 · 실제 운영 화면 · 트러블슈팅',
+  zoom:'확대 보기', swipe:'← 옆으로 밀어서 보기 →'
+};
+
 (function(){
   /* ---- 스크롤 위치 복원 ----
      목록(index)에서 다른 페이지로 갈 때 위치와 펼친 아코디언을 저장하고,
@@ -6,7 +26,7 @@
   (function(){
     var p=location.pathname, isIndex = p.endsWith('/') || /(^|\/)index\.html?$/.test(p);
     if(!isIndex) return;
-    var KEY='pf2-scroll', html=document.documentElement;
+    var KEY='pf2-scroll:' + location.pathname.replace(/[^\/]*$/, ''), html=document.documentElement;
     var details=function(){ return [].slice.call(document.querySelectorAll('details')); };
 
     function restore(state){
@@ -110,19 +130,19 @@
           '<div class="tm-seg" role="tablist">' +
             '<button type="button" class="on" data-tab="task" role="tab" aria-selected="true">' +
               '<span class="ic">📋</span><span class="tx">' +
-              '<span class="tt">개요</span><span class="sb">문제 · 한 일 · 결과</span></span></button>' +
+              '<span class="tt">' + PF_T.overview + '</span><span class="sb">' + PF_T.overviewSub + '</span></span></button>' +
             '<button type="button" data-tab="detail" role="tab" aria-selected="false">' +
               '<span class="ic">🔍</span><span class="tx">' +
-              '<span class="tt">상세 기록</span><span class="sb">설계 판단 · 운영 화면</span></span>' +
+              '<span class="tt">' + PF_T.detail + '</span><span class="sb">' + PF_T.detailSub + '</span></span>' +
               '<span class="ct">0</span></button>' +
           '</div>' +
-          '<button type="button" class="tm-x" aria-label="닫기">✕</button>' +
+          '<button type="button" class="tm-x" aria-label="' + PF_T.close + '">✕</button>' +
         '</div>' +
         '<div class="tm-body"></div>' +
         '<div class="tm-foot">' +
           '<span class="meta"></span>' +
-          '<button type="button" class="tm-btn tm-close">닫기</button>' +
-          '<a class="tm-btn pri tm-full" href="#">전체 페이지로 열기 →</a>' +
+          '<button type="button" class="tm-btn tm-close">' + PF_T.close + '</button>' +
+          '<a class="tm-btn pri tm-full" href="#">' + PF_T.openFull + '</a>' +
         '</div>' +
       '</div>';
     document.body.appendChild(back);
@@ -199,7 +219,7 @@
         '<h2 class="tm-title">' + esc(data.title) + '</h2>' +
         '<div class="tm-chips">' +
           (state ? '<span class="f state">' + esc(state) + '</span>' : '') +
-          '<span class="f">Assignee <b>김상옥</b></span>' +
+          '<span class="f">Assignee <b>' + PF_T.assignee + '</b></span>' +
           '<span class="f">Type <b>Case Study</b></span>' +
           metrics +
         '</div>' +
@@ -208,8 +228,8 @@
           '<div class="track"><div class="fill"></div></div></div>' +
         '<div class="tm-lede">' + (data.lede || '') + '</div>' +
         '<button type="button" class="tm-next" data-tab="detail">' +
-          '<span class="l"><b>상세 기록 ' + data.sections + '개</b>' +
-          '<em>설계 판단 · 실제 운영 화면 · 트러블슈팅</em></span>' +
+          '<span class="l"><b>' + PF_T.detailCount(data.sections) + '</b>' +
+          '<em>' + PF_T.detailNext + '</em></span>' +
           '<span class="a">→</span></button>' +
       '</div>' +
       '<div data-pane="detail" style="display:none">' + (data.detail || '') + '</div>';
@@ -261,7 +281,7 @@
     document.body.classList.add('tm-open');
     back.classList.add('on');
     var body = back.querySelector('.tm-body');
-    body.innerHTML = '<div class="tm-load"><span>불러오는 중…</span></div>';
+    body.innerHTML = '<div class="tm-load"><span>' + PF_T.loading + '</span></div>';
     back.querySelector('.tm-x').focus();
 
     load(card.getAttribute('href')).then(function(d){
@@ -271,8 +291,8 @@
       }catch(err){
         // 렌더 실패는 네트워크 실패와 구분 — 모달만 닫고 페이지로 넘기지 않음
         console.error('[modal] render failed', err);
-        body.innerHTML = '<div class="tm-load">내용을 표시할 수 없습니다. ' +
-          '<a href="' + card.getAttribute('href') + '">전체 페이지로 열기 →</a></div>';
+        body.innerHTML = '<div class="tm-load">' + PF_T.cantShow + ' ' +
+          '<a href="' + card.getAttribute('href') + '">' + PF_T.openFull + '</a></div>';
       }
     }).catch(function(err){
       // fetch 자체가 실패한 경우에만 이동 (file:// 등)
@@ -320,10 +340,10 @@
     lb.className = 'zoom';
     lb.setAttribute('role','dialog');
     lb.setAttribute('aria-modal','true');
-    lb.setAttribute('aria-label','확대 보기');
-    lb.innerHTML = '<button type="button" class="x" aria-label="닫기">✕</button>' +
+    lb.setAttribute('aria-label', PF_T.zoom);
+    lb.innerHTML = '<button type="button" class="x" aria-label="' + PF_T.close + '">✕</button>' +
                    '<div class="media"></div><div class="cap"></div>' +
-                   '<div class="hint">← 옆으로 밀어서 보기 →</div>';
+                   '<div class="hint">' + PF_T.swipe + '</div>';
     document.body.appendChild(lb);
     lb.addEventListener('click', function(e){
       // 영상 컨트롤바를 누른 경우는 닫지 않음

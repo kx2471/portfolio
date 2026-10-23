@@ -1,6 +1,6 @@
 # 김상옥 · SW QA Engineer — Portfolio
 
-**https://kx2471.github.io/portfolio/**
+**https://kx2471.github.io/portfolio/** · 日本語版 **https://kx2471.github.io/portfolio/jp/**
 
 QA 프로세스 설계 · 테스트 자동화 · AI 도구 개발 기록.
 테스트 리포트 형태로 구성했으며, 대표 작업은 태스크 창(모달)으로 열립니다.

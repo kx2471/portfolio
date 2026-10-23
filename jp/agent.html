@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Agent — Regression TC Creator · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="Root Causeの記録を読み取り、回帰テストケースを設計してシート・チケットまで連携するClaude Agentの実装記録。">
+<link rel="alternate" hreflang="ko" href="../agent.html">
+<link rel="alternate" hreflang="ja" href="agent.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html" class="on">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <a class="lang" href="../agent.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-04</span></div>
+  <h1>AI Agent — Regression TC Creator</h1>
+  <p class="lede">私が記入を必須化したRoot Causeの記録を読み取り、回帰テストケースを設計してGoogle Sheetsに記録し、チケットにコメントとフィールドまで連携するClaudeベースのAgentです。<strong>ルールを定めた本人が、そのルールが残したデータを活用するツールを自らつくりました。</strong></p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>RCAの記録は溜まる一方で、活用されない資産になるおそれがあり、回帰テストケースの設計・記録・連携は毎スプリント繰り返す手作業でした。</p></div><div><h5>Action</h5><p>MCPツールの組み合わせ・3段階のゲーティング・安全策を備えた仕組みとして実装しました。</p></div><div class="r"><h5>Result</h5><p>チケットIDを1行渡すだけで、テストケース設計・シートへの記録・チケット連携が自動で完了します。他チームが社内の業務改善事例として共有しました。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>なぜつくったか · 動作の流れ<span class="meta">ルールが残したデータを使うツール</span></summary>
+  <div class="det">
+    <p>QAワークフローを設計する中で、<strong>不具合チケットのRoot Cause・Corrective Actionの記入を必須化</strong>しました。
+      しかしこの情報は<em>記録されるだけで活用されない資産</em>になるおそれがありました —
+      毎スプリント、不具合チケットを1件ずつ読み、回帰テストケースを手で設計し、シートに記録し、
+      元のチケットに紐づける作業は<strong>単純作業の繰り返し</strong>でした。</p>
+    <figure class="shot"><img src="../assets/img/tc-flow.jpg" alt="設計段階で描いた実際の動作フロー。チケット本文・Custom Fieldsとコメント・スレッドを並行して取得してから設計し、3つの書き込みを順次ゲーティングでつないだ。" loading="lazy"><figcaption>設計段階で描いた実際の動作フロー。チケット本文・Custom Fieldsとコメント・スレッドを並行して取得してから設計し、3つの書き込みを順次ゲーティングでつないだ。</figcaption></figure>
+    <div class="note">
+      3つの書き込みは、<strong>前の段階が成功して初めて次に進みます</strong>。
+      一部だけが反映される<strong>中途半端な状態を根本から防ぐ</strong>ためです。
+    </div>
+    <h4 class="h">実際の動作 — チケット1件で最後まで</h4>
+    <figure class="demo">
+      <video src="../assets/video/tc-creator-demo.mp4" poster="../assets/video/tc-creator-poster.jpg"
+             autoplay loop muted playsinline preload="metadata"
+             aria-label="Regression TC Creatorの実行デモ"></video>
+      <figcaption><span class="badge">DEMO</span>
+        チケットの確認 → サブエージェントの呼び出し → 分析・設計 → Google Sheetsへの記録まで。
+        実行中は、何を読み何を書いているかが画面に残ります。
+        <span class="nb">（ワークスペース・アカウント情報は匿名化 · 画面は韓国語UI）</span></figcaption>
+    </figure>
+
+    <h4 class="h">呼び出しは1行で済む</h4>
+    <figure class="shot"><img src="../assets/img/tc-invoke.png" alt="サブエージェントとして登録しておき、チケットIDだけを渡す —「daisy-3582を分析してTCを作成して」（画面は韓国語）。" loading="lazy"><figcaption>サブエージェントとして登録しておき、チケットIDだけを渡す —「daisy-3582を分析してTCを作成して」（画面は韓国語）。</figcaption></figure>
+    <p>エージェントを<strong>サブエージェントとして登録</strong>しておき、チケットIDを1つ自然言語で渡すだけです。
+      設定やオプションのフラグなしで<strong>デフォルトのシートに記録されるよう</strong>初期値を決め、
+      使う人が毎回決めることをなくしました。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      ツールが使われるかどうかは、機能の数ではなく<strong>最初に使うときの手間</strong>で決まります。
+      「何を設定すればいい？」と一度でも思わせたら、人は手作業に戻ります。</div>
+  </div>
+</details>
+
+<details>
+  <summary>設計原則 — QAエンジニアの思考プロセスを明文化<span class="meta">RCAベース · 5軸のスキャン · 量より質</span></summary>
+  <div class="det">
+    <h4 class="h">1. RCAに基づくテストケース設計</h4>
+    <p>チケットを要約するのではなく、<strong>過去の失敗モードを再現すること</strong>を行います。</p>
+    <ul>
+      <li>Root Causeが明記されている場合 → その失敗モードを<strong>再現する明示的なケース</strong>を設計</li>
+      <li>Corrective Actionが実際に防げているかを確認する<strong>回帰ケース</strong>を追加</li>
+      <li>同じ根本原因の影響を受けうる<em>隣接する境界条件</em>も合わせて設計</li>
+    </ul>
+    <h4 class="h">2. 5つの軸でシナリオをスキャン</h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:170px">軸</th><th>内容 / 例</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Happy-path</strong></td><td>意図どおりに動く主要なエンドツーエンドのシナリオ</td></tr>
+        <tr><td><strong>入力・データの変化</strong></td><td>境界値、通常値、意味のある組み合わせ</td></tr>
+        <tr><td><strong>エラー・失敗条件</strong></td><td>不正な入力、欠損データ、タイムアウト、権限、連携の失敗</td></tr>
+        <tr><td><strong>連携・外部システム</strong></td><td>他のサービス、モデル推論、ストレージ、バックエンドの応答に基づくUI更新</td></tr>
+        <tr><td><strong>Frequency・繰り返し</strong></td><td>頻繁な実行、バッチ・スケジュール、ピーク時の安定性</td></tr>
+      </tbody>
+    </table></div>
+    <h4 class="h">3. 量より質 — 無理に埋めない</h4>
+    <p>エージェントが<em>形だけのテストケースを量産しないよう</em>、出力量のルールを明確に定めました。</p>
+    <ul>
+      <li><strong>基本目標</strong>：チケット1件につき3つ（happy-path 1 + 主要な回帰 1 + 隣接・例外 1）</li>
+      <li><strong>縮小</strong>：単純な不具合（文言の修正、狭い正規表現の補正）は1〜2つで完了してよい</li>
+      <li><strong>拡大</strong>：Corrective Actionが複数の機能領域にまたがる場合や、FrequencyがAlwaysで負荷ケースが本質の場合</li>
+      <li><strong>禁止</strong>：形だけのhappy-pathや意味のない変化で空きを埋めること</li>
+    </ul>
+    <div class="note">
+      シートに載せるには曖昧な<em>補助的な検証アイデア</em>はシートではなく、
+      <strong>コメントの「追加で検証すべき点」</strong>ブロックに入れ、シートとコメントの役割を分けました。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>3段階の書き込み構造と実際の結果<span class="meta">Sheets → コメント → Related TC</span></summary>
+  <div class="det">
+    <h4 class="h">Step 1. Google Sheetsへの記録（正式版）</h4>
+    <p>14列の書式で、シートの最終行の次に直接記録します。
+      Agentが追加した行は<strong>オレンジ色の背景</strong>にして、人が書いたテストケースとすぐ区別できるようにし、
+      <code>wrapStrategy: WRAP</code>を適用してセル内の改行が実際に見えるようにしました。</p>
+    <figure class="shot"><img src="../assets/img/tc-sheet.jpg" alt="Step 1 — 最終行の次に回帰テストケースが追加される。Agentが入れた行はオレンジ色の背景なので、人が書いたテストケースとすぐ区別できる。（TC_871以外の実際のテストケースは匿名化）" loading="lazy"><figcaption>Step 1 — 最終行の次に回帰テストケースが追加される。Agentが入れた行はオレンジ色の背景なので、人が書いたテストケースとすぐ区別できる。（TC_871以外の実際のテストケースは匿名化）</figcaption></figure>
+    <h4 class="h">Step 2 · 3. コメントの投稿 → Related TCの連携</h4>
+    <p>テストケースの表はコメントに入れず、<strong>テストケースはシートが正式版</strong>という原則を守ります。
+      コメントには簡単な分析・追加の検証ポイント・関連するエッジケース・シートの追加位置だけが入ります。
+      生成したTC_IDはチケットのRelated TCフィールドに<strong>既存の値を残したまま追記</strong>し、
+      双方向のトレーサビリティが自動で残ります。</p>
+    <figure class="shot"><img src="../assets/img/tc-ticket.jpg" alt="Step 2・3 — チケットに分析コメントが投稿され（右）、Related TCフィールドにTC_871が紐づく（左下）。Agentが読む入力であるRoot Cause・Corrective Actionのフィールドも同じ画面に見える。" loading="lazy"><figcaption>Step 2・3 — チケットに分析コメントが投稿され（右）、Related TCフィールドにTC_871が紐づく（左下）。Agentが読む入力であるRoot Cause・Corrective Actionのフィールドも同じ画面に見える。</figcaption></figure>
+    <div class="note">
+      これは、私が設計したQAワークフローの3つ目の原則（<strong>Root Causeの記入必須化</strong>）で終わらせず、
+      <em>その記録が検証の資産へとつながる輪</em>をつくる段階です。
+      <a href="process.html">→ 01 プロセス設計</a>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>安全策と実装中に直面した問題<span class="meta">根拠なしには書かない仕組み</span></summary>
+  <div class="det">
+    <h4 class="h">安全策</h4>
+    <ul>
+      <li><strong>プレビューモード</strong> — 「下書きだけ見せて」と指示すると、シート・コメント・フィールドの更新をすべて省き画面にだけ出力</li>
+      <li><strong>部分的な拒否に対応</strong> — 「シートには書かないで」などの指示を個別に処理し、拒否された段階以降も自動で一緒に省略</li>
+      <li><strong>フォールバックのシート探索</strong> — デフォルトのシートにアクセスできないときだけ候補を提示し、確定しなければ<strong>書き込みをすべて保留</strong></li>
+      <li><strong>フィールドがあるときだけ更新</strong> — Related TCフィールドがなければ作成せずにスキップ</li>
+      <li><strong>書き込み後の検証</strong> — 同じ範囲を読み直し、実際に入った行番号・TC_IDの範囲を確認</li>
+    </ul>
+    <h4 class="h">実装中に直面した実際の問題</h4>
+    <div class="grid g2">
+      <div class="card"><h3>🐞 Sheets APIが誤った位置に行を挿入する問題</h3>
+        <p>プルダウン・条件付き書式が設定された空の領域があると、APIがその領域までを「テーブル」と認識し、
+          <strong>最後のデータ行から10〜20行離れた場所に行を入れてしまいました。</strong></p>
+        <p style="margin-bottom:0"><strong>→</strong> <code>add_rows</code>の使用をやめ、
+          最後のデータ行 + 1から始まる<strong>明示的なセル範囲</strong>を計算して直接書き込むよう設計を変更。</p></div>
+      <div class="card"><h3>📝 コメントがMarkdownを表示しない問題</h3>
+        <p>Markdownで書くと<code>**強調**</code>・<code>## 見出し</code>・<code>- 箇条書き</code>が
+          すべて<em>記号のまま</em>表示されていました。</p>
+        <p style="margin-bottom:0"><strong>→</strong> Markdownを全面禁止にルールを変え、
+          見出しは角括弧、箇条書きは中黒、強調は<code>ALL CAPS:</code>のパターンで、
+          <strong>プレーンテキストでも見た目の構造が残るよう</strong>設計し直しました。</p></div>
+      <div class="card"><h3>🔢 TC_IDの体系を「推測」しない</h3>
+        <p>シートの最終行のTC_IDを<strong>先に読み取り</strong>、その形式を保ったまま連番だけを増やします。
+          数字だけなら+1、接頭辞があれば接頭辞を維持。
+          <strong>Agentが出どころや形式を勝手につくらないよう制約する</strong>ことが要点でした。</p></div>
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>社内展開 — 自分のツールからチームの事例へ<span class="meta">他チームが改善事例として共有</span></summary>
+  <div class="det">
+    <p>つくって使うことと、<strong>組織に受け入れられること</strong>は別の問題です。
+      このエージェントは私が宣伝したのではなく、<strong>他のチームが社内の改善事例として紹介</strong>したことで広まりました。</p>
+    <figure class="shot"><img src="../assets/img/tc-share.jpg" alt="社内の#generalチャンネルで「業務改善事例」として共有されたRegression TC Creator。60件以上のリアクションが付いた。（共有者の情報は匿名化）" loading="lazy"><figcaption>社内の#generalチャンネルで「業務改善事例」として共有されたRegression TC Creator。60件以上のリアクションが付いた。（共有者の情報は匿名化）</figcaption></figure>
+    <h4 class="h">展開を見据えてつくったもの</h4>
+    <ul>
+      <li><strong>1行で呼び出し</strong> — 設定やフラグなしでデフォルトのシートに記録されるよう初期値を決めた</li>
+      <li><strong>結果が目に見えるように</strong> — オレンジ色の行、チケットのコメント、フィールドの連携。
+        「実行したけど何が変わったか分からない」とならないように</li>
+      <li><strong>利用ガイドを同梱</strong> — できること・基本的な使い方・オプションを社内ドキュメントとして一緒に配布</li>
+    </ul>
+    <div class="note">
+      <b>次のステップ</b> — 現在はエージェントが正式版のシートに直接書き込み、オレンジ色の行で人がレビューすべき対象を見分けています。
+      次はこれを<strong>レビュー待ち → 承認 → 正式版</strong>に変えて、レビューが必ず通る段階にし、
+      差し戻し理由をエージェントのルールに反映することです。<span class="nb">（<a href="index.html#direction">目指す方向</a>）</span>
+    </div>
+    <div class="why"><b>振り返って</b>
+      良いツールをつくることより、<strong>他の人に使ってもらうことのほうがはるかに難しい</strong>ということを、
+      テストランナーとこのエージェントで繰り返し学びました。
+      だから今は、ツールをつくるときに<strong>利用ガイドと最初の実行体験を同じ作業として</strong>扱っています。</div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="runner.html"><span class="k">PREV · CASE-03</span><span class="t">← テストランナー — 誰でも検証できる環境</span></a><a href="practice.html" style="text-align:right"><span class="k">NEXT · CASE-05</span><span class="t">検証実務 — API検証・トレーサビリティ・業務ツール →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-04 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>

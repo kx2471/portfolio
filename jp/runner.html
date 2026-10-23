@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>テストランナー — 誰でも検証できる環境 · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="E2E自動化をチーム全員が使えるようにした、セルフサービス実行UIの設計記録。">
+<link rel="alternate" hreflang="ko" href="../runner.html">
+<link rel="alternate" hreflang="ja" href="runner.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html" class="on">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <a class="lang" href="../runner.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-03</span></div>
+  <h1>テストランナー — 誰でも検証できる環境</h1>
+  <p class="lede">全社で<strong>同じプロダクトをつくっているのに、それを検証できる人はごく一部</strong>でした。つくる人なら誰でも、自分の変更を自分で確認できるべきだと考えました。そこで、インストールもコマンドも不要で<strong>ブラウザさえあれば検証が回る環境</strong>をつくり、設計・実装・ユーザー向けドキュメントまで1人で担当しました。</p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>同じプロダクトを一緒につくっているのに、<strong>品質の確認はQAを通さないと</strong>できませんでした。スイートは完成していても、ターミナルや環境設定を分かる人しか実行できませんでした。</p></div><div><h5>Action</h5><p>「ツールを知らない人が押しても間違いが起きない」を基準に、安全な初期値と依存関係の自動解決を備えた検証環境をつくりました。</p></div><div class="r"><h5>Result</h5><p>つくった人が<strong>自分の変更を自分で検証</strong>し、QAは何をどう検証するかの<strong>設計に集中</strong>できるようになりました。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="note" style="margin-bottom:18px">
+  <b>私がつくりたかったもの</b> — 全社で1つのプロダクトをつくっているなら、
+  <strong>つくる人は誰でも自分の変更を確認できるべき</strong>であり、
+  QAの仕事はその確認を<strong>可能にすること</strong>だと考えました。
+  検証をQAが独占すれば、品質はQAの処理能力の分しか良くなりません。
+  検証できる人が増えれば、<strong>品質がチーム全体の仕事</strong>になります。
+  <br><br>
+  私の目標はツール1つではなく、<strong>そうした検証環境を構築すること</strong>であり、
+  <strong>このランナーはその一環としてつくりました。</strong>
+</div>
+<div class="note warn" style="margin-bottom:20px">
+  <b>環境はツール1つではできません</b> — 誰でも検証できるようにするには、3つが揃う必要がありました。<br>
+  · <strong>実行</strong> — インストールやコマンドなしで動かせるか <span class="nb">（このランナー）</span><br>
+  · <strong>解釈</strong> — 結果を見て自分で判断できるか <span class="nb">（レポート設計 · 下記）</span><br>
+  · <strong>蓄積</strong> — 結果が履歴として残り、次の判断の根拠になるか
+    <span class="nb">（<a href="process.html">Test Run管理ツール</a>）</span>
+</div>
+<details open>
+  <summary>6つの設計判断 — 画面に表れた決定とその理由<span class="meta">実際に運用中の画面</span></summary>
+  <div class="det">
+    <h4 class="h">1. 止めるときは、止める理由も一緒に示す</h4>
+    <figure class="shot"><img src="../assets/img/run-block.jpg" alt="実行が止められたとき。止めるだけで終わらず、誰が・何を・何分前から実行しているかを一緒に表示する。" loading="lazy"><figcaption>実行が止められたとき。止めるだけで終わらず、誰が・何を・何分前から実行しているかを一緒に表示する。</figcaption></figure>
+    <p>共有アカウントの制約はなくせないため同時実行は止めますが、それが「故障」に見えないよう、
+      <strong>誰が・何を・何分前から</strong>実行しているかを同じ画面に表示しました。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      待つか問い合わせるかをユーザーが自分で判断できれば、ブロックは障害ではなく情報になります。
+      ツールへの信頼は、<strong>動く機能ではなく、動かないときの説明</strong>で決まると考えました。</div>
+
+    <h4 class="h">2. 前提となるテストは、ユーザーではなくランナーが知っている</h4>
+    <figure class="shot"><img src="../assets/img/run-deps.jpg" alt="プロラベル1件にチェックすると16件が選択される。🔒の15件はランナーが自動で加えた前提テスト。" loading="lazy"><figcaption>プロラベル1件にチェックすると16件が選択される。🔒の15件はランナーが自動で加えた前提テスト。</figcaption></figure>
+    <p>プロラベルを検証するには、先にモデルが学習されている必要があります。この依存関係をユーザーが知っていなければならないなら
+      セルフサービスとは言えないため、ランナーが前提テストを自動で選択し🔒で表示します。
+      マウスを重ねると、なぜ含まれたのかまで表示されます。<strong>1件にチェックすると16件</strong>が選択されます。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      自動で加えるだけだと「なぜ16件？」という不信が生まれます。
+      <strong>自動化しつつ、根拠は見えるようにしておく</strong>ほうを選びました。</div>
+
+    <h4 class="h">3. 予想時間は実際の実行方式を反映する</h4>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/run-env.jpg" alt="環境と言語。選択を変えると、下のテストケース一覧も一緒に更新される。" loading="lazy"><figcaption>環境と言語。選択を変えると、下のテストケース一覧も一緒に更新される。</figcaption></figure><figure class="shot"><img src="../assets/img/run-notify.jpg" alt="実行を始めると依頼者・環境・規模・予想時間がチャンネルに告知され、終わると同じスレッドに実際の所要時間が付く。" loading="lazy"><figcaption>実行を始めると依頼者・環境・規模・予想時間がチャンネルに告知され、終わると同じスレッドに実際の所要時間が付く。</figcaption></figure></div>
+    <p>選択件数と予想所要時間をその場で計算しますが、単純な合計ではなく
+      <strong>3 workerの並列という実際の実行方式を反映した値</strong>を使います。
+      環境と言語を変えると、対象のテストケース一覧そのものが一緒に更新されます。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      外れた予想値は、一度外れただけで次から誰も見なくなります。
+      示せないなら示さないほうがよく、示すなら当たっていなければなりません。<br>
+      上の実行では<strong>予想1時間33分 → 実際1時間25分34秒</strong>。</div>
+
+    <h4 class="h">4. 環境でできないことは、無効化ではなく非表示に</h4>
+    <figure class="shot"><img src="../assets/img/run-options.jpg" alt="オプションは3つだけ。初期値のまま実行しても問題が起きないよう設計した。" loading="lazy"><figcaption>オプションは3つだけ。初期値のまま実行しても問題が起きないよう設計した。</figcaption></figure>
+    <p>オプションは3つに絞り、<strong>初期値のまま実行しても問題が起きないように</strong>しました。
+      画面のないサーバーではブラウザのウィンドウを開けないため、該当オプションはグレーアウトせず<strong>そもそも表示しません</strong>。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      選べない選択肢を見せること自体が混乱のもとです。
+      Slack送信をopt-inにしたのも同じ理由で、<strong>部分実行でチームのチャンネルが埋もれないように</strong>するためです。</div>
+
+    <h4 class="h">5. 実行セッションはサーバーに、ブラウザはビューアーにすぎない</h4>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/run-progress.jpg" alt="進捗は「完了数 / 全体」と現在実行中のテストを一緒に表示する。" loading="lazy"><figcaption>進捗は「完了数 / 全体」と現在実行中のテストを一緒に表示する。</figcaption></figure><figure class="shot"><img src="../assets/img/run-log.jpg" alt="実行ログはリアルタイムでストリーミングされる。どのテストの何番目のステップかが行ごとに残る。" loading="lazy"><figcaption>実行ログはリアルタイムでストリーミングされる。どのテストの何番目のステップかが行ごとに残る。</figcaption></figure></div>
+    <p>進捗は<strong>「完了数 / 全体」と現在のテスト</strong>を一緒に表示し、実行ログはリアルタイムでストリーミングされます。
+      ウィンドウを閉じて開き直しても、<strong>他の人が始めた実行に接続しても</strong>、ログと進捗がそのまま復元されます。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      学習を含むと実行は数十分を超えます。その間ブラウザを開いたままにするよう求めた瞬間、人はもう使わなくなります。
+      <strong>途中で止めても、すでに終わったテストの結果は保存</strong>されます。</div>
+
+    <h4 class="h">6. 結果はサーバーではなく自分のPCに届く</h4>
+    <figure class="shot"><img src="../assets/img/run-result.jpg" alt="結果を取得するボタンは実行が終わってから表示される。サーバーで実行しても、ダウンロードはローカルに保存される。" loading="lazy"><figcaption>結果を取得するボタンは実行が終わってから表示される。サーバーで実行しても、ダウンロードはローカルに保存される。</figcaption></figure>
+    <p>実行が終わると<strong>結果レポートを開く・スクリーンショットのzipをダウンロード</strong>の2つのボタンが表示されます。
+      サーバーで実行してもダウンロードはローカルに保存され、再読み込みしたり後で開き直したりしても、直前の実行結果を取得し続けられます。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      結果が実行した人の手元に残らなければ、<strong>「実行した」で終わり</strong>、共有や次の対応につながりません。
+      実行中にボタンを隠しているのも、<strong>未完成のレポートを配ってしまう事故を防ぐ</strong>ためです。</div>
+  </div>
+</details>
+
+<details>
+  <summary>レポート設計 — 合格したものも「何を確認したか」を残す<span class="meta">flakyを独立した状態に</span></summary>
+  <div class="det">
+    <p>自動化の結果が<strong>PASS/FAILの数字だけで終わると、人はその数字を検証する手段がありません。</strong></p>
+    <div class="shots2"><figure class="shot"><img src="../assets/img/run-report1.jpg" alt="レポート上部のサマリー。4つの状態の合計が全件数と一致する。" loading="lazy"><figcaption>レポート上部のサマリー。4つの状態の合計が全件数と一致する。</figcaption></figure><figure class="shot"><img src="../assets/img/run-report2.jpg" alt="検証ポイントを展開したところ。行末の「画面」を押すと、その時点のスクリーンショットが開く。" loading="lazy"><figcaption>検証ポイントを展開したところ。行末の「画面」を押すと、その時点のスクリーンショットが開く。</figcaption></figure></div>
+    <p>各テストの<strong>検証ポイント</strong>を展開すると、何をどの順序で確認したかが表示され、
+      行末の「画面」を押すとその時点のスクリーンショットが開きます。<strong>合格したテストにも同じように付きます。</strong></p>
+    <div class="note">
+      失敗した項目は、<strong>その時点の画面がレポートファイルの中に</strong>含まれています。
+      リンクや別の添付なしに、レポート1つを渡すだけで相手がそのまま見られます —
+      開発者に再現を依頼するときの<strong>やり取りを減らすための設計</strong>です。
+    </div>
+    <h4 class="h">状態を4つに分けた理由</h4>
+    <div class="tw"><table>
+      <thead><tr><th>表示</th><th>意味</th><th>扱い</th></tr></thead>
+      <tbody>
+        <tr><td><strong>完了</strong></td><td>検証に合格</td><td>正常</td></tr>
+        <tr><td><strong>失敗</strong></td><td>期待結果と異なる — 理由と画面を一緒に提示</td><td>原因を確認</td></tr>
+        <tr><td><strong>不安定</strong></td><td>リトライで合格</td><td class="after">緑ではない · 確認が必要</td></tr>
+        <tr><td><strong>スキップ</strong></td><td>前提の失敗または中断により未実行</td><td>前提の結果から確認</td></tr>
+      </tbody>
+    </table></div>
+    <div class="why"><b>なぜ4つに分けたか</b>
+      「リトライで通ったから合格」で済ませると、<strong>flakyはいつまでも溜まり続けます。</strong>
+      不安定を独立した状態に分け、flakyを運ではなく原因のある欠陥として扱う基準を
+      <strong>ツールのレベルで固定</strong>しました。</div>
+  </div>
+</details>
+
+<details>
+  <summary>ツールと一緒につくったユーザー向けドキュメント · 成果<span class="meta">配布するだけでは誰も使わない</span></summary>
+  <div class="det">
+    <p>画面の順序どおりに進めるガイドを、<strong>ツールと一緒に</strong>作成しました。</p>
+    <ul>
+      <li><strong>使う人の言葉で書く</strong> — 「ヘッドレス」「同時実行ロック」ではなく、
+        <em>「ウィンドウを表示」</em>、<em>「現在、別の実行が進行中です」</em></li>
+      <li><strong>止められる画面を先に説明する</strong> — 実行がブロックされる画面をスクリーンショット付きで示し、
+        <em>「これは故障ではありません」</em>と先に伝えて問い合わせ自体を減らす</li>
+      <li><strong>問い合わせが来そうな点に先に答える</strong> — 失敗が多いとき / 予想より時間がかかるとき /
+        レポートが開かないときを、トラブルシューティングとして先回りして整理</li>
+      <li><strong>ドキュメントを画面に連動させる</strong> — 実際の画面キャプチャをそのまま載せ、
+        画面が変わればドキュメントも一緒に更新することを前提に構成</li>
+    </ul>
+    <div class="note warn">
+      <b>このドキュメント自体が成果物です。</b>ツールをつくった人がドキュメントまで責任を持たなければ、
+      結局問い合わせはその人に戻ってきて、<strong>ボトルネックは形を変えて残ります</strong>。
+    </div>
+    <h4 class="h">成果</h4>
+    <div class="tw"><table>
+      <thead><tr><th>項目</th><th>Before</th><th>After</th></tr></thead>
+      <tbody>
+        <tr><td>実行する人</td><td class="before">ターミナルを使えるQA 1人</td><td class="after">開発・QAのメンバー誰でも（ブラウザのURL 1つ）</td></tr>
+        <tr><td>実行の準備</td><td class="before">クローン・依存関係のインストール・環境変数・コマンドの習得</td><td class="after">インストール0ステップ · コマンド0行</td></tr>
+        <tr><td>同時実行の事故</td><td class="before">共有アカウントの衝突で両方とも失敗</td><td class="after">単独実行を保証 + 実行者・経過時間を表示</td></tr>
+        <tr><td>前提条件</td><td class="before">ユーザーが依存関係を把握して自分で選択</td><td class="after">ランナーが自動選択 · 含めた理由を表示</td></tr>
+        <tr><td>実行中の離脱</td><td class="before">セッションが切れると進捗が失われる</td><td class="after">再接続時にログ・進捗を復元（他の人の実行も含む）</td></tr>
+        <tr><td>結果の取得</td><td class="before">サーバーに残り、個人のPCに持ってくる手段がない</td><td class="after">レポート・スクリーンショットzipをワンクリックでダウンロード</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note">
+      <b>この取り組みで示したやり方</b><br>
+      · <strong>検証を分け合う仕組みをつくる</strong> — 品質の責任をQAに集めず、つくった人が自分で確認できるように<br>
+      · <strong>自動化は動いた瞬間ではなく、他の人が使えるようになって完成する</strong> — 実行UIとユーザー向けドキュメントも自動化の一部と考える<br>
+      · <strong>止めるときは理由を一緒に示す</strong> — なくせない制約なら、せめて判断するための情報を渡す<br>
+      · <strong>ドメイン知識が必要な部分はツールが代わりに計算する</strong> — 前提となるテスト、並列での所要時間<br>
+      · <strong>基準をドキュメントではなくツールに固定する</strong> — 不安定な状態を分離し、flakyの判定基準を強制
+    </div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="automation.html"><span class="k">PREV · CASE-02</span><span class="t">← Playwrightによるテスト自動化の構築</span></a><a href="agent.html" style="text-align:right"><span class="k">NEXT · CASE-04</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-03 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャは韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>
