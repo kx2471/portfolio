@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QAナレッジ管理システムの構築 — QA Vault · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="散在していたQAナレッジを相互リンクされた一つのナレッジベースに集約し、AIエージェントが毎日無人で最新化するナレッジ管理システムの構築記録。">
+<link rel="alternate" hreflang="ko" href="../vault.html">
+<link rel="alternate" hreflang="ja" href="vault.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="vault.html" class="on">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
+  <a class="lang" href="../vault.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-01</span></div>
+  <h1>QAナレッジ管理システムの構築 — QA Vault</h1>
+  <p class="lede">チケット・テストケース・企画書・意思決定に散らばっていたQAのナレッジを、<strong>相互にリンクされた一つのナレッジベース</strong>に集約し、
+    AIエージェントが<strong>毎朝無人で最新化</strong>するようにしました。
+    <strong>ナレッジこそが資産で、AIは道案内役</strong>という方針のもと、3.5週間で企画・設計・構築を一人で行い、現在も運用しています。</p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>バグはClickUp、テストケースはシート、企画はFigma、決定事項はコメント。「この機能の仕様は何だったか」に答えるには4か所を探す必要があり、企画の変更は誰にも気づかれずに過ぎていました。</p></div><div><h5>Action</h5><p>スクリプトは収集・比較、AIエージェントは判断・整理、人は承認と役割を分け、ナレッジベースと平日09:00の無人同期を構築しました。</p></div><div class="r"><h5>Result</h5><p>イシュー439・テストケース1,372・仕様18・インサイト38が一か所でつながり、企画の変更は翌朝のレポートで影響TCの修正案とともに届きます。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · 単独で企画・設計・構築・運用（3.5週間、以後運用中）</p><ol><li><b>収集・比較はスクリプト、判断はAI、確定は人と分けました。</b> <em>— AIに収集まで任せると、同じ入力でも結果が毎回変わったためです。</em></li><li><b>企画の決定を仕様書に自動登録せず、「候補」として挙げるだけにしました。</b> <em>— コメントを読み違えて誤った仕様が確定すると、その仕様を根拠につくったテストケースまで一緒に誤ります。</em></li><li><b>企画担当に新しいツールを求めず、普段書いているコメントを読みに行きました。</b> <em>— 仕様書が蓄積されなかった原因は、書く場所がないことではなく、書く手間にありました。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>なぜつくったか · システム構成<span class="meta">スクリプト · AI · 人の役割分担</span></summary>
+  <div class="det">
+    <div class="tw"><table>
+      <thead><tr><th style="width:190px">課題</th><th>実際の状況</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ナレッジが散在</strong></td><td>バグはClickUp、テストケースはスプレッドシート、企画はFigma、決定事項はSlack・チケットのコメント。仕様を一つ確かめるのに4か所を探していた</td></tr>
+        <tr><td><strong>企画変更を見逃す</strong></td><td>Figmaの文言・仕様カードが黙って変わっても知る手段がなく、テストケースの期待結果が古いまま残った</td></tr>
+        <tr><td><strong>決定がコメントに埋もれる</strong></td><td>企画担当がコメントで決めた動作（「失敗時は元に戻すこと」）が仕様書に残らなかった</td></tr>
+        <tr><td><strong>回帰範囲の根拠が弱い</strong></td><td>過去の不具合パターンを記憶に頼って判断していた</td></tr>
+        <tr><td><strong>繰り返しの手作業</strong></td><td>run作成、結果集計、Test Plan・Report作成、イシュー整理を毎回手で行っていた</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="h">目標</h4>
+    <ul>
+      <li>QAナレッジを<strong>一か所に、相互リンクされた構造で</strong>集める — ナレッジが資産、AIは道案内役</li>
+      <li>外部ソース（ClickUp・Figma・自動化プロジェクト）の変化を<strong>毎日自動で反映</strong>する</li>
+      <li>AIが<strong>作り話をしないよう</strong>すべてに根拠を残す</li>
+      <li>外部システムへの書き込みは<strong>人の承認後にのみ</strong>行う</li>
+    </ul>
+
+    <h4 class="h">日次同期の流れ</h4>
+    <div class="flow">
+      <div class="node git"><b>外部ソース</b><em>ClickUp · Figma · 自動化プロジェクト</em></div><div class="arrow">→</div>
+      <div class="node"><b>Pythonスクリプト</b><em>収集 · 比較 · 集計</em></div><div class="arrow">→</div>
+      <div class="node"><b>Claude Codeエージェント</b><em>分類 · 仕様反映 · レポート</em></div><div class="arrow">→</div>
+      <div class="node"><b>ナレッジベース</b><em>Obsidian vault · GitHub</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>QAの承認</b><em>承認分のみClickUpへ書き込み</em></div>
+    </div>
+    <div class="note">
+      <b>役割分担</b> — スクリプトは<strong>機械的な作業</strong>（収集・比較・表の作成）、AIエージェントは<strong>判断</strong>（分類・仕様反映・レポート）、
+      人は<strong>承認と最終判断</strong>。この境界を手順書とガードレールで明文化し、毎日同じ品質が出るようにしました。
+    </div>
+    <div class="why"><b>なぜこうしたか</b>
+      AIに収集まで任せると毎回結果がぶれ、判断までスクリプトで書くとルールが際限なく増えます。
+      <strong>決定的な処理はコードで、解釈が必要な処理はAIで</strong>と分けたことで、再現性と柔軟性を両立できました。</div>
+    <div class="note">
+      <b>このナレッジベースの上に載せたもの</b> — 集めたナレッジを開発・企画の誰もがSlackで質問できるようにした質問エージェントは、
+      <a href="askbot.html">CASE-02 Slack質問Agent</a>に分けてまとめました。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>ナレッジ構造 — オントロジー<span class="meta">6フォルダ · 16ドメイン · 原子単位のインサイト</span></summary>
+  <div class="det">
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
+      <figure class="shot" style="flex:0 1 300px;margin:0"><img src="../assets/img/vault-tree.png" alt="Obsidian vaultの最上位構造。0. Inboxから5. Archiveまで、ナレッジのライフサイクル順にフォルダを分けた。" loading="lazy"><figcaption>Obsidian vaultの最上位構造。0. Inboxから5. Archiveまで、ナレッジのライフサイクル順にフォルダを分けた。</figcaption></figure>
+      <div class="tw" style="flex:1 1 360px;margin:0"><table>
+        <thead><tr><th style="width:120px">フォルダ</th><th>入れるもの</th></tr></thead>
+        <tbody>
+          <tr><td><code>0. Inbox</code></td><td>メモ · 同期レポート（一時置き場）</td></tr>
+          <tr><td><code>1. Projects</code></td><td>進行中の機能（EPIC）— 概要 · 要件 · テスト計画 · 決定ログ</td></tr>
+          <tr><td><code>2. Policies</code></td><td>確定した動作基準（Figma・企画の決定から抽出）</td></tr>
+          <tr><td><code>3. Issues</code></td><td>バグ — 原因 · 対応 · 再発防止 · インサイト</td></tr>
+          <tr><td><code>4. Resources</code></td><td><strong>最終的な資産</strong> — インサイト、機能辞書、ドメイン目次、履歴表、カバレッジ</td></tr>
+          <tr><td><code>5. Archive</code></td><td>終了したプロジェクト</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <ul>
+      <li>実際のテストケースシートの機能領域に合わせて<strong>16のドメイン</strong>を定義し、すべてのノートをfrontmatter（ドメイン・エディション・モデルタイプ・データ種別）で分類</li>
+      <li>ノート同士が<strong>ウィキリンクでつながり</strong>グラフで探索できる — イシュー → 仕様 → テストケース → インサイトとたどれる</li>
+    </ul>
+    <h4 class="h">インサイトは原子単位で</h4>
+    <p>インサイトノートは<strong>ファイル名そのものが一文の原則</strong>です。
+      例：<em>「新しいデータ種別が追加されたら、既存の全ノードでその種別の分岐を確認する」</em>。
+      必ず根拠となるイシュー・プロジェクトをリンクし、<strong>根拠の数を数えます</strong>。根拠の多い上位10件は累積コンテキストとして保持し、
+      次の機能のテスト観点として再利用します。</p>
+    <div class="why"><b>なぜこうしたか</b>
+      「注意すべきこと」のような長い文書は誰も読み返しません。一文の原則に根拠リンクが付いていてこそ、
+      <strong>人もAIも取り出して使え、根拠の数で重要度を判断</strong>できます。</div>
+  </div>
+</details>
+
+<details>
+  <summary>日次自動同期 · Figmaの企画変更検知<span class="meta">平日09:00 無人実行</span></summary>
+  <div class="det">
+    <div class="tw"><table>
+      <thead><tr><th style="width:120px">ステップ</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td><strong>チケット</strong></td><td>新機能（EPIC）→ プロジェクト文書4種を生成、バグ → イシューノート、デザインイシュー → 履歴表。類似インサイトを自動リンク</td></tr>
+        <tr><td><strong>コメント</strong></td><td>チケット・サブタスクのコメントを収集 → イシューノートに追記、企画の回答を決定ログに反映</td></tr>
+        <tr><td><strong>TC · run</strong></td><td>テストケース1,372件のスナップショット、TCの空白（回帰TCのないバグなど）分析、実行結果をマスターTCに反映</td></tr>
+        <tr><td><strong>Figma</strong></td><td>企画書の全ページの文言・コメントの変更を検知</td></tr>
+        <tr><td><strong>自動化</strong></td><td>E2E自動化プロジェクトのTC紐付け・実行結果を追跡</td></tr>
+        <tr><td><strong>機能の終了</strong></td><td>EPICが閉じたらインサイトを抽出 → 累積コンテキストを更新 → Archiveへ移動</td></tr>
+        <tr><td><strong>レポート</strong></td><td>変更の要約、承認待ち項目、要確認項目をInboxに残す</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4 class="h">Figmaの企画変更検知</h4>
+    <p>企画書は頻繁に変わるのに、変更の通知はありません。最初に使ったMCPツールは呼び出し上限が小さく、コンポーネント内の文言を読めませんでした。</p>
+    <ul>
+      <li><strong>Figma REST API</strong>で表示されるすべてのテキストを抽出し、<strong>スナップショットと比較</strong>（変更・追加・削除）。ファイルのバージョンが同じならスキップ</li>
+      <li>同じフレーム内でidだけが変わった文言は<strong>相殺して誤検知を削減</strong></li>
+      <li>仕様ノートには以前の文言を<strong>取り消し線で残し</strong>、新しい文言を反映して変更履歴を記録</li>
+      <li>テストケースから<strong>以前の文言を使っているTCを探し、修正案</strong>をレポートで提案 — TCは承認後にのみ修正</li>
+      <li>企画の説明とデザイン案の文言が異なれば<code>❗ 不一致</code>と表示 → <strong>開発前に</strong>企画担当とすり合わせる</li>
+    </ul>
+    <div class="note">
+      <b>成果</b> — 企画書の変更を<strong>翌朝のレポートで</strong>把握し、影響を受けるテストケースの修正案まで受け取れます。
+      古い期待結果でテストしてから「企画が変わっていた」と気づくことがなくなりました。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>Human-in-the-loop — 決定は人が確定する<span class="meta">仕様登録候補 · レポートへの返信</span></summary>
+  <div class="det">
+    <h4 class="h">企画の決定 → 仕様書</h4>
+    <p>企画担当がチケットのコメントだけで決めると、仕様書に残りません。かといって企画担当にGitやObsidianを使ってもらうのはハードルが高すぎます。</p>
+    <div class="flow">
+      <div class="node git"><b>企画担当のコメント</b><em>いつも通りチケットに記入</em></div><div class="arrow">→</div>
+      <div class="node"><b>仕様登録候補</b><em>登録先 · 文 · 矛盾 · 影響TC</em></div><div class="arrow">→</div>
+      <div class="node"><b>QAの返答</b><em>OK / 確定 / 却下</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>仕様書に登録</b><em>登録された決定は確定</em></div>
+    </div>
+    <p>同期処理が企画担当のコメントから<strong>仕様の決定と思われる文だけを選び</strong>、レポートに挙げます。
+      <strong>自動登録はしません</strong> — 誤解によって誤った仕様が確定するのを防ぐためです。</p>
+
+    <h4 class="h">「レポートに返信」— 非同期の承認</h4>
+    <p>レポートの提案の下に<strong>形式を問わず自由に</strong>返答を書くと、次回の同期が
+      <strong>前回のコミットと比較して人が変更した行だけ</strong>を見つけ、意図を判断して処理します。</p>
+    <div class="grid g2">
+      <div class="card"><h3>🛡️ プロンプトインジェクション対策</h3>
+        <p style="margin-bottom:0">レポートに引用された外部コメントは比較の基準にすでに含まれているため、<strong>指示として読まれません</strong>。
+          他の人のコミットが混ざった場合は外部への書き込みを行いません。</p></div>
+      <div class="card"><h3>✍️ 書き込み範囲の制限</h3>
+        <p style="margin-bottom:0">外部への書き込みは許可範囲（TCの作成・修正、関係の紐付け）に限定し、
+          <strong>変更前後の値を残して</strong>いつでも戻せるようにしました。</p></div>
+    </div>
+    <div class="why"><b>なぜこうしたか</b>
+      <strong>ユーザーがすでに使っているツールの中で動かなければ使われません。</strong>企画担当に新しいツールを求める代わりにコメントを読みに行き、
+      QAの承認も別画面ではなくレポートに一行書くだけで済むようにしました。</div>
+  </div>
+</details>
+
+<details>
+  <summary>テストケース管理 · カバレッジ · 文書化の自動化<span class="meta">下書き → レビュー → 反映</span></summary>
+  <div class="det">
+    <div class="shots2">
+      <figure class="shot"><img src="../assets/img/vault-cli-tc.png" alt="vault内で起動したClaude Code。「プロジェクト要件に関するTCを作成して」の一行で、仕様・要件・過去のバグを根拠にTCの下書きを作る。" loading="lazy"><figcaption>vault内で起動したClaude Code。「プロジェクト要件に関するTCを作成して」の一行で、仕様・要件・過去のバグを根拠にTCの下書きを作る。</figcaption></figure>
+      <figure class="shot"><img src="../assets/img/vault-cli-insight.png" alt="「10月20日のTest RunでFAILしたTCを整理し、その期間のDefectチケットの原因・結果を分析してインサイトを導出して」— run結果と不具合の原因が同じリポジトリにあるので一度に聞ける。" loading="lazy"><figcaption>「10月20日のTest RunでFAILしたTCを整理 + 同期間のDefectの原因分析・インサイト導出」— run結果と不具合の原因が同じリポジトリにあるので一度に聞ける。</figcaption></figure>
+    </div>
+    <ul>
+      <li><strong>TC移行</strong> — スプレッドシートのTC 1,279件をClickUpへ移行し、毎日同期</li>
+      <li><strong>TC作成</strong> — 仕様・要件・過去のバグを根拠に下書き → 人が下書きファイルにレビューメモ → 反映後に一括作成。
+        例：新機能のTC <strong>36件の下書き → レビューで3件削除・2件修正 → 33件作成</strong>、要件との紐付けまで自動</li>
+      <li><strong>カバレッジ</strong> — 回帰TCのないバグ、TCのない機能・仕様を自動集計</li>
+      <li><strong>自動化の追跡</strong> — E2Eコードのテストケースアノテーションと実行レポートを読み、
+        <strong>自動化対象760件中391件（51%）</strong>、機能領域別の残り、新しいFailを毎日追跡 <span class="nb">（<a href="automation.html">CASE-04</a>）</span></li>
+      <li><strong>runツール</strong> — スプレッドシートのマクロをClickUp用のGUI・CLIとして再実装（条件フィルターでrun作成、完了記録、不具合の紐付け、結果集計）</li>
+      <li><strong>Test Plan · Reportスキル</strong> — チームの文書テンプレートを読んで従い、範囲はバージョンのチケット一覧、TCはrun、結果はrun統計・チケットコメントから取得。
+        <strong>PlanとReportを一対で</strong>扱い、同じ範囲・合格基準・runを共有し、Planの項目ごとに結果が付く</li>
+    </ul>
+    <div class="note">
+      <b>CASE-06からの発展</b> — <a href="agent.html">Regression TC Creator</a>はチケット1件のRoot Causeを読んで正本のシートに直接書き込み、
+      オレンジ色の行・作成者の固定・空の分類欄でレビューを促していました。現在はそのエージェントの代わりに<strong>このリポジトリの仕様・イシュー・インサイト全体を根拠に</strong>
+      回帰テストケースを書き、AIが書いたTCは下書きファイルにとどまり、人のレビューメモが反映された後にのみ作成されます。
+    </div>
+  </div>
+</details>
+
+<details>
+  <summary>ガードレール · 無人運用 · トラブルシューティング<span class="meta">人がいなくても毎日回る仕組み</span></summary>
+  <div class="det">
+    <h4 class="h">設計原則（ガードレール）</h4>
+    <div class="checks">
+      <div class="check"><div class="mark">1</div><div class="body"><div class="t">作り話をしない</div><div class="d">確認されていない動作は<code>❓ 未確認</code>と表示</div></div></div>
+      <div class="check"><div class="mark">2</div><div class="body"><div class="t">根拠を残す</div><div class="d">テストのチェック・仕様・インサイトすべてに出典（チケット・決定・文書）のリンクが必須</div></div></div>
+      <div class="check"><div class="mark">3</div><div class="body"><div class="t">決定ログは追記のみ</div><div class="d">変わった決定は新しい番号で追加し、以前の番号を参照</div></div></div>
+      <div class="check"><div class="mark">4</div><div class="body"><div class="t">修正ではなく履歴</div><div class="d">仕様が変わったら以前の文言を残し、変更履歴に日付と根拠</div></div></div>
+      <div class="check"><div class="mark">5</div><div class="body"><div class="t">外部への書き込みは承認後</div><div class="d">例外は事前に許可を得たフィールド（TCの最新結果など）のみ</div></div></div>
+      <div class="check"><div class="mark">6</div><div class="body"><div class="t">最終判断は人</div><div class="d">インサイトの確定、仕様の登録、TCの作成は人が承認</div></div></div>
+    </div>
+
+    <h4 class="h">実装中に直面した問題</h4>
+    <div class="grid g2">
+      <div class="card"><h3>🔇 同期が静かに失敗</h3>
+        <p>無人実行中にOAuthが期限切れになったのに、<strong>終了コードが伝わらず</strong>失敗したことにも気づけませんでした。</p>
+        <p style="margin-bottom:0"><strong>→</strong> 終了コードの伝達、リトライ、失敗マーカー + 再ログインされたら<strong>15分以内に自動再実行</strong>。</p></div>
+      <div class="card"><h3>🎨 Figmaの構造が一部しか見えない</h3>
+        <p>MCPのメタデータツールの限界と呼び出し上限のため、コンポーネント内の文言が読めませんでした。</p>
+        <p style="margin-bottom:0"><strong>→</strong> REST APIで全テキストを収集 + スナップショット比較に切り替え。</p></div>
+      <div class="card"><h3>📖 同じ用語を異なる意味で解釈</h3>
+        <p>「前処理」がノードなのか学習の準備段階なのか曖昧で、見当違いの範囲を測定してしまいました。</p>
+        <p style="margin-bottom:0"><strong>→</strong> 用語が曖昧なら<strong>測定前に範囲を確認</strong>するよう手順・メモリに反映。</p></div>
+      <div class="card"><h3>🔗 文書のリンクをチップにできない</h3>
+        <p>文書APIがタスクのメンションに対応していないことを、自分で試して確認しました。</p>
+        <p style="margin-bottom:0"><strong>→</strong> 「番号+タイトル」のリンクに標準化し、画面で変えた書式が上書きで消えないよう<strong>追記を優先</strong>。</p></div>
+      <div class="card"><h3>📐 ダイアグラムが画面で切れる</h3>
+        <p>Obsidianの表示幅を超えたダイアグラムが切れて表示されました。</p>
+        <p style="margin-bottom:0"><strong>→</strong> レンダリングして幅を測り、600px以下に再設計。</p></div>
+    </div>
+    <div class="why"><b>振り返って</b>
+      <strong>運用まで考えた自動化こそが本当の自動化です。</strong>認証の期限切れのような失敗経路を一つずつ塞いでこそ、
+      人がいなくても毎日回ります。そして失敗は静かであってはいけません — 失敗マーカーが残ってこそ直せます。</div>
+  </div>
+</details>
+
+<details>
+  <summary>成果 · 学び · 次のステップ<span class="meta">3.5週間 · コミット182 · 無人同期21回</span></summary>
+  <div class="det">
+    <div class="tw"><table>
+      <thead><tr><th style="width:200px">指標</th><th>数値</th></tr></thead>
+      <tbody>
+        <tr><td><strong>イシューノート</strong></td><td>439（ClickUpのバグ387件を一括移行 + 毎日自動追加）</td></tr>
+        <tr><td><strong>テストケース</strong></td><td>1,372件を同期、自動化対象760件中391件の自動化を追跡</td></tr>
+        <tr><td><strong>仕様ノート · 機能辞書</strong></td><td>18 · 46</td></tr>
+        <tr><td><strong>インサイト（再利用可能な原則）</strong></td><td>38（根拠数の上位10件を累積コンテキストとして保持）</td></tr>
+        <tr><td><strong>自動同期</strong></td><td>21回（平日毎日、無人）</td></tr>
+        <tr><td><strong>構成要素</strong></td><td>Pythonスクリプト18、エージェントスキル7</td></tr>
+      </tbody>
+    </table></div>
+    <h4 class="h">定性的な変化</h4>
+    <ul>
+      <li>「この機能の仕様は何だったか」を4か所ではなく<strong>一か所</strong>で根拠とともに確認</li>
+      <li>コメントにしか残らなかった企画の決定が<strong>仕様書として蓄積</strong></li>
+      <li>繰り返すバグの原因を<strong>インサイトとして蓄積</strong>し、次の機能のテスト観点として再利用</li>
+      <li>新機能のTC数十件、Test Plan・Reportを<strong>下書き → レビュー → 反映</strong>の流れで作成</li>
+    </ul>
+    <h4 class="h">学び</h4>
+    <ul>
+      <li><strong>AIに任せる仕事と人が判断する仕事を分けることが核心。</strong>収集・比較はスクリプト、分類・要約はAI、確定・承認は人。境界を文書で明示してこそ毎回同じ品質が出る。</li>
+      <li><strong>ユーザーがすでに使っているツールの中で動かなければ使われない。</strong>企画担当に新しいツールを求める代わりにコメントを読みに行った。</li>
+    </ul>
+    <div class="note">
+      <b>次のステップ</b> — 企画担当と仕様を共同管理する試行（未解決の質問キュー、企画変更の確認依頼）、
+      リリース検証の基本範囲（後方互換・ライセンス・実データでの長時間学習）の標準化。<span class="nb">（<a href="index.html#direction">目指す方向</a>）</span>
+    </div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="askbot.html" style="text-align:right"><span class="k">NEXT · CASE-02</span><span class="t">Slack質問Agent — 誰でも根拠付きで聞ける →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-01 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>

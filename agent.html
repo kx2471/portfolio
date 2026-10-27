@@ -15,15 +15,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html" class="on">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html" class="on">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="jp/agent.html" hreflang="ja" lang="ja">日本語</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-04</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-06</span></div>
   <h1>AI Agent — Regression TC Creator</h1>
   <p class="lede">제가 의무화한 Root Cause 기록을 읽어 회귀 TC를 설계하고, Google Sheets에 기록하고, 티켓에 코멘트와 필드까지 연결하는 Claude 기반 Agent입니다. <strong>정책을 만든 사람이 그 정책이 남긴 데이터를 쓰는 도구를 직접 만들었습니다.</strong></p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>RCA 기록은 쌓이는데 활용이 안 되는 자산이 될 위험이 있었고, 회귀 TC 설계·기록·연결은 매 스프린트 반복되는 수작업이었습니다.</p></div><div><h5>Action</h5><p>MCP 도구 조합 · 3단계 게이팅 · 안전장치를 포함한 시스템으로 구현했습니다.</p></div><div class="r"><h5>Result</h5><p>티켓 ID 한 줄이면 TC 설계·시트 기록·티켓 연결이 자동으로 끝납니다. 타 팀이 사내 업무 개선 사례로 공유했습니다.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>RCA 기록은 쌓이는데 활용이 안 되는 자산이 될 위험이 있었고, 회귀 TC 설계·기록·연결은 매 스프린트 반복되는 수작업이었습니다.</p></div><div><h5>Action</h5><p>MCP 도구 조합 · 3단계 게이팅 · 안전장치를 포함한 시스템으로 구현했습니다.</p></div><div class="r"><h5>Result</h5><p>티켓 ID 한 줄이면 TC 설계·시트 기록·티켓 연결이 자동으로 끝납니다. Related TC로 연결된 회귀 자산 45건, 타 팀이 사내 업무 개선 사례로 공유했습니다.</p></div></div><div class="mine"><h5>제 판단과 기여</h5><p class="role"><b>역할</b> · 설계 · 구현 · 사내 배포 단독</p><ol><li><b>제가 의무화한 Root Cause 기록이 죽은 데이터가 되지 않도록 소비처를 직접 만들었습니다.</b> <em>— 쓰이지 않는 기록은 곧 안 쓰게 됩니다.</em></li><li><b>시트 기록 → 코멘트 → 필드 연결을 앞 단계가 성공해야 넘어가는 3단계로 묶었습니다.</b> <em>— 일부만 게시된 불완전 상태가 가장 찾기 어려운 오류이기 때문입니다.</em></li><li><b>검토용 시트를 따로 두지 않고 정본에 바로 쓰게 했습니다.</b> <em>— 시트가 두 개면 아무도 안 봅니다. 대신 주황색 배경 · 작성자 Claude 고정 · 빈 분류 칸으로, 사람이 아직 안 본 TC가 정본 안에서 드러나게 했습니다.</em></li><li><b>이후 도구에서 지식 기반으로 옮겨 갔습니다.</b> <em>— 지금은 이 에이전트 대신 <a href="vault.html">CASE-01</a>의 지식 저장소를 근거로 회귀 TC를 쓰고, 검토는 표시가 아니라 관문(초안 → 검토 → 생성)이 됐습니다.</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>왜 만들었는가 · 동작 흐름<span class="meta">정책이 남긴 데이터를 쓰는 도구</span></summary>
   <div class="det">
@@ -99,7 +99,10 @@
   <div class="det">
     <h4 class="h">Step 1. Google Sheets 기록 (정본)</h4>
     <p>14컬럼 양식으로 시트 마지막 행 다음에 직접 기록합니다.
-      Agent가 추가한 행은 <strong>주황색 배경</strong>으로 칠해 사람이 작성한 TC와 즉시 구분되도록 했고,
+      <strong>별도 검토용 시트를 만들지 않고 정본에 바로 쓰게 한 것</strong>은 의도한 선택입니다 — 시트가 두 개면 아무도 안 봅니다.
+      대신 정본 안에 검토 장치를 붙였습니다. Agent가 추가한 행은 <strong>주황색 배경</strong>으로 칠하고,
+      <strong>작성자는 Claude로 고정</strong>하고, <strong>분류 칸은 비워 둬 QA가 채우게</strong> 했습니다.
+      분류가 비어 있는 주황색 행이 곧 “아직 사람이 안 본 TC”입니다. 또한
       <code>wrapStrategy: WRAP</code>을 적용해 셀 안 줄바꿈이 실제로 보이도록 했습니다.</p>
     <figure class="shot"><img src="assets/img/tc-sheet.jpg" alt="Step 1 — 마지막 행 다음에 회귀 TC가 추가된다. Agent가 넣은 행은 주황색 배경이라 사람이 쓴 TC와 즉시 구분된다. (TC_871 외 실제 TC는 비식별 처리)" loading="lazy"><figcaption>Step 1 — 마지막 행 다음에 회귀 TC가 추가된다. Agent가 넣은 행은 주황색 배경이라 사람이 쓴 TC와 즉시 구분된다. (TC_871 외 실제 TC는 비식별 처리)</figcaption></figure>
     <h4 class="h">Step 2 · 3. 코멘트 게시 → Related TC 연결</h4>
@@ -111,7 +114,7 @@
     <div class="note">
       이는 제가 설계한 QA 워크플로우의 세 번째 원칙(<strong>Root Cause 의무화</strong>)에서 끝나지 않고,
       <em>그 기록이 검증 자산으로 이어지는 고리</em>를 만드는 단계입니다.
-      <a href="process.html">→ 01 프로세스 설계</a>
+      <a href="process.html">→ CASE-03 프로세스 설계</a>
     </div>
   </div>
 </details>
@@ -162,9 +165,9 @@
       <li><strong>사용 가이드 동봉</strong> — 할 수 있는 일 · 기본 사용법 · 옵션을 사내 문서로 함께 배포</li>
     </ul>
     <div class="note">
-      <b>다음 단계</b> — 지금은 에이전트가 정본 시트에 바로 쓰고, 주황색 행으로 사람이 검토할 대상을 구분합니다.
-      다음은 이를 <strong>검토 대기 → 승인 → 정본</strong>으로 바꿔 검수가 반드시 거치는 단계가 되게 하고,
-      반려 사유를 에이전트 규칙에 반영하는 것입니다. <span class="nb">(<a href="index.html#direction">지향점</a>)</span>
+      <b>그 후 — 도구에서 지식 기반으로</b> — 지금은 이 에이전트를 쓰지 않습니다.
+      티켓 하나의 Root Cause만 보던 방식에서, <a href="vault.html">QA Vault(CASE-01)</a>에 쌓인 정책 · 이슈 · 인사이트 전체를 근거로
+      회귀 TC를 작성하는 방식으로 옮겨 갔습니다. 검토도 표시에서 관문으로 바뀌어, AI가 쓴 TC는 초안 → 검토 → 생성을 거칩니다.
     </div>
     <div class="why"><b>돌아보며</b>
       좋은 도구를 만드는 것보다 <strong>남이 쓰게 만드는 것이 훨씬 어렵다</strong>는 걸
@@ -173,9 +176,9 @@
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="runner.html"><span class="k">PREV · CASE-03</span><span class="t">← 테스트 러너 — 모두가 검증할 수 있는 환경</span></a><a href="practice.html" style="text-align:right"><span class="k">NEXT · CASE-05</span><span class="t">검증 실무 — API 검증 · 추적성 · 도구 →</span></a></div>
+  <div class="pager"><a href="runner.html"><span class="k">PREV · CASE-05</span><span class="t">← 테스트 러너 — 모두가 검증할 수 있는 환경</span></a><a href="practice.html" style="text-align:right"><span class="k">NEXT · CASE-07</span><span class="t">검증 실무 — API 검증 · 추적성 · 도구 →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-04 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-06 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
     고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>

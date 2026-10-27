@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slack質問Agent — 誰でも根拠付きで聞ける · キム・サンオク</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="description" content="QAナレッジベースを根拠に、開発・企画の誰もがSlackで仕様を質問できるようにした読み取り専用のClaude質問エージェントの構築記録。">
+<link rel="alternate" hreflang="ko" href="../askbot.html">
+<link rel="alternate" hreflang="ja" href="askbot.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="../assets/report.css">
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="brand" href="index.html"><span class="dot"></span>Home</a>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html" class="on">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
+  <a class="lang" href="../askbot.html" hreflang="ko" lang="ko">한국어</a>
+</div></nav>
+<header class="phead"><div class="wrap">
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-02</span></div>
+  <h1>Slack質問Agent — 誰でも根拠付きで聞ける</h1>
+  <p class="lede"><a href="vault.html">QAナレッジ管理システム（CASE-01）</a>に蓄積された仕様・イシュー・企画を根拠に、
+    開発者でも企画担当でも<strong>Slackでメンションするだけで質問し、スレッドで回答を受け取れる</strong>Claudeベースの質問エージェントです。
+    <strong>回答には必ず元資料のリンクが付き、資料になければ「わからない」と答えます。</strong></p>
+</div></header>
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>ナレッジを一か所に集めても、Obsidian・Gitを使うQAしか見られなければ、「これの仕様は？」という質問は相変わらずQA一人に集中します。</p></div><div><h5>Action</h5><p>チームがすでにいるSlackに読み取り専用のエージェントを置き、回答形式・権限・「わからない」ルールを設計して、Linuxサーバーで無人運用しました。</p></div><div class="r"><h5>Result</h5><p>誰でもメンション一行で約15秒以内に根拠リンク付きの回答を受け取れ、毎朝チームチャンネルに新規バグ・企画変更・確定仕様が届きます。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · 単独で設計・実装・サーバーデプロイ・運用</p><ol><li><b>回答形式を固定し、資料になければ「わからない」と答えるようにしました。</b> <em>— もっともらしい回答が一度でも間違えば、チームは二度とボットを使いません。</em></li><li><b>読み取り専用にし、参照スクリプト一つだけを許可しました。</b> <em>— 誰でも話しかけられるボットでは、権限がそのまま事故の範囲になります。</em></li><li><b>QAが答えていた質問を、チームが自分で確認できるようにすることを目標にしました。</b> <em>— ナレッジを集めてもQAしか見られなければ、質問はQA一人に集中し続けます。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<details open>
+  <summary>実際の動作 · 流れ<span class="meta">メンション → 参照 → スレッドで回答</span></summary>
+  <div class="det">
+    <figure class="shot"><img src="../assets/img/vault-slack.png" alt="左は毎朝チームチャンネルに投稿されるデイリーのお知らせ。右は質問スレッド — 結論を一行目に置き、未確認の項目は❓で示し、根拠リンクと次のアクションを添える。（担当者名・バージョンは匿名化）" loading="lazy"><figcaption>左は毎朝チームチャンネルに投稿されるデイリーのお知らせ。右は質問スレッド — 結論を一行目に置き、未確認の項目は❓で示し、根拠リンクと次のアクションを添える。（担当者名・バージョンは匿名化）</figcaption></figure>
+    <div class="flow">
+      <div class="node git"><b>@メンションで質問</b><em>誰でも · チームチャンネルで</em></div><div class="arrow">→</div>
+      <div class="node"><b>サーバーのボット</b><em>Slack Bolt · Linux</em></div><div class="arrow">→</div>
+      <div class="node"><b>Claude（Haiku）</b><em>参照スクリプト一つだけ許可</em></div><div class="arrow">→</div>
+      <div class="node"><b>根拠の参照</b><em>ナレッジベース · ClickUp · Figma</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>スレッドで回答</b><em>結論 · 根拠リンク · 次のアクション</em></div>
+    </div>
+    <p>上のスレッドでは「読み込み時にタスク画面にX表示が出るべき？」という質問に対し、ボットは
+      <strong>Figmaのデザイン案の位置と仕様カードを根拠に</strong>答えつつ、コメントに残る「ポップアップを閉じるに変更」が実際の中断を意味するかは
+      <code>❓ 未確認</code>とし、<strong>企画に確認するよう次のアクション</strong>を示しています。</p>
+    <div class="why"><b>なぜSlackか</b>
+      <strong>ユーザーがすでに使っているツールの中で動かなければ使われません。</strong>開発・企画に新しいツールを開いてもらう代わりに、
+      チームが一日中いるSlackにナレッジを持ち込みました。</div>
+  </div>
+</details>
+
+<details>
+  <summary>回答の設計 — 信じて使える回答<span class="meta">結論が先 · 根拠リンク · わからなければわからない</span></summary>
+  <div class="det">
+    <h4 class="h">回答形式を固定した</h4>
+    <div class="flow">
+      <div class="node ok"><b>① 結論</b><em>✅ 回答 · ⚠️ 注意 · 🔍 資料なし · 🙅 拒否</em></div><div class="arrow">→</div>
+      <div class="node"><b>② 要点</b><em>デザイン案 · 仕様 · 履歴</em></div><div class="arrow">→</div>
+      <div class="node"><b>③ 元資料のリンク</b><em>最大3件</em></div><div class="arrow">→</div>
+      <div class="node git"><b>④ 次のアクション</b><em>誰に何を確認するか</em></div>
+    </div>
+    <ul>
+      <li><strong>一行目だけ読めばいい</strong> — 結論の絵文字で回答の性質がすぐわかる</li>
+      <li><strong>資料になければ「わからない」</strong> — 🔍で示し、探した場所と聞くべき相手を併せて案内</li>
+      <li><strong>確認されていないものは確認されていないと</strong> — 仕様書にない動作は<code>❓ 未確認</code></li>
+      <li><strong>根拠リンク</strong> — Figmaのデザイン案・仕様ノート・チケットに直接飛んで確認できる</li>
+    </ul>
+    <div class="why"><b>なぜこうしたか</b>
+      <strong>「わからない」と言わせる設計が信頼を生みます。</strong>もっともらしい回答が一度でも間違えば、チームは二度とボットを使いません。
+      根拠リンクと未確認の表示があってこそ、開発・企画が回答を信じてそのまま使えます。</div>
+  </div>
+</details>
+
+<details>
+  <summary>権限の設計 — 質問専用のエージェント<span class="meta">最小権限 · 作業依頼は拒否</span></summary>
+  <div class="det">
+    <p>誰でも話しかけられるボットなので、<strong>何ができるかより、何をさせないか</strong>を先に決めました。</p>
+    <div class="grid g2">
+      <div class="card"><h3>🔒 読み取り専用</h3>
+        <p style="margin-bottom:0">ファイル変更・外部への書き込み・コネクタを<strong>すべて遮断</strong>し、参照スクリプト<strong>一つだけ</strong>を許可しました。
+          誰が何を頼んでも、ナレッジベースとClickUpは変わりません。</p></div>
+      <div class="card"><h3>🙅 作業依頼は拒否</h3>
+        <p style="margin-bottom:0">「チケットを作って」「TCを直して」といった依頼は🙅で断り、担当者を案内します。
+          書き込みは承認フローのある<a href="vault.html">同期側</a>でのみ行われます。</p></div>
+      <div class="card"><h3>🔑 認証の分離</h3>
+        <p style="margin-bottom:0">ClickUp・Figmaは<strong>APIトークン</strong>で参照し、AIアカウントの認証と分離しました。
+          AIのセッションが切れても参照は続きます。</p></div>
+      <div class="card"><h3>⚡ 軽量モデル</h3>
+        <p style="margin-bottom:0">質問への回答は判断より参照と要約が中心なので、<strong>Haiku</strong>を使って約15秒以内に答えるようにしました。</p></div>
+    </div>
+    <div class="why"><b>なぜこうしたか</b>
+      権限を広く開ければ便利ですが、誰でも話しかけられるボットでは<strong>権限がそのまま事故の範囲</strong>になります。
+      質問ボットは読み取りのみ、書き込みは人が承認する同期のみ — <strong>役割によって権限を分離</strong>しました。</div>
+  </div>
+</details>
+
+<details>
+  <summary>チームへのデイリーお知らせ<span class="meta">チームに役立つものだけ</span></summary>
+  <div class="det">
+    <p>毎朝の同期が終わると、チームチャンネルに<strong>新規バグ・解決・企画（Figma）変更・新たに確定した仕様</strong>だけを短く投稿します。
+      QA内部の情報（承認待ち、TCの空白など）は除きます。</p>
+    <ul>
+      <li>バグはチケットのリンクと重大度を付けて一行ずつ</li>
+      <li>企画の変更はFigmaで検知した文言の変更を、人が読める文章で</li>
+      <li>新たに確定した仕様は<strong>根拠となるチケットと決定者</strong>と一緒に</li>
+      <li>最後に「気になることはボットに聞いてください」— <strong>お知らせが質問につながるように</strong></li>
+    </ul>
+  </div>
+</details>
+
+<details>
+  <summary>サーバーデプロイ · 運用 · トラブルシューティング<span class="meta">インバウンド接続なしの無人デプロイ</span></summary>
+  <div class="det">
+    <div class="flow">
+      <div class="node git"><b>PCで同期</b><em>平日09:00 · ナレッジ更新</em></div><div class="arrow">→</div>
+      <div class="node"><b>GitHub push</b><em>CI：構文 · Python 3.8互換 · 秘密情報チェック</em></div><div class="arrow">→</div>
+      <div class="node"><b>Linuxサーバー</b><em>5分ごとにpull · ボットのコード変更時に再起動</em></div><div class="arrow">→</div>
+      <div class="node ok"><b>Slack</b><em>最新のナレッジで回答</em></div>
+    </div>
+    <ul>
+      <li><strong>サーバーへのインバウンド接続なしで</strong>動作 — サーバー自身がpullするのでポートを開けない</li>
+      <li><strong>秘密情報</strong>は環境変数・git除外ファイルにのみ置き、チャットやリポジトリに残さず、CIで漏えいをチェック</li>
+      <li>サーバーのログインセッション切れは<strong>長期トークン</strong>で解決</li>
+    </ul>
+    <h4 class="h">実装中に直面した問題</h4>
+    <div class="grid g2">
+      <div class="card"><h3>🐧 サーバーでボットがすぐ終了</h3>
+        <p>サーバーのPython 3.8にない構文を使っていたため、ボットが起動直後に落ちました。</p>
+        <p style="margin-bottom:0"><strong>→</strong> 互換性を修正し、<strong>CIに最低バージョンのチェックを追加</strong>して再発を防止。</p></div>
+      <div class="card"><h3>🎨 サーバーのボットがFigmaを参照できない</h3>
+        <p>Linuxには<code>python</code>コマンドがなく、ライブラリは仮想環境にしかありませんでした。</p>
+        <p style="margin-bottom:0"><strong>→</strong> 実行環境ごとのコマンドをボットが決めてAIに渡し、許可リストに追加。</p></div>
+    </div>
+    <div class="note">
+      <b>次のステップ</b> — 質問ボットを開発・企画チャンネルに拡大し、<strong>利用指標（質問数・質問者数）</strong>を追跡して、
+      実際にQAへの質問が減ったかを測定します。<span class="nb">（<a href="index.html#direction">目指す方向</a>）</span>
+    </div>
+  </div>
+</details>
+</div><footer><div class="wrap">
+  <div class="pager"><a href="vault.html"><span class="k">PREV · CASE-01</span><span class="t">← QAナレッジ管理システムの構築 — QA Vault</span></a><a href="process.html" style="text-align:right"><span class="k">NEXT · CASE-03</span><span class="t">QAプロセスを0から1へ →</span></a></div>
+  <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
+    END OF CASE-02 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
+  <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
+    顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>
+</div></footer>
+<script src="../assets/report.js"></script>
+</body></html>

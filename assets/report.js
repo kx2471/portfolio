@@ -224,6 +224,7 @@ var PF_T = PF_JA ? {
           metrics +
         '</div>' +
         (data.psr || '') +
+        (data.mine || '') +
         '<div class="tm-prog"><div class="lb"><span>Progress</span><span>100%</span></div>' +
           '<div class="track"><div class="fill"></div></div></div>' +
         '<div class="tm-lede">' + (data.lede || '') + '</div>' +
@@ -254,6 +255,7 @@ var PF_T = PF_JA ? {
       var h1 = doc.querySelector('.phead h1');
       var lede = doc.querySelector('.phead .lede');
       var psr = doc.querySelector('.psr');
+      var mine = doc.querySelector('.mine');
       var wrap = doc.querySelectorAll('.wrap');
       var detail = '';
       // 본문(details 블록들)이 들어있는 마지막 .wrap
@@ -265,6 +267,7 @@ var PF_T = PF_JA ? {
         title: h1 ? h1.textContent.trim() : '',
         lede: lede ? '<p style="font-size:14.6px;color:var(--ink2)">' + lede.innerHTML + '</p>' : '',
         psr: psr ? '<div class="tm-psr">' + psr.innerHTML + '</div>' : '',
+        mine: mine ? mine.outerHTML : '',
         detail: detail,
         sections: (detail.match(/<details/g) || []).length,
         href: href

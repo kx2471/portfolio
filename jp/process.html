@@ -16,15 +16,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html" class="on">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html" class="on">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="../process.html" hreflang="ko" lang="ko">한국어</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-01</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-03</span></div>
   <h1>QAプロセスを0から1へ</h1>
   <p class="lede">課題管理の仕組みがなかった環境に、ワークフロー・Priority基準・Root Causeの記入必須化・デプロイゲート・RC検証手順を自ら設計し、ルールが実際に機能するよう自動化まで組み込みました。</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>優先度は起票者の主観に任され、不具合の原因は記録されず、未検証のビルドが現場にデプロイされる事故もありました。</p></div><div><h5>Action</h5><p>判断基準を明文化し、守られなければ自動で差し戻すルールをトラッカーに設定しました。</p></div><div class="r"><h5>Result</h5><p>「これ、QAに回していいですか？」がフィールドの条件に置き換わり、デプロイを差し止める権限がQAに明示的に与えられました。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>優先度は起票者の主観に任され、不具合の原因は記録されず、未検証のビルドが現場にデプロイされる事故もありました。</p></div><div><h5>Action</h5><p>判断基準を明文化し、守られなければ自動で差し戻すルールをトラッカーに設定しました。</p></div><div class="r"><h5>Result</h5><p>「これ、QAに回していいですか？」がフィールドの条件に置き換わり、デプロイを差し止める権限がQAに明示的に与えられました。その後のリリースは、TC 185件・Pass率97.3%（基準95%）、Urgent・High 0件で判定しました。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · ワークフロー・Priority・RCA・デプロイゲート・RC手順の設計と導入を主導、自動化ルール・QA Requestボット・Test Runツールを実装</p><ol><li><b>未検証ビルドのデプロイ事故を、個人のミスではなく仕組みの空白と捉えました。</b> <em>— バージョンラベルだけでデプロイ対象を確認する限り、同じことは誰がやっても再び起きます。そこで責任追及ではなく、ビルド番号基準のデプロイゲートをつくりました。</em></li><li><b>QAにはNO-GOの差し止め権を、最終的なGOはPMに置きました。</b> <em>— QAがビジネス判断まで抱えると、品質の報告が交渉になります。品質の事実の報告とデプロイの決定を分けました。</em></li><li><b>Root Causeフィールドを必須化する前に、不具合272件を全件分析しました。</b> <em>— 自由記述のRoot Causeの43%が1行だけでした。最初は反発もありましたが、この数字と実際のチケットから抽出した10カテゴリーで説得して必須化しました。今ではこのフィールドがイシュー分析・インサイト導出・バグ予防の入力になっています。</em></li><li><b>ルールをドキュメントではなくトラッカーの自動化に組み込みました。</b> <em>— RCA未記入のまま進めると自動で差し戻します。人の注意に頼るルールは、忙しいときに真っ先に破られます。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>開発・QAワークフロー — コードの流れと仕事の流れをつなぐ<span class="meta">Git × 課題トラッカー × Automation</span></summary>
   <div class="det">
@@ -174,6 +174,15 @@
       QAがビジネス判断を抱え込まず、品質の事実に集中できるようにするための分離です。
       本番の緊急修正は、Full Testを省いて自動化による迅速な検証だけを行う<strong>Hotfix専用トラック</strong>に分け、
       緊急対応が通常の手順を崩さないようにしました。</p>
+    <h4 class="h">適用結果</h4>
+    <div class="tw"><table>
+      <thead><tr><th style="width:220px">リリース</th><th>判定</th></tr></thead>
+      <tbody>
+        <tr><td>定期リリースA</td><td class="after">TC 185件 · Pass率<strong>97.3%</strong>（基準95%以上）→ 通過</td></tr>
+        <tr><td>定期リリースB</td><td class="after">残りのUrgent・High <strong>0件</strong>で通過</td></tr>
+        <tr><td>RC3 · RC4</td><td class="after">自動化された回帰テストにより<strong>同じ日に2つのRCを両方検証</strong> <span class="nb">（<a href="automation.html">CASE-04</a>）</span></td></tr>
+      </tbody>
+    </table></div>
   </div>
 </details>
 
@@ -221,14 +230,26 @@
     <p>不具合チケットは増える一方で、根本原因は自由記述で散らばるか、まったく記録されていませんでした。
       「どの種類の原因が繰り返されているか」に定量的に答えられる人はおらず、
       構造化したフィールドの導入を提案しても<strong>説得材料がありませんでした。</strong></p>
+    <div class="tw"><table>
+      <thead><tr><th style="width:220px">導入前の基準（1つのリリースライン）</th><th>数値</th></tr></thead>
+      <tbody>
+        <tr><td>不具合</td><td>272件 — うちreopen 17件・運用イシュー18件</td></tr>
+        <tr><td>自由記述のRoot Cause</td><td class="after"><strong>43%が1行だけ</strong> — 後から原因を分析し直せない水準</td></tr>
+      </tbody>
+    </table></div>
     <div class="flow">
       <div class="node no"><b>自由記述 · 未記録</b><em>集計できない</em></div><div class="arrow">→</div>
-      <div class="node git"><b>全件分析（1回）</b><em>帰納的に10カテゴリーを導出</em></div><div class="arrow">→</div>
+      <div class="node git"><b>全件分析（272件）</b><em>帰納的に10カテゴリーを導出</em></div><div class="arrow">→</div>
       <div class="node"><b>選択式フィールド + 記入の必須化</b><em>Automationで強制</em></div><div class="arrow">→</div>
       <div class="node ok"><b>原因分布の自動蓄積</b><em>以後すべての不具合がデータになる</em></div>
     </div>
+    <h4 class="h">反発と説得</h4>
+    <p>最初に必須化を持ち出したときは<strong>反発</strong>がありました。
+      そこで意見ではなく数字で話しました — 今のやり方で書かれた原因の43%が1行だけで、後から誰も分析し直せないこと、
+      実際のチケットをまとめると原因が10の類型で繰り返されていること。この根拠で説得して必須化し、
+      今ではこのフィールドがイシュー分析・インサイト導出・バグ予防に使われています。</p>
     <div class="note warn">
-      <b>「何件分析したか」は重要ではありません。</b>
+      <b>272件は出発点にすぎません。</b>
       分析時点の件数は増え続けますし、それこそがこの仕組みの狙いです。
       目的は一度きりの正確な集計ではなく、
       <strong>不具合が増えていく間も、原因の分布が自動で最新に保たれること</strong>でした。
@@ -239,17 +260,18 @@
     <ul>
       <li>品質状況報告の<strong>定量的な根拠</strong> — 繰り返し発生する原因の上位カテゴリーから改善の優先順位を導出</li>
       <li>定期トリアージ・Known Issueバックログ管理の基礎データ</li>
-      <li><strong>Regression TC Creatorの入力</strong> — Agentがこのフィールドを読んで回帰テストケースを設計
-        <a href="agent.html">→ 04 AI Agent</a></li>
+      <li><strong>回帰テストケースの入力</strong> — 最初はTC Creatorが、今はQA Vaultがこのフィールドを読んで回帰テストケースを設計
+        <a href="agent.html">→ CASE-06</a> · <a href="vault.html">CASE-01</a></li>
+      <li><strong>インサイト・バグ予防</strong> — 繰り返す原因を一文の原則として蓄積し、次の機能のテスト観点として再利用</li>
     </ul>
     <div class="note"><b>要点</b> — <strong>「提案する前に全件を見る」</strong>という姿勢。
       フィールドを1つ追加するような小さなプロセス変更でも、データの根拠をもとに提案すれば組織の受け入れの速さが変わります。</div>
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="automation.html" style="text-align:right"><span class="k">NEXT · CASE-02</span><span class="t">Playwrightによるテスト自動化の構築 →</span></a></div>
+  <div class="pager"><a href="askbot.html"><span class="k">PREV · CASE-02</span><span class="t">← Slack質問Agent — 誰でも根拠付きで聞ける</span></a><a href="automation.html" style="text-align:right"><span class="k">NEXT · CASE-04</span><span class="t">Playwrightによるテスト自動化の構築 →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-01 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-03 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
     顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャは韓国語のUIのまま掲載しています。</p>

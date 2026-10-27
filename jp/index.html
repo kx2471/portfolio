@@ -17,8 +17,8 @@
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
   <div class="menu">
-    <a href="#summary">Summary</a><a href="#cases">Cases</a><a href="#direction">Direction</a><a href="#checks">Verified</a>
-    <a href="#career">Career</a><a href="#side">Side</a><a href="#contact">Contact</a>
+    <a href="#cases">Cases</a><a href="#direction">View</a><a href="#lessons">Lessons</a><a href="#growth">Growth</a>
+    <a href="#checks">Verified</a><a href="#career">Career</a><a href="#side">Side</a><a href="#contact">Contact</a>
   </div>
   <a class="lang" href="../index.html" hreflang="ko" lang="ko">한국어</a>
 </div></nav>
@@ -39,13 +39,17 @@
           現在は産業向けAIビジョン検査プラットフォーム<strong>Daisy</strong>の品質を担当し、
           AIプロダクトの出力を判定する基準を定め、検証プロセス・自動化・ツールをゼロから設計しています。
         </p>
+        <p class="lede">
+          私の強みは、<strong>判定基準のない場所に基準を定め、その基準が人の注意ではなく仕組みによって守られるようにすること</strong>です。
+          ルールはトラッカーの自動化に、判定はデータに、検証は誰でも回せるツールに組み込みます。
+        </p>
       </div>
       <figure class="rpt-photo"><img src="../assets/img/profile.jpg" alt="キム・サンオクのプロフィール写真" width="720" height="953"></figure>
     </div>
     <div class="summary" id="summary">
       <div class="pass"><div class="n">4年目</div><div class="k">SW QA経験 · 3つのドメイン</div></div>
       <div class="pass"><div class="n">0 → 1</div><div class="k">QAプロセスがない環境で体制を構築</div></div>
-      <div class="pass"><div class="n">1日 → 1.5時間</div><div class="k">リリース回帰テスト · コマンド1行で無人実行</div></div>
+      <div class="pass"><div class="n">1日 → 1.5時間</div><div class="k">リリース回帰テスト · 自動化テストケース502件を無人実行</div></div>
       <div class="pass"><div class="n">6</div><div class="k">産業AIプロジェクトの検証 · 自社1 · 受託5</div></div>
     </div>
   </div>
@@ -54,71 +58,112 @@
 <section id="cases">
   <div class="wrap">
     <div class="sec-head"><span class="sec-id">CASES</span><h2 class="sec">代表的な取り組み</h2></div>
-    <p class="sec-sub">各取り組みは<strong>課題 → 取り組み → 成果</strong>の順に整理し、
-      設計上の判断と実際の運用画面は詳細ページに掲載しています。<span class="nb">（機密情報は匿名化）</span></p>
+    <p class="sec-sub">各取り組みは<strong>課題 → 取り組み → 成果</strong>の順に整理しました。
+      カードごとに<strong>私が下した主な判断</strong>を一行で記し、詳細ページの冒頭には役割と<strong>判断の根拠</strong>をまとめています。
+      <span class="nb">（機密情報は匿名化）</span></p>
 
     <div class="cases">
-      <a class="case" href="process.html">
+      <a class="case" href="vault.html">
         <div class="case-top">
           <span class="case-id">CASE-01</span>
+          <span class="chip-st st-pass">NEW · 運用中</span>
+        </div>
+        <h3>QAナレッジ管理システムの構築 — QA Vault</h3>
+        <p>チケット・テストケース・企画書・意思決定に散らばったQAナレッジを<strong>相互リンクされた一つのリポジトリ</strong>に集約し、
+          AIエージェントが毎朝無人で最新化します。企画変更は翌朝のレポートで届き、決定は人が承認して初めて仕様になります。</p>
+        <p class="judg"><b>判断</b>企画の決定を仕様に自動登録せず、「候補」として挙げるだけにしました。誤った仕様が確定すると、それを根拠につくったテストケースまで誤るからです。</p>
+        <div class="metrics">
+          <div>ナレッジ <b>イシュー439 · TC 1,372</b></div>
+          <div>同期 <b>平日09:00 無人</b></div>
+          <div>外部書き込み <b>人の承認後のみ</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+
+      <a class="case" href="askbot.html">
+        <div class="case-top">
+          <span class="case-id">CASE-02</span>
+          <span class="chip-st st-pass">NEW · 運用中</span>
+        </div>
+        <h3>Slack質問Agent — 誰でも根拠付きで聞ける</h3>
+        <p>上のナレッジベースを根拠に、開発・企画の誰もが<strong>Slackでメンションするだけで仕様を質問し回答を得られる</strong>読み取り専用エージェント。
+          回答には元資料のリンクが付き、<strong>資料になければ「わからない」</strong>と答えます。</p>
+        <p class="judg"><b>判断</b>資料になければ「わからない」と答えさせ、権限は読み取り専用に絞りました。もっともらしい誤答一つが、ボット全体の信頼を崩します。</p>
+        <div class="metrics">
+          <div>質問 <b>メンション一行 · 約15秒</b></div>
+          <div>権限 <b>読み取り専用</b></div>
+          <div>お知らせ <b>毎朝チームチャンネルへ</b></div>
+        </div>
+        <span class="go">→ 詳細を見る</span>
+      </a>
+
+      <a class="case" href="process.html">
+        <div class="case-top">
+          <span class="case-id">CASE-03</span>
           <span class="chip-st st-pass">運用中</span>
         </div>
         <h3>QAプロセスを0から1へ</h3>
         <p>課題管理の仕組みがなかった環境に、ワークフロー・Priority基準・Root Causeの記入必須化・
           デプロイゲート・RC検証手順を設計し、ルールが実際に機能するよう自動化まで組み込みました。</p>
+        <p class="judg"><b>判断</b>Root Causeの43%が1行だけという数字で反発を説得して必須化し、デプロイ事故は個人のミスではなく仕組みの空白と捉えてデプロイゲートをつくりました。</p>
         <div class="metrics">
-          <div>ワークフロー <b>Git連携</b></div>
+          <div>RCA <b>不具合272件を全件分析</b></div>
           <div>デプロイゲート <b>NO-GOによる差し止め権</b></div>
-          <div>Exit Criteria <b>数値で判定</b></div>
+          <div>Exit Criteria <b>Pass 97.3%で判定</b></div>
         </div>
         <span class="go">→ 詳細を見る</span>
       </a>
 
       <a class="case" href="automation.html">
         <div class="case-top">
-          <span class="case-id">CASE-02</span>
+          <span class="case-id">CASE-04</span>
           <span class="chip-st st-pass">運用中</span>
         </div>
         <h3>Playwrightによるテスト自動化の構築</h3>
         <p>本番相当の実サーバー・単一の共有アカウント・高コストなモデル学習という制約の上で、テスト同士が干渉しない構造を設計し、
           1日以上かかっていたリリース検証を、コマンド1行・約1.5時間の無人実行に置き換えました。</p>
+        <p class="judg"><b>判断</b>6分かかる学習が26秒で「通過」したのを見て、判定基準を画面のトーストからサーバーのデータに切り替えました。</p>
         <div class="metrics">
+          <div>自動化TC <b>250 → 502</b></div>
+          <div>カバレッジ <b>開発キャンバス80%</b></div>
           <div>並列 <b>3 worker</b></div>
-          <div>前処理 <b>-39%</b></div>
-          <div>学習 <b>タイプごとに1回</b></div>
-          <div>拡張 <b>アーキテクチャ変更なし</b></div>
+          <div>RC <b>1日に2回検証</b></div>
         </div>
         <span class="go">→ 詳細を見る</span>
       </a>
 
       <a class="case" href="runner.html">
         <div class="case-top">
-          <span class="case-id">CASE-03</span>
+          <span class="case-id">CASE-05</span>
           <span class="chip-st st-pass">運用中</span>
         </div>
         <h3>テストランナー — 誰でも検証できる環境</h3>
         <p>全社で同じプロダクトをつくっているのに、それを検証できる人はごく一部でした。
           つくる人なら誰でも自分の変更を確認できるべきだと考え、
-          そうした<strong>検証環境を構築することを目標</strong>にしました。このランナーはその一環です。</p>
+          インストールもコマンドも要らない<strong>セルフサービスの検証環境</strong>をつくりました。今は主にQAが使っており、<strong>チーム全体に広げることが次の課題</strong>です。</p>
+        <p class="judg"><b>判断</b>目標をツールではなく「つくった人なら誰でも検証できる環境」に置きました。検証をQAが独占すると、品質はQAの処理量の分しか良くなりません。</p>
         <div class="metrics">
           <div>インストール <b>0ステップ</b></div>
           <div>コマンド <b>0行</b></div>
           <div>前提テスト <b>自動で解決</b></div>
+          <div>次の課題 <b>チーム全体への展開</b></div>
         </div>
         <span class="go">→ 詳細を見る</span>
       </a>
 
       <a class="case" href="agent.html">
         <div class="case-top">
-          <span class="case-id">CASE-04</span>
-          <span class="chip-st st-pass">社内展開</span>
+          <span class="case-id">CASE-06</span>
+          <span class="chip-st st-pass">社内展開 → CASE-01へ発展</span>
         </div>
         <h3>AI Agent — Regression TC Creator</h3>
         <p>私が記入を必須化したRoot Causeの記録を読み取り、回帰テストケースを設計してシート・チケットまで連携するClaude Agentです。
           <strong>ルールを定めた本人が、そのルールが残したデータを活用するツールを自らつくりました。</strong></p>
+        <p class="judg"><b>判断</b>「シートが2つあると誰も見ない」— レビュー用シートを別に設けず正本に直接書き込み、オレンジ色の行・作成者の固定・空の分類欄で人が見るべき箇所を示しました。</p>
         <div class="metrics">
           <div>呼び出し <b>チケットID 1行</b></div>
           <div>書き込み <b>3段階ゲーティング</b></div>
+          <div>回帰資産 <b>Related TC 45件</b></div>
           <div>他チーム <b>改善事例として共有</b></div>
         </div>
         <span class="go">→ 詳細を見る</span>
@@ -126,78 +171,180 @@
 
       <a class="case" href="practice.html">
         <div class="case-top">
-          <span class="case-id">CASE-05</span>
+          <span class="case-id">CASE-07</span>
           <span class="chip-st st-pass">常時</span>
         </div>
         <h3>検証実務 — API検証・トレーサビリティ・業務ツール</h3>
         <p>UIを経由せずAPIを直接叩き、<strong>フロントエンドでしか防げていなかった入力チェックとXSSの経路</strong>を発見しました。
           要件–テストケース–不具合のトレーサビリティ体制と、繰り返し作業を減らしたツールもまとめています。</p>
+        <p class="judg"><b>判断</b>画面で止まった値がサーバーでも止まるかをAPIで直接確かめ、レスポンスで止まらず管理画面まで追いかけてXSSを見つけました。</p>
         <div class="metrics">
           <div>API <b>サーバー側検証の欠如・XSSを発見</b></div>
           <div>トレーサビリティ <b>要件 ↔ TC ↔ 不具合</b></div>
         </div>
         <span class="go">→ 詳細を見る</span>
       </a>
+
     </div>
   </div>
 </section>
 
 <section id="direction">
   <div class="wrap narrow">
-    <div class="sec-head"><span class="sec-id">DIRECTION</span><h2 class="sec">目指す方向 — AIがつくった結果を信頼できるものに</h2></div>
-    <p class="sec-sub">AIが成果物を安く速くつくるほど、ボトルネックは<strong>「それを信頼してよいのか」</strong>に移ります。
-      かといって人がすべてを確認すれば、今度は人が新たなボトルネックになり、レビューは形だけのものになります。
-      だから私の目標は、レビューを自分で抱え込むことではなく、<strong>人の判断が最も必要な場所で正しく使われる検証の仕組み</strong>を設計することです。</p>
+    <div class="sec-head"><span class="sec-id">VIEW</span><h2 class="sec">この仕事で大切だと考えること</h2></div>
+    <p class="sec-sub">QAの仕事はバグを見つけて終わりではないと考えています。
+      <strong>「この状態で出していいか」に、チームが根拠を持って同じ答えを出せるようにすること</strong>がこの職務の核心です。
+      次の6つを仕事の基準にしており、それぞれ実際の取り組みで確認できます。</p>
 
-    <h4 class="h">2つの軸、同じ仕事</h4>
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">① 判定基準 — 誰が見ても同じ結論になるべき</div>
+        <div class="d">「これUrgentですか？」「RCは終わりましたか？」が毎回議論になるなら、品質は声の大きい人が決めることになります。
+          Priorityは4段階の判断フローで、RCの終了は残りUrgent 0件・Pass率95%といった数字で決めました。
+          正解が一つではないLLMの出力は、個々の応答ではなく<strong>データセット単位の正解率</strong>で判定しました。</div></div>
+        <div class="tag">CASE-03 · CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">② 根拠 — 通過したものも「何を見たか」が残るべき</div>
+        <div class="d">PASSの数字はそれ自体が検証の対象です。通過したテストが犯人だった経験から、レポートには検証ポイントとその時点の画面を残し、
+          リトライ後の通過は「不安定」として別に分類します。AIが答えるときも元資料のリンクを付け、資料になければ「わからない」と言わせます。</div></div>
+        <div class="tag">CASE-01·02·04·05</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">③ 仕組み — 人の注意に頼るルールは忙しいときに破られる</div>
+        <div class="d">Root Causeを書かずに進めると、トラッカーが自動で差し戻します。
+          事故が起きたら人を探すより、<strong>同じことが仕組み上起こり得なくなるポイント</strong>を探します。
+          AIが出した結果も目印を付けるだけでなく、人が承認して初めて正本になる関門を設けます。</div></div>
+        <div class="tag">CASE-01·03·06</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">④ 自動化の目的は、QAが回すことではなく、誰でも検証できる環境をつくること</div>
+        <div class="d">QAがすべての変更の関門になると、QAがボトルネックになります。だから<strong>普段は検証環境を提供し</strong> — ブラウザで回すランナー、Slackで聞ける仕様Agent —
+          <strong>止めるべき場所はデプロイ直前の一点</strong>に集めます。その一点では、ビルド番号基準のゲートとNO-GOの差し止め権で確実に止めます。
+          <span class="nb">環境は整い、チーム全体に実際に使ってもらうことが今の課題です。</span></div></div>
+        <div class="tag">CASE-02·03·05</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">⑤ 新しいテストを増やすより、既存の資産の使い方を変える</div>
+        <div class="d">すでに蓄積された不具合の記録・テストケース・実行履歴こそ、最も安い検証資産です。
+          Root Causeの記録は回帰テストケースの入力になり（Related TC 45件）、前回RCのFAIL・NAだけを次のRCに引き継ぎ、
+          スプレッドシートのテストケース1,279件は移行して毎日同期し、繰り返すバグの原因はインサイトとして蓄積して次の機能のテスト観点に使います。</div></div>
+        <div class="tag">CASE-01·03·06</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">⑥ テストを前にしたためらいを減らす</div>
+        <div class="d">「何を設定すればいいんだろう？」と一度でも思えば、人はテストを後回しにします。
+          インストール0ステップ・コマンド0行のランナー、チケットID 1行での呼び出し、Slackのメンション1行での質問のように、<strong>最初の実行の摩擦</strong>を真っ先に設計し、
+          止めるときは止める理由も一緒に見せます。</div></div>
+        <div class="tag">CASE-02·05·06</div></div>
+    </div>
+
+    <div class="note" style="margin-top:14px">
+      <b>開発者・企画担当との働き方</b> — <strong>意見を出すのはQAの役目で、反映するかどうかは相手が決めます。</strong>
+      企画とデザイン案が違えば<code>❗ 不一致</code>と示して企画担当とすり合わせ、コメントの中の決定は仕様の「候補」として挙げるだけにし、
+      サーバー側検証の欠如は改善の方向まで提案しつつ、決定は担当者に委ねます。
+      例外は事前に合意した一点、デプロイゲートだけです。そこでもQAは品質の事実をもとにNO-GOを出し、最終的なGOはPMが決めます。
+    </div>
+
+    <h4 class="h" style="margin-top:30px">AI時代にこの基準がより重要になる理由</h4>
+    <p>AIが成果物を安く速くつくるほど、ボトルネックは<strong>「それを信じていいのか」</strong>へ移ります。
+      人がすべてを確認すれば人が新たなボトルネックになり、結局レビューは形だけの承認になります。
+      だから私は、同じ基準を二つの方向に使います。</p>
     <div class="grid g2">
       <div class="card"><h3>🧪 AIプロダクトを検証する</h3>
-        <p>正解が1つに定まらない出力を判定する基準をつくります。
-          LLMマッチングをデータセットの正解率（%）で判定したこと、ビジョン検出の可否の根拠、異常検知指標の集計基準がそれにあたります。
+        <p>正解が一つに定まらない出力を判定する基準を定めます。
+          LLMマッチングのデータセット正解率（%）による判定、ビジョン検出の可否の根拠、異常検知指標の集計基準がそれにあたります。
           <span class="nb">（<a href="#career">職歴</a>）</span></p></div>
       <div class="card"><h3>🤖 AIで検証する</h3>
         <p>AIと自動化に作業を任せつつ、その結果を人が検証できる形で残します。
-          判定の根拠を残すレポートや、AIが書いたテストケースを見分ける目印がそれにあたります。
-          <span class="nb">（<a href="automation.html">CASE-02</a> · <a href="agent.html">CASE-04</a>）</span></p></div>
-    </div>
-    <div class="note" style="margin-top:14px">
-      <b>どちらも同じ力です</b> — <strong>判定できないものを、判定できる形にする仕事</strong>。
-      AIプロダクトの出力でも、AIがこなした作業でも同じです。
-    </div>
-
-    <h4 class="h" style="margin-top:30px">3つの層で設計します — これまでの実践</h4>
-    <div class="checks">
-      <div class="check"><div class="mark">✓</div><div class="body">
-        <div class="t">① 振り分け — 人が何を見るべきかを決める</div>
-        <div class="d">すべての結果を人が見るわけではありません。リトライで通ったテストは緑ではなく「不安定」として分けて人に回し、
-          RCの終了は数値基準で判定して、議論が必要なものだけを人が見ます。Priorityも4段階の判断フローで、誰が付けても同じ結果になるようにしました。</div></div>
-        <div class="tag">CASE-01·02</div></div>
-      <div class="check"><div class="mark">✓</div><div class="body">
-        <div class="t">② 根拠 — 素早く、正しく確認できるようにする</div>
-        <div class="d">自動化が「合格」としたものも、何をどの順序で確認したかをその時点の画面とともに残します。
-          TC CreatorはRoot Causeを根拠にテストケースを設計し、AIが書いた行はオレンジ色で残して、レビュー対象がすぐ分かるようにしました。</div></div>
-        <div class="tag">CASE-02·03·04</div></div>
-      <div class="check"><div class="mark">✓</div><div class="body">
-        <div class="t">③ フィードバック — 人が確認した結果が仕組みを直す</div>
-        <div class="d">不具合ごとにRoot Causeを選択式で残すようにし、原因の分布が自動で蓄積され、その記録が回帰テストケースの入力になります。
-          未検証ビルドのデプロイというインシデントも、責任追及ではなくデプロイゲートという仕組みに変えました。</div></div>
-        <div class="tag">CASE-01·04</div></div>
+          根拠リンク付きの回答、下書き → レビュー → 承認の関門、判定の根拠を残すレポートがそれにあたります。
+          <span class="nb">（<a href="vault.html">CASE-01</a> · <a href="askbot.html">CASE-02</a> · <a href="automation.html">CASE-04</a> · <a href="agent.html">CASE-06</a>）</span></p></div>
     </div>
 
     <h4 class="h" style="margin-top:30px">次の目標 — レビューが必ず行われるループ</h4>
     <div class="grid g2">
-      <div class="card"><h3>① レビューゲート</h3>
-        <p>AIの結果がそのまま正式版にならず、リスクに応じて<strong>レビュー待ち</strong>に入り、人が承認して初めて正式版になる仕組み。</p></div>
+      <div class="card"><h3>① レビューの関門 <span class="chip-st st-pass" style="margin-left:6px;vertical-align:middle">一部実装</span></h3>
+        <p>AIの結果がそのまま正本にならず、人が承認して初めて正本になる仕組み。
+          テストケース作成には<a href="vault.html">CASE-01</a>で適用しており、リスクに応じた段階的なレビューへ広げる予定です。</p></div>
       <div class="card"><h3>② 根拠付きの結果</h3>
-        <p>結果ごとに<strong>どの根拠から導かれたか</strong>が付いていて、自分でつくるよりレビューのほうが速くなるように。</p></div>
+        <p>結果ごとに<strong>どの根拠から出たか</strong>が付き、自分でつくるよりレビューのほうが速くなるように。</p></div>
       <div class="card"><h3>③ 差し戻し理由の反映</h3>
-        <p>差し戻し理由を分類して記録し、<strong>ルールに反映</strong>することで、次からは人が見る量そのものが減るように。</p></div>
+        <p>差し戻し理由を分類して記録し、<strong>ルールに反映</strong>して、次は人が見る量そのものが減るように。</p></div>
       <div class="card"><h3>④ 計測</h3>
-        <p>承認率・修正後の承認率・自作した場合と比べたレビュー時間、そして<strong>誰が承認したか</strong>まで記録。</p></div>
+        <p>承認率・修正後の承認率・レビュー時間と自作時間の比較、そして<strong>誰が承認したか</strong>まで記録。</p></div>
     </div>
-    <div class="note" style="margin-top:18px">
-      <b>まとめると</b> — これまではAIと自動化がつくった結果を<strong>人が検証できるようにする設計</strong>をしてきました。
-      次の目標は、これを<strong>レビューが必ず行われ、レビューするほど人が見る量が減っていくループ</strong>として完成させることです。
+  </div>
+</section>
+
+<section id="lessons">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">LESSONS</span><h2 class="sec">失敗から直したこと</h2></div>
+    <p class="sec-sub">基準は成功よりも失敗から多く変わりました。
+      失敗を運や個人のミスで済ませず、<strong>原因を証拠で確定し、同じ失敗が仕組み上繰り返されない</strong>ところまで進めることを原則にしています。</p>
+    <div class="grid g2">
+      <div class="card"><h3>🟥 通過したテストが犯人だった</h3>
+        <p><b>何が間違っていたか</b> — 学習の完了を画面のトーストで判定していたため、負荷がかかった日に6分かかる学習が26秒で「通過」しました。</p>
+        <p><b>どう確定したか</b> — レポートのタイムラインを再構成し、DOMスナップショットを時点ごとに突き合わせました。</p>
+        <p style="margin-bottom:0"><b>何を変えたか</b> — 判定の根拠をノードの状態・ダウンロードファイル・リクエストのペイロードに移し、
+          レポートには通過した項目も検証ポイントと画面を残すようにしました。<span class="nb">（<a href="automation.html">CASE-04</a> · <a href="runner.html">CASE-05</a>）</span></p></div>
+      <div class="card"><h3>🟧 原因がわからないままつくった回避策</h3>
+        <p><b>何が間違っていたか</b> — 並列実行時にセッションが切れる問題を避けるためにタブorchestration構造をつくりましたが、それ自体が単一障害点になりました。</p>
+        <p><b>どう確定したか</b> — 「アカウントごとに単一セッション」というもっともらしい仮説と「手動ではできる」という事実が矛盾していたので実験を続け、セッションがデバイス（User-Agent）単位だと突き止めました。</p>
+        <p style="margin-bottom:0"><b>何を変えたか</b> — workerごとにUAを分けて並列を1 → 3 workerに復旧し、すでにつくった回避策は廃棄しました。<span class="nb">（<a href="automation.html">CASE-04</a>）</span></p></div>
+      <div class="card"><h3>⬛ 静かに失敗した無人同期</h3>
+        <p><b>何が間違っていたか</b> — 無人実行中にログインが期限切れになったのに終了コードが伝わらず、同期が失敗したことにも気づけませんでした。</p>
+        <p style="margin-bottom:0"><b>何を変えたか</b> — 終了コードの伝達、リトライ、失敗マーカーを残し、再ログインされたら15分以内に自動で再実行されるようにしました。
+          自動化は<strong>失敗が見えて</strong>こそ完成です。<span class="nb">（<a href="vault.html">CASE-01</a>）</span></p></div>
+      <div class="card"><h3>⬜ 同じ言葉、違う範囲</h3>
+        <p><b>何が間違っていたか</b> — 「前処理」がノード一つなのか学習準備の段階全体なのかを確認せずに測定し、異なる範囲を前提に数字を突き合わせることになりました。</p>
+        <p style="margin-bottom:0"><b>何を変えたか</b> — 用語が曖昧なら<strong>測定の前に範囲を確認する</strong>よう、手順とエージェントのルールに組み込みました。
+          数字が正確でも範囲が違えば誤った報告です。<span class="nb">（<a href="vault.html">CASE-01</a>）</span></p></div>
+      <div class="card"><h3>🟩 インシデントを仕組みに戻す</h3>
+        <p><b>何があったか</b> — 未検証のビルドが顧客の現場にデプロイされました。</p>
+        <p><b>当時の判断</b> — 誰がミスしたかではなく、なぜミスが起こり得たのかを見ました。デプロイ対象の確認がバージョンラベル基準で、QAの完了とデプロイの決定の間につながりがありませんでした。</p>
+        <p style="margin-bottom:0"><b>何を変えたか</b> — ビルド番号基準のデプロイゲートとQAのNO-GO差し止め権、緊急デプロイ用の非常レーンをつくりました。<span class="nb">（<a href="process.html">CASE-03</a>）</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="growth">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">GROWTH</span><h2 class="sec">成長してきた方法</h2></div>
+    <p class="sec-sub">自動車 → 公共・教育 → 産業AIと、ドメインが3回変わりました。そのたびに一から学び直す必要があり、
+      その過程で<strong>学び方そのもの</strong>が固まってきました。</p>
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">新しい環境では「判定基準」から身につける</div>
+        <div class="d">自動車ではASPICE SWE.6の標準の中で大規模な検証を回す方法を、公共・教育では標準のない場所にプロセスとCIを自ら立ち上げる方法を学びました。
+          産業AIでは正解が一つではない出力に出会い、ISO/IEC TR 29119-11のテストオラクル問題を調べて、データセット単位の合格基準で解決しました。</div></div>
+        <div class="tag">CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">検証対象のモデルを理解するために、自ら学ぶ</div>
+        <div class="d">AIプロダクトをきちんと検証するには、まず検証対象のモデルを理解する必要があると考えました。
+          そこで<strong>KAIST 製造AIエンジニアブートキャンプ第2期</strong>（基礎・応用課程、2026.09〜11受講中、11月修了予定）で、
+          機械学習・ディープラーニングの基礎とPython（NumPy・Pandas・PyTorch）を学び、時系列・画像といった製造データでミニプロジェクトに取り組んでいます。</div></div>
+        <div class="tag">NOW</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">標準の言葉で仕事をする</div>
+        <div class="d"><strong>ISTQB CTFL</strong>（2024.10）でテストの用語と技法を標準に合わせ、
+          <strong>JLPT N2</strong>を取得して、現在はN1の準備をしています。</div></div>
+        <div class="tag">CERT</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">同じことを2回したらつくる — そして次第に「チームが使うもの」へ</div>
+        <div class="d">一人で使っていたログ解析スクリプト（KPI Calculator、検証リソースを30%削減）から始まり、
+          非開発者も使えるGUIツール → チームの業務を変える仕組み（Test Runツール、QA Requestボット）→ AIエージェント（TC Creator → QA Vault・Slack Agent）へと広げてきました。
+          つくる対象が「自分の繰り返し」から「チームの繰り返し」へ移ってきたことが、いちばん大きな成長だと考えています。</div></div>
+        <div class="tag">CASE-01·02·06·07</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">失敗は証拠とともに記録し、ルールに変える</div>
+        <div class="d">自動化のトラブルシューティングは、推測で直したものはなく、証拠で原因を確定した過程を残します。
+          AIエージェントが間違えた点は手順書とガードレールに反映し、次の実行から同じミスができないようにします。
+          <a href="#lessons">上の失敗事例</a>がその記録です。</div></div>
+        <div class="tag">CASE-01·04</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">気になったら、まずつくってみる</div>
+        <div class="d">OCRやマルチエージェントを業務とは関係なくつくってみて、そこで身につけたものが業務ツールの部品になりました。
+          クロス検証や「自動判断には根拠の記録が伴うべき」という原則もここから来ています。<span class="nb">（<a href="#side">個人プロジェクト</a>）</span></div></div>
+        <div class="tag">SIDE</div></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b>今取り組んでいること</b> — KAISTのブートキャンプで検証対象のモデルを学ぶ一方、AIの成果物のレビューループを実際の業務に組み込み、承認率・修正後の承認率といった<strong>レビューの効果を数字で測る方法</strong>をつくっています。
+      QA Vaultの質問Agentは開発・企画のチャンネルへ広げ、利用指標を追跡する予定です。
     </div>
   </div>
 </section>
@@ -211,12 +358,12 @@
         <div class="t">プロセス設計 — 定着と構築</div>
         <div class="d">ASPICE Level 1（SWE.6）認証環境での体系的なQAと、プロセスのない環境で
           ワークフロー・Gitブランチ戦略・自動化ルールをゼロから設計した経験の両方があります。</div></div>
-        <div class="tag">CASE-01</div></div>
+        <div class="tag">CASE-03</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">テスト自動化・回帰テスト</div>
         <div class="d">Playwright・Node.jsによるMLOps E2E回帰テストシステム（実サーバー・3 worker並列）を1人で設計・構築・運用。
           チーム向けセルフサービス実行ランナーの構築、Selenium UI自動化、Jenkins・GitHub Actions連携。</div></div>
-        <div class="tag">CASE-02·03</div></div>
+        <div class="tag">CASE-04·05</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">AIプロダクトの検証 — 判定基準の策定</div>
         <div class="d">LLMによるERPマッチングをデータセット正解率（%）の合格基準で判定（ISO/IEC TR 29119-11のテストオラクル問題を参考）、ビジョン検査PoCにおける判別可否の根拠づくり、
@@ -224,9 +371,9 @@
         <div class="tag">CAREER</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">AI活用・ツール開発</div>
-        <div class="d">Claude AgentによるRegression TC Creator、Slack + AWS LambdaによるQA Requestボット、
+        <div class="d">Claude CodeによるQAナレッジ管理システム（QA Vault）・Slack質問Agent、Claude AgentによるRegression TC Creator、Slack + AWS LambdaによるQA Requestボット、
           Google Apps ScriptによるQA Test Run管理ツール、総合抽出ツール・KPI Calculatorなどの業務ユーティリティ。</div></div>
-        <div class="tag">CASE-04</div></div>
+        <div class="tag">CASE-01·02·06</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">車載組込みの検証</div>
         <div class="d">HILSによるIVIシステムの検証、CAN通信・CANoeによるネットワーク検証、
@@ -236,7 +383,7 @@
         <div class="t">Web品質・セキュリティ診断</div>
         <div class="d">KRDS（韓国政府デザインシステム）準拠のWebアクセシビリティ検証、REST API検証でサーバー側の検証ロジック欠如を指摘し改善を主導、
           Burp Suite・LighthouseによるWebセキュリティ・品質診断。</div></div>
-        <div class="tag">CASE-05</div></div>
+        <div class="tag">CASE-07</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">協働・ドキュメンテーション</div>
         <div class="d">Jira・Xray・Jira Automation・ClickUp・Confluenceによるテスト管理、
@@ -248,10 +395,11 @@
     <div class="grid g3">
       <div class="card"><h3>テスト管理・協働</h3><div class="tags"><span>Jira</span><span>Xray</span><span>Jira Automation</span><span>ClickUp</span><span>Confluence</span><span>Slack</span></div></div>
       <div class="card"><h3>自動化・スクリプト</h3><div class="tags"><span>Playwright</span><span>Selenium</span><span>Postman</span><span>Python</span><span>Node.js</span><span>Shell</span><span>Jenkins</span><span>GitHub Actions</span></div></div>
-      <div class="card"><h3>AI・LLM</h3><div class="tags"><span>Claude Agent</span><span>MCP</span><span>LLMの正解率検証</span></div></div>
+      <div class="card"><h3>AI・LLM</h3><div class="tags"><span>Claude Agent</span><span>Claude Code</span><span>MCP</span><span>Obsidian</span><span>LLMの正解率検証</span></div></div>
       <div class="card"><h3>車載HILS・診断</h3><div class="tags"><span>Vector CANoe</span><span>CANalyzer</span><span>Monaco</span><span>ETFW</span><span>DCM</span></div></div>
+      <div class="card"><h3>資格・教育</h3><div class="tags"><span>ISTQB CTFL</span><span>JLPT N2</span><span>KAIST 製造AIブートキャンプ 第2期</span></div></div>
       <div class="card"><h3>Webセキュリティ・品質</h3><div class="tags"><span>Burp Suite</span><span>Lighthouse</span><span>KRDS</span></div></div>
-      <div class="card"><h3>サーバーレス・連携</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Google Sheets API</span><span>Apps Script</span></div></div>
+      <div class="card"><h3>サーバーレス・連携</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Figma REST API</span><span>Slack Bolt</span><span>Google Sheets API</span><span>Apps Script</span></div></div>
     </div>
   </div>
 </section>
@@ -281,6 +429,8 @@
                 <li>ワークフロー・デプロイゲート・RC・RCAの設計 <a href="process.html">→</a></li>
                 <li>MLOpsの無人回帰テスト・セルフサービスランナー <a href="automation.html">→</a></li>
                 <li>Claude Agentによる回帰テストケースの自動生成 <a href="agent.html">→</a></li>
+                <li>QAナレッジ管理システムの構築 <a href="vault.html">→</a></li>
+                <li>Slack仕様質問Agent <a href="askbot.html">→</a></li>
               </ul>
               <p style="margin-bottom:0">トレーサビリティ体制の構築により、新機能の<strong>要件カバレッジ100%</strong>を達成。</p></div>
             </div>

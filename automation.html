@@ -15,15 +15,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html" class="on">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html" class="on">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="jp/automation.html" hreflang="ja" lang="ja">日本語</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-02</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-04</span></div>
   <h1>Playwright 기반 자동화 구축</h1>
   <p class="lede">데이터셋 업로드부터 7종 AI 모델 학습·배포까지, 비전 AI 학습 플랫폼의 전체 파이프라인을 Playwright로 자동 검증하는 회귀 시스템을 <strong>1인으로 설계·구축·운영</strong>하고 있습니다.</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>릴리스마다 수동으로 하루 이상 걸리던 회귀 검증. 실서버 · 단일 공유 계정 · 30분~3시간짜리 학습이라는 제약까지 걸려 있었습니다.</p></div><div><h5>Action</h5><p>제약을 먼저 정의하고, 테스트가 서로를 깨뜨리지 않는 구조를 설계했습니다.</p></div><div class="r"><h5>Result</h5><p>명령 한 줄 무인 실행 + Slack 자동 보고. 스위트가 2배 이상 늘어나는 동안 아키텍처는 다시 쓰지 않았습니다.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>릴리스마다 수동으로 하루 이상 걸리던 회귀 검증. 실서버 · 단일 공유 계정 · 30분~3시간짜리 학습이라는 제약까지 걸려 있었습니다.</p></div><div><h5>Action</h5><p>제약을 먼저 정의하고, 테스트가 서로를 깨뜨리지 않는 구조를 설계했습니다.</p></div><div class="r"><h5>Result</h5><p>명령 한 줄 무인 실행 + Slack 자동 보고, 회차당 약 1시간 30분. 자동화 TC가 250 → 502개로 늘어나는 동안 아키텍처는 다시 쓰지 않았고, 개발 캔버스 커버리지는 80%입니다.</p></div></div><div class="mine"><h5>제 판단과 기여</h5><p class="role"><b>역할</b> · 1인 설계 · 구축 · 운영</p><ol><li><b>테스트를 짜기 전에, 이 제품이 자동화에 허용하지 않는 제약 5가지부터 정의했습니다.</b> <em>— 실서버 · 단일 계정 · 고비용 학습을 무시하고 짜면 스위트가 커질수록 서로를 깨뜨립니다.</em></li><li><b>화면이 아니라 데이터를 단언하도록 판정 기준을 바꿨습니다.</b> <em>— 6분짜리 학습이 26초 만에 “완료”로 통과한 사례에서, 토스트 기준 판정이 false PASS를 낸다는 걸 확인했기 때문입니다.</em></li><li><b>“계정당 단일 세션”이라는 그럴듯한 가설에서 멈추지 않았습니다.</b> <em>— 수동은 되는데 자동화만 안 되는 모순을 실험으로 파고들어 세션이 기기 단위임을 밝혔고, 병렬 1 → 3 worker를 복구했습니다.</em></li><li><b>이미 만든 탭 orchestration 구조를 폐기했습니다.</b> <em>— 원인을 찾고 나니 그 구조는 우회책이자 단일 실패점이었습니다.</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <figure class="demo" style="margin-bottom:22px">
   <video src="assets/video/runner-demo.mp4" poster="assets/video/runner-poster.jpg"
          autoplay loop muted playsinline preload="metadata"
@@ -124,7 +124,7 @@
       <b>통과한 것도 “무엇을 봤는지”를 남깁니다</b> — CASE 3처럼 <strong>통과한 TC가 범인</strong>인 경우가 있기 때문에,
       PASS/FAIL 숫자만으로는 결과를 신뢰할 수 없습니다. 검증 포인트와 그 시점 화면을 함께 남겨
       <strong>판정 자체를 검증 가능하게</strong> 만들었습니다.
-      <span class="nb">(리포트 설계 상세는 <a href="runner.html">CASE-03</a>)</span>
+      <span class="nb">(리포트 설계 상세는 <a href="runner.html">CASE-05</a>)</span>
     </div>
   </div>
 </details>
@@ -154,26 +154,28 @@
     <div class="tw"><table>
       <thead><tr><th>항목</th><th>Before</th><th>After</th></tr></thead>
       <tbody>
-        <tr><td>릴리스 회귀 검증</td><td class="before">수동 · 1일 이상</td><td class="after">명령 한 줄 · 무인 실행 + Slack 자동 보고</td></tr>
+        <tr><td>릴리스 회귀 검증</td><td class="before">수동 · 1일 이상</td><td class="after">명령 한 줄 · 무인 실행 + Slack 자동 보고 · <strong>회차당 약 1시간 30분</strong></td></tr>
+        <tr><td>RC 검증 속도</td><td class="before">RC 하나에 하루</td><td class="after"><strong>RC3 · RC4를 같은 날 모두 검증</strong></td></tr>
         <tr><td>cloud 병렬 실행</td><td class="before">SSO 개편 후 1 worker</td><td class="after">3 worker 복구</td></tr>
         <tr><td>전처리 스위트</td><td class="before">직렬 19.3분</td><td class="after">그룹 병렬 11.8분 (-39%)</td></tr>
         <tr><td>모델 학습 비용</td><td class="before">소비 테스트마다 재학습</td><td class="after">타입당 1회 · 픽스처 재사용</td></tr>
-        <tr><td>스위트 확장</td><td class="before">추가할수록 구조 수정 필요</td><td class="after">규모 2배 이상 확장 · <strong>아키텍처 무변경</strong></td></tr>
+        <tr><td>스위트 확장</td><td class="before">자동화 TC 250개</td><td class="after"><strong>502개</strong>로 확장 · 아키텍처 무변경</td></tr>
+        <tr><td>커버리지</td><td class="before">—</td><td class="after">개발 캔버스 <strong>80%</strong></td></tr>
         <tr><td>검증의 질문</td><td class="before">기능이 도는가</td><td class="after">+ 결과 품질이 유지되는가 · 고친 것이 유지되는가</td></tr>
       </tbody>
     </table></div>
     <div class="note">
       <b>확장 비용을 낮추는 설계</b> — 초기 구축 이후 <strong>모델 성능 비교 · 회귀 테스트</strong> 영역이 더해지며
-      스위트 규모는 두 배 이상이 됐습니다. 그때 한 일은 구조를 고치는 것이 아니라
+      자동화 TC는 250개에서 502개로 두 배가 됐습니다. 그때 한 일은 구조를 고치는 것이 아니라
       <strong>기존 구조 위에 스위트를 얹는 것</strong>이었습니다.
       자동화의 진짜 비용은 처음 만들 때가 아니라 <strong>늘려갈 때</strong> 발생하기 때문에 그 지점을 먼저 설계했습니다.
     </div>
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="process.html"><span class="k">PREV · CASE-01</span><span class="t">← QA 프로세스를 0에서 1로</span></a><a href="runner.html" style="text-align:right"><span class="k">NEXT · CASE-03</span><span class="t">테스트 러너 — 모두가 검증할 수 있는 환경 →</span></a></div>
+  <div class="pager"><a href="process.html"><span class="k">PREV · CASE-03</span><span class="t">← QA 프로세스를 0에서 1로</span></a><a href="runner.html" style="text-align:right"><span class="k">NEXT · CASE-05</span><span class="t">테스트 러너 — 모두가 검증할 수 있는 환경 →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-02 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-04 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
     고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>

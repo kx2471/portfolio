@@ -16,15 +16,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html" class="on">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html" class="on">CASE-07</a></div>
   <a class="lang" href="../practice.html" hreflang="ko" lang="ko">한국어</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-05</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-07</span></div>
   <h1>検証実務 — API検証・トレーサビリティ・業務ツール</h1>
   <p class="lede">UIを経由せずAPIを直接叩いて<strong>フロントエンドでしか防げていなかった入力チェックとXSSの経路</strong>を見つけた事例、要件–テストケース–不具合のトレーサビリティ体制、繰り返し作業を減らすためにつくったツールです。</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>UIで弾かれる値がサーバーでも弾かれるかは確認されておらず、要件–テストケース–不具合がばらばらに管理されていました。</p></div><div><h5>Action</h5><p>APIレベルまで掘り下げて検証し、トレーサビリティの体制を整え、繰り返し作業はツールで減らしました。</p></div><div class="r"><h5>Result</h5><p>サーバー側検証の欠如とXSSの経路を発見して改善を主導し、要件カバレッジと不具合のトレーサビリティを確保。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>UIで弾かれる値がサーバーでも弾かれるかは確認されておらず、要件–テストケース–不具合がばらばらに管理されていました。</p></div><div><h5>Action</h5><p>APIレベルまで掘り下げて検証し、トレーサビリティの体制を整え、繰り返し作業はツールで減らしました。</p></div><div class="r"><h5>Result</h5><p>サーバー側検証の欠如とXSSの経路を発見して改善を主導し、要件カバレッジと不具合のトレーサビリティを確保。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · API検証・トレーサビリティ体制の確立・業務ツールの制作</p><ol><li><b>フロントエンドの入力チェックを品質保証とは見なしませんでした。</b> <em>— 画面で止まったことは、サーバーが止めた証拠ではなく、画面がリクエストを送らなかった証拠にすぎません。</em></li><li><b>レスポンスコードで止まらず、DBへの保存と管理画面まで追いかけました。</b> <em>— その先で、保存されたスクリプトが管理画面で実行されるXSSの経路を見つけました。</em></li><li><b>発見後に基準を変えました。</b> <em>— フォームのある機能では、UIでの通過とAPIでの通過を別々の検証項目として扱います。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>API検証 — UIの裏側を直接叩く<span class="meta">サーバー側検証の欠如を発見</span></summary>
   <div class="det">
@@ -127,9 +127,9 @@
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="agent.html"><span class="k">PREV · CASE-04</span><span class="t">← AI Agent — Regression TC Creator</span></a></div>
+  <div class="pager"><a href="agent.html"><span class="k">PREV · CASE-06</span><span class="t">← AI Agent — Regression TC Creator</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-05 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-07 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
     顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャは韓国語のUIのまま掲載しています。</p>

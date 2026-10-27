@@ -15,15 +15,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html" class="on">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html" class="on">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="jp/runner.html" hreflang="ja" lang="ja">日本語</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-03</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-05</span></div>
   <h1>테스트 러너 — 모두가 검증할 수 있는 환경</h1>
   <p class="lede">전사가 <strong>같은 제품을 만들고 있는데, 그 제품을 검증할 수 있는 사람은 몇 명뿐</strong>이었습니다. 만드는 사람이라면 누구나 자기가 바꾼 것을 직접 확인할 수 있어야 한다고 봤습니다. 그래서 설치도 명령어도 없이 <strong>브라우저만 있으면 검증이 돌아가는 환경</strong>을 만들었고, 설계 · 구현 · 사용자 문서화까지 단독으로 진행했습니다.</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>같은 제품을 함께 만드는데 <strong>품질 확인은 QA를 거쳐야만</strong> 이뤄졌습니다. 스위트는 완성됐지만 터미널·환경 설정을 아는 사람만 돌릴 수 있었습니다.</p></div><div><h5>Action</h5><p>“도구를 모르는 사람이 눌러도 잘못될 수 없다”를 기준으로, 안전한 기본값과 자동 의존성 해결을 갖춘 검증 환경을 만들었습니다.</p></div><div class="r"><h5>Result</h5><p>만든 사람이 <strong>자기가 바꾼 것을 직접 검증</strong>하고, QA는 무엇을 어떻게 검증할지 <strong>설계하는 데 집중</strong>합니다.</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>같은 제품을 함께 만드는데 <strong>품질 확인은 QA를 거쳐야만</strong> 이뤄졌습니다. 스위트는 완성됐지만 터미널·환경 설정을 아는 사람만 돌릴 수 있었습니다.</p></div><div><h5>Action</h5><p>“도구를 모르는 사람이 눌러도 잘못될 수 없다”를 기준으로, 안전한 기본값과 자동 의존성 해결을 갖춘 검증 환경을 만들었습니다.</p></div><div class="r"><h5>Result</h5><p>설치 0단계 · 명령어 0줄로 누구나 돌릴 수 있는 <strong>셀프서비스 환경은 갖췄습니다.</strong> 다만 지금은 주로 QA가 쓰고 있고, <strong>팀 전체로 넓히는 것이 다음 과제</strong>입니다.</p></div></div><div class="mine"><h5>제 판단과 기여</h5><p class="role"><b>역할</b> · 설계 · 구현 · 사용자 문서화 단독</p><ol><li><b>목표를 “도구 하나”가 아니라 “만든 사람 누구나 검증할 수 있는 환경”으로 잡았습니다.</b> <em>— 검증을 QA가 독점하면 품질은 QA 처리량만큼만 좋아집니다.</em></li><li><b>선행 의존은 사용자가 아니라 러너가 계산하게 했습니다.</b> <em>— 의존 관계를 알아야 쓸 수 있다면 셀프서비스가 아닙니다. 대신 왜 포함됐는지는 🔒로 열어 뒀습니다.</em></li><li><b>재시도 후 통과를 초록이 아니라 “불안정”으로 따로 분류했습니다.</b> <em>— “통과했으니 됐다”로 넘기면 flaky가 영원히 쌓입니다. 판정 기준을 문서가 아니라 도구에 고정했습니다.</em></li><li><b>현재 상태를 있는 그대로 봅니다.</b> <em>— 환경은 갖췄지만 아직 주 사용자는 QA입니다. 전사적으로 테스트의 가치가 충분히 체감되지 않은 상황이라, 도구보다 “왜 돌려야 하는가”를 알리는 일이 남아 있습니다.</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <div class="note" style="margin-bottom:18px">
   <b>제가 만들고 싶었던 것</b> — 전사가 하나의 제품을 만들고 있다면
   <strong>만드는 사람 누구나 자기가 바꾼 것을 확인할 수 있어야</strong> 하고,
@@ -148,7 +148,7 @@
     <div class="tw"><table>
       <thead><tr><th>항목</th><th>Before</th><th>After</th></tr></thead>
       <tbody>
-        <tr><td>실행 주체</td><td class="before">터미널 접근 가능한 QA 1인</td><td class="after">개발·QA 팀원 누구나 (브라우저 주소 하나)</td></tr>
+        <tr><td>실행 가능한 사람</td><td class="before">터미널 접근 가능한 QA 1인</td><td class="after">브라우저 주소 하나로 누구나 <span class="nb">(현재 주 사용자는 QA)</span></td></tr>
         <tr><td>실행 준비</td><td class="before">클론 · 의존성 설치 · 환경 변수 · 명령어 숙지</td><td class="after">설치 0단계 · 명령어 0줄</td></tr>
         <tr><td>동시 실행 사고</td><td class="before">공유 계정 충돌로 양쪽 모두 실패</td><td class="after">단독 실행 보장 + 실행자·경과 시간 노출</td></tr>
         <tr><td>선행 조건</td><td class="before">사용자가 의존 관계를 알고 직접 선택</td><td class="after">러너가 자동 선택 · 포함 사유 표시</td></tr>
@@ -164,12 +164,17 @@
       · <strong>도메인 지식이 필요한 부분은 도구가 대신 계산한다</strong> — 선행 의존, 병렬 소요 시간<br>
       · <strong>기준을 문서가 아니라 도구에 고정한다</strong> — 불안정 상태 분리로 flaky 판정 기준을 강제
     </div>
+    <div class="note warn">
+      <b>솔직한 현재 상태와 다음 과제</b> — 누구나 돌릴 수 있는 환경을 만드는 것까지는 했지만, <strong>실제로 쓰게 만드는 것은 아직</strong>입니다.
+      지금 러너의 주 사용자는 QA이고, 전사적으로는 테스트의 중요성이 아직 충분히 인식되지 않았습니다.
+      도구를 더 다듬기보다, 개발자가 “내 변경을 직접 확인해 볼 이유”를 체감하게 만드는 것이 다음 과제입니다.
+    </div>
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="automation.html"><span class="k">PREV · CASE-02</span><span class="t">← Playwright 기반 자동화 구축</span></a><a href="agent.html" style="text-align:right"><span class="k">NEXT · CASE-04</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
+  <div class="pager"><a href="automation.html"><span class="k">PREV · CASE-04</span><span class="t">← Playwright 기반 자동화 구축</span></a><a href="agent.html" style="text-align:right"><span class="k">NEXT · CASE-06</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-03 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-05 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">실제 업무 경험을 바탕으로 재구성·가공되었으며, 회사 기밀 보호를 위해
     고객사 · 담당자명 · 버전 · 내부 주소 등 민감 정보는 익명화하거나 비식별 처리했습니다.</p>

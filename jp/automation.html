@@ -16,15 +16,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html" class="on">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html" class="on">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="../automation.html" hreflang="ko" lang="ko">한국어</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-02</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-04</span></div>
   <h1>Playwrightによるテスト自動化の構築</h1>
   <p class="lede">データセットのアップロードから7種類のAIモデルの学習・デプロイまで、ビジョンAI学習プラットフォームのパイプライン全体をPlaywrightで自動検証する回帰テストシステムを、<strong>1人で設計・構築・運用</strong>しています。</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>リリースのたびに手作業で1日以上かかっていた回帰テスト。実サーバー・単一の共有アカウント・30分〜3時間かかるモデル学習という制約もありました。</p></div><div><h5>Action</h5><p>まず制約を定義し、テスト同士が干渉しない構造を設計しました。</p></div><div class="r"><h5>Result</h5><p>コマンド1行で無人実行 + Slackへの自動報告。スイートが2倍以上に増える間も、アーキテクチャは書き直していません。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>リリースのたびに手作業で1日以上かかっていた回帰テスト。実サーバー・単一の共有アカウント・30分〜3時間かかるモデル学習という制約もありました。</p></div><div><h5>Action</h5><p>まず制約を定義し、テスト同士が干渉しない構造を設計しました。</p></div><div class="r"><h5>Result</h5><p>コマンド1行で無人実行 + Slackへの自動報告、1回あたり約1時間30分。自動化テストケースが250 → 502件に増える間もアーキテクチャは書き直しておらず、開発キャンバスのカバレッジは80%です。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · 1人で設計・構築・運用</p><ol><li><b>テストを書く前に、この製品が自動化に許さない制約を5つ定義しました。</b> <em>— 実サーバー・単一アカウント・高コストな学習を無視して書けば、スイートが大きくなるほどテスト同士が壊し合います。</em></li><li><b>画面ではなくデータをアサートするよう判定基準を変えました。</b> <em>— 6分かかる学習が26秒で「完了」として通過した事例から、トースト基準の判定がfalse PASSを生むと確認したためです。</em></li><li><b>「アカウントごとに単一セッション」というもっともらしい仮説で止まりませんでした。</b> <em>— 手動ではできるのに自動化だけできないという矛盾を実験で掘り下げ、セッションがデバイス単位だと突き止めて、並列を1 → 3 workerに復旧しました。</em></li><li><b>すでにつくったタブorchestration構造を廃棄しました。</b> <em>— 原因がわかってみると、その構造は回避策であり単一障害点でした。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <figure class="demo" style="margin-bottom:22px">
   <video src="../assets/video/runner-demo.mp4" poster="../assets/video/runner-poster.jpg"
          autoplay loop muted playsinline preload="metadata"
@@ -125,7 +125,7 @@
       <b>合格したものも「何を確認したか」を残します</b> — CASE 3のように<strong>合格したテストケースが犯人</strong>のこともあるため、
       PASS/FAILの数字だけでは結果を信頼できません。検証ポイントとその時点の画面を一緒に残し、
       <strong>判定そのものを検証できるように</strong>しました。
-      <span class="nb">（レポート設計の詳細は<a href="runner.html">CASE-03</a>）</span>
+      <span class="nb">（レポート設計の詳細は<a href="runner.html">CASE-05</a>）</span>
     </div>
   </div>
 </details>
@@ -155,26 +155,28 @@
     <div class="tw"><table>
       <thead><tr><th>項目</th><th>Before</th><th>After</th></tr></thead>
       <tbody>
-        <tr><td>リリース回帰テスト</td><td class="before">手作業 · 1日以上</td><td class="after">コマンド1行 · 無人実行 + Slackへ自動報告</td></tr>
+        <tr><td>リリース回帰テスト</td><td class="before">手作業 · 1日以上</td><td class="after">コマンド1行 · 無人実行 + Slackへ自動報告 · <strong>1回あたり約1時間30分</strong></td></tr>
+        <tr><td>RC検証のスピード</td><td class="before">RC 1つに1日</td><td class="after"><strong>RC3・RC4を同じ日に両方検証</strong></td></tr>
         <tr><td>cloudでの並列実行</td><td class="before">SSO刷新後は1 worker</td><td class="after">3 workerに復旧</td></tr>
         <tr><td>前処理スイート</td><td class="before">直列で19.3分</td><td class="after">グループ並列で11.8分（-39%）</td></tr>
         <tr><td>モデル学習のコスト</td><td class="before">利用するテストのたびに再学習</td><td class="after">タイプごとに1回 · フィクスチャを再利用</td></tr>
-        <tr><td>スイートの拡張</td><td class="before">追加するたびに構造の修正が必要</td><td class="after">規模を2倍以上に拡張 · <strong>アーキテクチャ変更なし</strong></td></tr>
+        <tr><td>スイートの拡張</td><td class="before">自動化テストケース250件</td><td class="after"><strong>502件</strong>に拡張 · アーキテクチャ変更なし</td></tr>
+        <tr><td>カバレッジ</td><td class="before">—</td><td class="after">開発キャンバス<strong>80%</strong></td></tr>
         <tr><td>検証の問い</td><td class="before">機能が動くか</td><td class="after">+ 結果の品質が保たれているか · 直したものが保たれているか</td></tr>
       </tbody>
     </table></div>
     <div class="note">
       <b>拡張コストを下げる設計</b> — 初期構築後に<strong>モデル性能の比較・回帰テスト</strong>の領域が加わり、
-      スイートの規模は2倍以上になりました。そのときに行ったのは構造の修正ではなく、
+      自動化テストケースは250件から502件へと2倍になりました。そのときに行ったのは構造の修正ではなく、
       <strong>既存の構造の上にスイートを載せること</strong>でした。
       自動化の本当のコストは最初につくるときではなく<strong>増やしていくとき</strong>に生じるため、その点を先に設計しました。
     </div>
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="process.html"><span class="k">PREV · CASE-01</span><span class="t">← QAプロセスを0から1へ</span></a><a href="runner.html" style="text-align:right"><span class="k">NEXT · CASE-03</span><span class="t">テストランナー — 誰でも検証できる環境 →</span></a></div>
+  <div class="pager"><a href="process.html"><span class="k">PREV · CASE-03</span><span class="t">← QAプロセスを0から1へ</span></a><a href="runner.html" style="text-align:right"><span class="k">NEXT · CASE-05</span><span class="t">テストランナー — 誰でも検証できる環境 →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-02 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-04 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
     顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>

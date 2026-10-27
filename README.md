@@ -9,12 +9,14 @@ QA 프로세스 설계 · 테스트 자동화 · AI 도구 개발 기록.
 
 | 페이지 | 내용 |
 |---|---|
-| `index.html` | 리포트 — Summary · Cases · Verified · Career · Side · Contact |
-| `process.html` | CASE-01 · QA 프로세스를 0에서 1로 |
-| `automation.html` | CASE-02 · MLOps 파이프라인 무인 회귀 검증 |
-| `runner.html` | CASE-03 · 테스트 러너 — 모두가 검증할 수 있는 환경 |
-| `agent.html` | CASE-04 · AI Agent — Regression TC Creator |
-| `practice.html` | CASE-05 · 검증 실무 — 산출물 · API 검증 · 업무 도구 |
+| `index.html` | 리포트 — Cases · View · Lessons · Growth · Verified · Career · Side · Contact |
+| `vault.html` | CASE-01 · QA 지식관리시스템 구축 — QA Vault |
+| `askbot.html` | CASE-02 · Slack 질문 Agent — 누구나 근거와 함께 묻는다 |
+| `process.html` | CASE-03 · QA 프로세스를 0에서 1로 |
+| `automation.html` | CASE-04 · Playwright 기반 자동화 구축 |
+| `runner.html` | CASE-05 · 테스트 러너 — 모두가 검증할 수 있는 환경 |
+| `agent.html` | CASE-06 · AI Agent — Regression TC Creator |
+| `practice.html` | CASE-07 · 검증 실무 — API 검증 · 추적성 · 업무 도구 |
 
 ## 기술
 

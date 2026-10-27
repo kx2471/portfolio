@@ -16,8 +16,8 @@
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
   <div class="menu">
-    <a href="#summary">Summary</a><a href="#cases">Cases</a><a href="#direction">Direction</a><a href="#checks">Verified</a>
-    <a href="#career">Career</a><a href="#side">Side</a><a href="#contact">Contact</a>
+    <a href="#cases">Cases</a><a href="#direction">View</a><a href="#lessons">Lessons</a><a href="#growth">Growth</a>
+    <a href="#checks">Verified</a><a href="#career">Career</a><a href="#side">Side</a><a href="#contact">Contact</a>
   </div>
   <a class="lang" href="jp/index.html" hreflang="ja" lang="ja">日本語</a>
 </div></nav>
@@ -38,13 +38,17 @@
           지금은 산업 AI 비전 검수 플랫폼 <strong>Daisy</strong>의 품질을 책임지며,
           AI 제품의 출력을 판정할 기준을 세우고, 검증 프로세스 · 자동화 · 도구를 0에서 설계하고 있습니다.
         </p>
+        <p class="lede">
+          제 강점은 <strong>판정 기준이 없는 곳에 기준을 세우고, 그 기준이 사람의 주의가 아니라 구조로 지켜지게 만드는 것</strong>입니다.
+          규칙은 트래커 자동화에, 판정은 데이터에, 검증은 누구나 돌릴 수 있는 도구에 걸어 둡니다.
+        </p>
       </div>
       <figure class="rpt-photo"><img src="assets/img/profile.jpg" alt="김상옥 프로필 사진" width="720" height="953"></figure>
     </div>
     <div class="summary" id="summary">
       <div class="pass"><div class="n">4년 차</div><div class="k">SW QA 경력 · 3개 도메인</div></div>
       <div class="pass"><div class="n">0 → 1</div><div class="k">QA 프로세스 부재 환경에서 체계 구축</div></div>
-      <div class="pass"><div class="n">1일 → 1.5시간</div><div class="k">릴리스 회귀 검증 · 명령 한 줄 무인 실행</div></div>
+      <div class="pass"><div class="n">1일 → 1.5시간</div><div class="k">릴리스 회귀 검증 · 자동화 TC 502개 무인 실행</div></div>
       <div class="pass"><div class="n">6</div><div class="k">산업 AI 프로젝트 검증 · 인하우스 1 · 수주 5</div></div>
     </div>
   </div>
@@ -53,71 +57,112 @@
 <section id="cases">
   <div class="wrap">
     <div class="sec-head"><span class="sec-id">CASES</span><h2 class="sec">대표 작업</h2></div>
-    <p class="sec-sub">각 작업은 <strong>문제 → 한 일 → 결과</strong>로 정리했고,
-      설계 판단과 실제 운영 화면은 상세 페이지에 있습니다. <span class="nb">(민감 정보는 비식별 처리)</span></p>
+    <p class="sec-sub">각 작업은 <strong>문제 → 한 일 → 결과</strong>로 정리했습니다.
+      카드마다 <strong>제가 내린 핵심 판단</strong>을 한 줄로 적었고, 상세 페이지 맨 위에는 역할과 <strong>판단의 근거</strong>를 정리했습니다.
+      <span class="nb">(민감 정보는 비식별 처리)</span></p>
 
     <div class="cases">
-      <a class="case" href="process.html">
+      <a class="case" href="vault.html">
         <div class="case-top">
           <span class="case-id">CASE-01</span>
+          <span class="chip-st st-pass">NEW · 운영 중</span>
+        </div>
+        <h3>QA 지식관리시스템 구축 — QA Vault</h3>
+        <p>티켓 · TC · 기획서 · 결정으로 흩어진 QA 지식을 <strong>서로 링크된 하나의 저장소</strong>로 모으고,
+          AI 에이전트가 매일 아침 무인으로 최신화합니다. 기획 변경은 다음 날 리포트로, 결정은 사람이 승인해야 정책이 됩니다.</p>
+        <p class="judg"><b>판단</b>기획 결정을 정책에 자동 등록하지 않고 “후보”로만 올렸습니다. 틀린 정책이 확정되면 그걸 근거로 만든 TC까지 함께 틀리기 때문입니다.</p>
+        <div class="metrics">
+          <div>지식 <b>이슈 439 · TC 1,372</b></div>
+          <div>동기화 <b>평일 09:00 무인</b></div>
+          <div>외부 쓰기 <b>사람 승인 후</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
+      </a>
+
+      <a class="case" href="askbot.html">
+        <div class="case-top">
+          <span class="case-id">CASE-02</span>
+          <span class="chip-st st-pass">NEW · 운영 중</span>
+        </div>
+        <h3>Slack 질문 Agent — 누구나 근거와 함께 묻는다</h3>
+        <p>위 지식 저장소를 근거로 개발 · 기획 누구나 <strong>Slack 멘션 한 번으로 정책을 묻고 답을 받는</strong> 읽기 전용 에이전트.
+          답마다 원본 링크가 붙고, <strong>자료에 없으면 “모른다”</strong>고 답합니다.</p>
+        <p class="judg"><b>판단</b>자료에 없으면 “모른다”고 답하게 하고, 권한은 읽기 전용으로 묶었습니다. 그럴듯한 오답 한 번이 봇 전체의 신뢰를 무너뜨립니다.</p>
+        <div class="metrics">
+          <div>질문 <b>멘션 한 줄 · 약 15초</b></div>
+          <div>권한 <b>읽기 전용</b></div>
+          <div>공지 <b>매일 아침 팀 채널</b></div>
+        </div>
+        <span class="go">→ 상세 보기</span>
+      </a>
+
+      <a class="case" href="process.html">
+        <div class="case-top">
+          <span class="case-id">CASE-03</span>
           <span class="chip-st st-pass">운영 중</span>
         </div>
         <h3>QA 프로세스를 0에서 1로</h3>
         <p>이슈 관리 체계가 없던 환경에 워크플로우 · Priority 기준 · Root Cause 의무화 ·
           배포 게이트 · RC 검증 절차를 설계하고, 규칙이 실제로 동작하도록 자동화까지 붙였습니다.</p>
+        <p class="judg"><b>판단</b>Root Cause의 43%가 한 줄짜리라는 숫자로 반발을 설득해 의무화했고, 배포 사고는 개인 실수가 아닌 구조의 공백으로 보고 배포 게이트를 만들었습니다.</p>
         <div class="metrics">
-          <div>워크플로우 <b>Git 연동</b></div>
+          <div>RCA <b>결함 272건 전수 분석</b></div>
           <div>배포 게이트 <b>NO-GO 차단권</b></div>
-          <div>Exit Criteria <b>수치 판정</b></div>
+          <div>Exit Criteria <b>Pass 97.3% 판정</b></div>
         </div>
         <span class="go">→ 상세 보기</span>
       </a>
 
       <a class="case" href="automation.html">
         <div class="case-top">
-          <span class="case-id">CASE-02</span>
+          <span class="case-id">CASE-04</span>
           <span class="chip-st st-pass">운영 중</span>
         </div>
         <h3>Playwright 기반 자동화 구축</h3>
         <p>실서버 · 단일 공유 계정 · 고비용 학습이라는 제약 위에서 테스트가 서로를 깨뜨리지 않는 구조를 설계해,
           하루 이상 걸리던 릴리스 검증을 명령 한 줄, 1.5시간 무인 실행으로 바꿨습니다.</p>
+        <p class="judg"><b>판단</b>6분짜리 학습이 26초 만에 “통과”한 걸 보고, 판정 기준을 화면 토스트에서 서버 데이터로 바꿨습니다.</p>
         <div class="metrics">
+          <div>자동화 TC <b>250 → 502</b></div>
+          <div>커버리지 <b>개발 캔버스 80%</b></div>
           <div>병렬 <b>3 worker</b></div>
-          <div>전처리 <b>-39%</b></div>
-          <div>학습 <b>타입당 1회</b></div>
-          <div>확장 <b>아키텍처 무변경</b></div>
+          <div>RC <b>하루 2회 검증</b></div>
         </div>
         <span class="go">→ 상세 보기</span>
       </a>
 
       <a class="case" href="runner.html">
         <div class="case-top">
-          <span class="case-id">CASE-03</span>
+          <span class="case-id">CASE-05</span>
           <span class="chip-st st-pass">운영 중</span>
         </div>
         <h3>테스트 러너 — 모두가 검증할 수 있는 환경</h3>
         <p>전사가 같은 제품을 만드는데 검증할 수 있는 사람은 몇 명뿐이었습니다.
           만드는 사람이라면 누구나 자기가 바꾼 것을 확인할 수 있어야 한다고 봤고,
-          그런 <strong>검증 환경을 구축하는 것이 목표</strong>였습니다. 이 러너는 그 일환입니다.</p>
+          설치도 명령어도 없는 <strong>셀프서비스 검증 환경</strong>을 만들었습니다. 지금은 주로 QA가 쓰고 있어, <strong>팀 전체로 넓히는 것이 다음 과제</strong>입니다.</p>
+        <p class="judg"><b>판단</b>목표를 도구가 아니라 “만든 사람 누구나 검증할 수 있는 환경”으로 잡았습니다. 검증을 QA가 독점하면 품질은 QA 처리량만큼만 좋아집니다.</p>
         <div class="metrics">
           <div>설치 <b>0단계</b></div>
           <div>명령어 <b>0줄</b></div>
           <div>선행 의존 <b>자동 해결</b></div>
+          <div>다음 과제 <b>팀 전체 확산</b></div>
         </div>
         <span class="go">→ 상세 보기</span>
       </a>
 
       <a class="case" href="agent.html">
         <div class="case-top">
-          <span class="case-id">CASE-04</span>
-          <span class="chip-st st-pass">사내 확산</span>
+          <span class="case-id">CASE-06</span>
+          <span class="chip-st st-pass">사내 확산 → CASE-01로 발전</span>
         </div>
         <h3>AI Agent — Regression TC Creator</h3>
         <p>제가 의무화한 Root Cause 기록을 읽어 회귀 TC를 설계하고 시트·티켓까지 연결하는 Claude Agent.
           <strong>정책을 만든 사람이 그 정책이 남긴 데이터를 쓰는 도구를 직접 만들었습니다.</strong></p>
+        <p class="judg"><b>판단</b>“시트가 두 개면 아무도 안 본다” — 검토용 시트를 따로 두지 않고 정본에 바로 쓰되, 주황색 행 · 작성자 고정 · 빈 분류 칸으로 사람이 볼 곳을 드러냈습니다.</p>
         <div class="metrics">
           <div>호출 <b>티켓 ID 한 줄</b></div>
           <div>쓰기 <b>3단계 게이팅</b></div>
+          <div>회귀 자산 <b>Related TC 45건</b></div>
           <div>타 팀 <b>개선 사례 공유</b></div>
         </div>
         <span class="go">→ 상세 보기</span>
@@ -125,68 +170,96 @@
 
       <a class="case" href="practice.html">
         <div class="case-top">
-          <span class="case-id">CASE-05</span>
+          <span class="case-id">CASE-07</span>
           <span class="chip-st st-pass">상시</span>
         </div>
         <h3>검증 실무 — API 검증 · 추적성 · 업무 도구</h3>
         <p>UI를 거치지 않고 API를 직접 두드려 <strong>프론트만 막고 있던 유효성 검증과 XSS 경로</strong>를 찾아냈습니다.
           요구사항–TC–결함 추적성 체계와 반복 업무를 줄인 도구들도 함께 정리했습니다.</p>
+        <p class="judg"><b>판단</b>화면에서 막힌 값이 서버에서도 막히는지 API로 직접 확인했고, 응답에서 멈추지 않고 관리자 화면까지 따라가 XSS를 찾았습니다.</p>
         <div class="metrics">
           <div>API <b>서버 검증 부재 · XSS 발견</b></div>
           <div>추적성 <b>요구사항 ↔ TC ↔ 결함</b></div>
         </div>
         <span class="go">→ 상세 보기</span>
       </a>
+
     </div>
   </div>
 </section>
 
 <section id="direction">
   <div class="wrap narrow">
-    <div class="sec-head"><span class="sec-id">DIRECTION</span><h2 class="sec">지향점 — AI가 만든 결과를 믿을 수 있게</h2></div>
-    <p class="sec-sub">AI가 결과물을 싸고 빠르게 만들수록 병목은 <strong>“그걸 믿어도 되는가”</strong>로 옮겨갑니다.
-      그렇다고 사람이 전부 들여다보면 사람이 새 병목이 되고, 결국 검수는 도장 찍기가 됩니다.
-      그래서 제 목표는 검수를 직접 떠안는 것이 아니라, <strong>사람의 판단이 가장 필요한 곳에 제대로 쓰이는 검증 체계</strong>를 설계하는 것입니다.</p>
+    <div class="sec-head"><span class="sec-id">VIEW</span><h2 class="sec">이 일에서 중요하다고 보는 것</h2></div>
+    <p class="sec-sub">QA의 일은 버그를 찾는 데서 끝나지 않는다고 생각합니다.
+      <strong>“이 상태로 내보내도 되는가”에 팀이 근거를 갖고 같은 답을 낼 수 있게 만드는 것</strong>이 이 직무의 핵심입니다.
+      아래 여섯 가지를 일하는 기준으로 삼고 있고, 각 기준은 실제 작업으로 확인할 수 있습니다.</p>
 
-    <h4 class="h">두 가지 축, 같은 일</h4>
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">① 판정 기준 — 누가 봐도 같은 결론이 나야 한다</div>
+        <div class="d">“이거 Urgent인가요?”, “RC 끝난 건가요?”가 매번 논쟁이면 품질은 목소리 큰 사람이 정합니다.
+          Priority는 4단계 판단 흐름으로, RC 종료는 잔여 Urgent 0 · Pass Rate 95% 같은 숫자로 정했습니다.
+          정답이 하나가 아닌 LLM 출력은 개별 응답이 아니라 <strong>데이터셋 단위 정확도</strong>로 판정했습니다.</div></div>
+        <div class="tag">CASE-03 · CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">② 근거 — 통과한 것도 “무엇을 봤는지” 남아야 한다</div>
+        <div class="d">PASS 숫자는 그 자체로 검증 대상입니다. 통과한 테스트가 범인이었던 경험 뒤로, 리포트에는 검증 포인트와 그 시점 화면을 남기고
+          재시도 후 통과는 “불안정”으로 따로 분류합니다. AI가 답할 때도 원본 링크를 붙이고, 자료에 없으면 “모른다”고 하게 합니다.</div></div>
+        <div class="tag">CASE-01·02·04·05</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">③ 구조 — 사람의 주의에 기대는 규칙은 바쁠 때 깨진다</div>
+        <div class="d">Root Cause를 안 쓰고 넘기면 트래커가 자동으로 되돌립니다.
+          사고가 나면 사람을 찾기보다 <strong>같은 일이 구조적으로 불가능해지는 지점</strong>을 찾습니다.
+          AI가 쓴 결과도 표시만 하지 않고, 사람이 승인해야 정본이 되는 관문을 둡니다.</div></div>
+        <div class="tag">CASE-01·03·06</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">④ 자동화의 목표는 QA가 돌리는 게 아니라, 누구나 검증할 수 있는 환경이다</div>
+        <div class="d">QA가 모든 변경의 관문이 되면 QA가 병목이 됩니다. 그래서 <strong>평소에는 검증 환경을 제공</strong>하고 — 브라우저로 돌리는 러너, Slack에서 묻는 정책 Agent —
+          <strong>막아야 할 곳은 배포 직전 한 지점</strong>으로 모읍니다. 그 지점에서는 빌드 번호 기준 게이트와 NO-GO 차단권으로 확실히 막습니다.
+          <span class="nb">환경은 갖췄고, 팀 전체가 실제로 쓰게 만드는 것이 지금의 과제입니다.</span></div></div>
+        <div class="tag">CASE-02·03·05</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">⑤ 새 테스트를 늘리는 것보다, 기존 자산을 쓰는 방식을 바꾼다</div>
+        <div class="d">이미 쌓인 결함 기록 · TC · 실행 이력이 가장 값싼 검증 자산입니다.
+          Root Cause 기록은 회귀 TC의 입력이 되고(Related TC 45건), 지난 RC의 FAIL · NA만 다음 RC로 승계하며,
+          스프레드시트 TC 1,279건은 이관해 매일 동기화하고, 반복되는 버그 원인은 인사이트로 쌓아 다음 기능의 테스트 관점으로 씁니다.</div></div>
+        <div class="tag">CASE-01·03·06</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">⑥ 테스트 앞에서의 망설임을 줄인다</div>
+        <div class="d">“무엇을 설정해야 하지?”가 한 번이라도 떠오르면 사람들은 테스트를 미룹니다.
+          설치 0단계 · 명령어 0줄의 러너, 티켓 ID 한 줄 호출, Slack 멘션 한 줄 질문처럼 <strong>첫 실행의 마찰</strong>을 가장 먼저 설계하고,
+          막아야 할 때는 막는 이유를 함께 보여줍니다.</div></div>
+        <div class="tag">CASE-02·05·06</div></div>
+    </div>
+
+    <div class="note" style="margin-top:14px">
+      <b>개발자 · 기획자와 일하는 방식</b> — <strong>의견을 내는 건 QA의 몫이고, 반영 여부는 상대가 정합니다.</strong>
+      기획과 시안이 다르면 <code>❗ 불일치</code>로 표시해 기획자와 맞추고, 댓글 속 결정은 정책 “후보”로만 올리고,
+      서버 검증 부재는 개선 방향까지 제안하되 결정은 담당자에게 둡니다.
+      예외는 미리 합의한 한 지점, 배포 게이트뿐입니다. 그곳에서도 QA는 품질 사실로 NO-GO를 걸고, 최종 GO는 PM이 정합니다.
+    </div>
+
+    <h4 class="h" style="margin-top:30px">AI 시대에 이 기준이 더 중요해지는 이유</h4>
+    <p>AI가 결과물을 싸고 빠르게 만들수록 병목은 <strong>“그걸 믿어도 되는가”</strong>로 옮겨갑니다.
+      사람이 전부 들여다보면 사람이 새 병목이 되고, 결국 검수는 도장 찍기가 됩니다.
+      그래서 저는 같은 기준을 두 방향에 씁니다.</p>
     <div class="grid g2">
       <div class="card"><h3>🧪 AI 제품을 검증한다</h3>
         <p>정답이 하나로 정해지지 않는 출력을 판정할 기준을 세웁니다.
-          LLM 매칭을 데이터셋 정확도(%) 기준으로 판정한 것, 비전 검출의 가능 여부 근거, 이상 탐지 지표의 집계 기준이 그것입니다.
+          LLM 매칭의 데이터셋 정확도(%) 판정, 비전 검출의 가능 여부 근거, 이상 탐지 지표의 집계 기준이 그것입니다.
           <span class="nb">(<a href="#career">경력</a>)</span></p></div>
       <div class="card"><h3>🤖 AI로 검증한다</h3>
         <p>AI와 자동화가 일을 맡되, 그 결과를 사람이 검증할 수 있는 형태로 남깁니다.
-          판정 근거를 남기는 리포트, AI가 쓴 TC를 구분하는 표시가 그것입니다.
-          <span class="nb">(<a href="automation.html">CASE-02</a> · <a href="agent.html">CASE-04</a>)</span></p></div>
-    </div>
-    <div class="note" style="margin-top:14px">
-      <b>둘 다 같은 근육입니다</b> — <strong>판정할 수 없는 것을 판정 가능한 형태로 만드는 일</strong>.
-      AI 제품의 출력이든, AI가 해낸 일이든 마찬가지입니다.
-    </div>
-
-    <h4 class="h" style="margin-top:30px">세 층으로 설계합니다 — 지금까지 한 것</h4>
-    <div class="checks">
-      <div class="check"><div class="mark">✓</div><div class="body">
-        <div class="t">① 분류 — 사람이 무엇을 봐야 하는지 정한다</div>
-        <div class="d">모든 결과를 사람이 보지 않습니다. 재시도해서 통과한 테스트는 초록이 아니라 “불안정”으로 따로 분류해 사람에게 넘기고,
-          RC 종료는 수치 기준으로 판정해 논쟁할 건만 사람이 봅니다. Priority도 4단계 판단 흐름으로 누가 매겨도 같은 결과가 나오게 했습니다.</div></div>
-        <div class="tag">CASE-01·02</div></div>
-      <div class="check"><div class="mark">✓</div><div class="body">
-        <div class="t">② 근거 — 빠르고 제대로 볼 수 있게 만든다</div>
-        <div class="d">자동화가 “통과”라고 한 것도 무엇을 어떤 순서로 봤는지 그 시점 화면과 함께 남깁니다.
-          TC Creator는 Root Cause를 근거로 TC를 설계하고, AI가 쓴 행은 주황색으로 남겨 검토 대상을 바로 구분하게 했습니다.</div></div>
-        <div class="tag">CASE-02·03·04</div></div>
-      <div class="check"><div class="mark">✓</div><div class="body">
-        <div class="t">③ 피드백 — 사람이 본 결과가 시스템을 고친다</div>
-        <div class="d">버그마다 Root Cause를 선택형으로 남기게 해 원인 분포가 자동으로 쌓이고, 그 기록이 다시 회귀 TC의 입력이 됩니다.
-          미검증 빌드 배포 인시던트는 책임 추궁이 아니라 배포 게이트라는 구조로 되돌렸습니다.</div></div>
-        <div class="tag">CASE-01·04</div></div>
+          근거 링크가 붙은 답, 초안 → 검토 → 승인 관문, 판정 근거를 남기는 리포트가 그것입니다.
+          <span class="nb">(<a href="vault.html">CASE-01</a> · <a href="askbot.html">CASE-02</a> · <a href="automation.html">CASE-04</a> · <a href="agent.html">CASE-06</a>)</span></p></div>
     </div>
 
     <h4 class="h" style="margin-top:30px">다음 목표 — 검수가 반드시 일어나는 루프</h4>
     <div class="grid g2">
-      <div class="card"><h3>① 검수 관문</h3>
-        <p>AI 결과가 바로 정본이 되지 않고, 위험도에 따라 <strong>검토 대기</strong>로 들어가 사람이 승인해야 정본이 되는 구조.</p></div>
+      <div class="card"><h3>① 검수 관문 <span class="chip-st st-pass" style="margin-left:6px;vertical-align:middle">일부 구현</span></h3>
+        <p>AI 결과가 바로 정본이 되지 않고, 사람이 승인해야 정본이 되는 구조.
+          TC 작성에는 <a href="vault.html">CASE-01</a>에서 적용했고, 위험도에 따른 차등 검수로 넓히려 합니다.</p></div>
       <div class="card"><h3>② 근거가 붙은 결과</h3>
         <p>결과마다 <strong>어느 근거에서 나왔는지</strong>가 붙어, 직접 만드는 것보다 검수가 빠르도록.</p></div>
       <div class="card"><h3>③ 반려 사유 반영</h3>
@@ -194,9 +267,84 @@
       <div class="card"><h3>④ 측정</h3>
         <p>승인율 · 수정 후 승인율 · 검수 시간 대비 직접 작성 시간, 그리고 <strong>누가 승인했는지</strong>까지 기록.</p></div>
     </div>
-    <div class="note" style="margin-top:18px">
-      <b>정리하면</b> — 지금까지는 AI와 자동화가 만든 결과를 <strong>사람이 검증할 수 있게 만드는 설계</strong>를 해왔습니다.
-      다음 목표는 이를 <strong>검수가 반드시 일어나고, 검수할수록 사람이 볼 양이 줄어드는 루프</strong>로 완성하는 것입니다.
+  </div>
+</section>
+
+<section id="lessons">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">LESSONS</span><h2 class="sec">실패에서 고친 것</h2></div>
+    <p class="sec-sub">기준은 성공보다 실패에서 더 많이 바뀌었습니다.
+      실패를 운이나 개인 실수로 넘기지 않고, <strong>원인을 증거로 확정한 뒤 같은 실패가 구조적으로 반복되지 않게</strong> 만드는 데까지 가는 것을 원칙으로 합니다.</p>
+    <div class="grid g2">
+      <div class="card"><h3>🟥 통과한 테스트가 범인이었다</h3>
+        <p><b>무엇이 틀렸나</b> — 학습 완료를 화면 토스트로 판정했더니, 부하가 걸린 날 6분짜리 학습이 26초 만에 “통과”했습니다.</p>
+        <p><b>어떻게 확정했나</b> — 리포트 타임라인을 재구성하고 DOM 스냅샷을 시점별로 대조했습니다.</p>
+        <p style="margin-bottom:0"><b>무엇을 바꿨나</b> — 판정 근거를 노드 상태 · 다운로드 파일 · 요청 페이로드로 옮기고,
+          리포트에 통과한 항목도 검증 포인트와 화면을 남기게 했습니다. <span class="nb">(<a href="automation.html">CASE-04</a> · <a href="runner.html">CASE-05</a>)</span></p></div>
+      <div class="card"><h3>🟧 원인을 모른 채 만든 우회 구조</h3>
+        <p><b>무엇이 틀렸나</b> — 병렬 실행 시 세션이 끊기는 문제를 피하려고 탭 orchestration 구조를 만들었는데, 그 자체가 단일 실패점이 됐습니다.</p>
+        <p><b>어떻게 확정했나</b> — “계정당 단일 세션”이라는 그럴듯한 가설과 “수동은 된다”는 사실이 모순이라 실험을 이어갔고, 세션이 기기(User-Agent) 단위임을 밝혔습니다.</p>
+        <p style="margin-bottom:0"><b>무엇을 바꿨나</b> — worker별 UA를 분리해 병렬 1 → 3 worker를 복구하고, 이미 만든 우회 구조는 폐기했습니다. <span class="nb">(<a href="automation.html">CASE-04</a>)</span></p></div>
+      <div class="card"><h3>⬛ 조용히 실패한 무인 동기화</h3>
+        <p><b>무엇이 틀렸나</b> — 무인 실행 중 로그인이 만료됐는데 종료 코드가 전달되지 않아, 동기화가 실패한 줄도 몰랐습니다.</p>
+        <p style="margin-bottom:0"><b>무엇을 바꿨나</b> — 종료 코드 전달, 재시도, 실패 표식을 남기고, 다시 로그인되면 15분 안에 자동 재실행되게 했습니다.
+          자동화는 <strong>실패가 보여야</strong> 완성입니다. <span class="nb">(<a href="vault.html">CASE-01</a>)</span></p></div>
+      <div class="card"><h3>⬜ 같은 단어, 다른 범위</h3>
+        <p><b>무엇이 틀렸나</b> — “전처리”가 노드 하나인지 학습 준비 단계 전체인지 확인하지 않고 측정해, 서로 다른 범위를 놓고 숫자를 맞춰 보는 일이 생겼습니다.</p>
+        <p style="margin-bottom:0"><b>무엇을 바꿨나</b> — 용어가 모호하면 <strong>측정 전에 범위부터 확인</strong>하도록 절차와 에이전트 규칙에 넣었습니다.
+          숫자가 정확해도 범위가 틀리면 틀린 보고입니다. <span class="nb">(<a href="vault.html">CASE-01</a>)</span></p></div>
+      <div class="card"><h3>🟩 인시던트를 구조로 되돌리기</h3>
+        <p><b>무엇이 있었나</b> — 미검증 빌드가 고객 현장에 배포됐습니다.</p>
+        <p><b>당시 판단</b> — 누가 실수했는지가 아니라, 왜 실수가 가능했는지를 봤습니다. 배포 대상 확인이 버전 라벨 기준이었고, QA 완료와 배포 결정 사이에 연결 고리가 없었습니다.</p>
+        <p style="margin-bottom:0"><b>무엇을 바꿨나</b> — 빌드 번호 기준 배포 게이트와 QA의 NO-GO 차단권, 긴급 배포용 비상 레인을 만들었습니다. <span class="nb">(<a href="process.html">CASE-03</a>)</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="growth">
+  <div class="wrap narrow">
+    <div class="sec-head"><span class="sec-id">GROWTH</span><h2 class="sec">성장해 온 방식</h2></div>
+    <p class="sec-sub">자동차 → 공공·교육 → 산업 AI로 도메인이 세 번 바뀌었습니다. 매번 처음부터 다시 배워야 했고,
+      그 과정에서 <strong>배우는 방식 자체</strong>가 굳어졌습니다.</p>
+
+    <div class="checks">
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">새 환경에서는 “판정 기준”부터 익힌다</div>
+        <div class="d">자동차에서는 ASPICE SWE.6 표준 안에서 대규모 검증을 굴리는 법을, 공공·교육에서는 표준이 없는 곳에 프로세스와 CI를 직접 세우는 법을 배웠습니다.
+          산업 AI에서는 정답이 하나가 아닌 출력을 만나 ISO/IEC TR 29119-11의 테스트 오라클 문제를 찾아 읽고, 데이터셋 단위 합격 기준으로 풀었습니다.</div></div>
+        <div class="tag">CAREER</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">검증 대상인 모델을 이해하려고, 직접 배운다</div>
+        <div class="d">AI 제품을 제대로 검증하려면 검증 대상인 모델부터 이해해야 한다고 봤습니다.
+          그래서 <strong>KAIST 제조AI 엔지니어 부트캠프 2기</strong>(기초 · 응용 과정, 2026.09 ~ 11 수강 중, 11월 수료 예정)에서
+          머신러닝 · 딥러닝 기초와 Python(NumPy · Pandas · PyTorch)을 배우고, 시계열 · 이미지 같은 제조 데이터로 미니 프로젝트를 하고 있습니다.</div></div>
+        <div class="tag">NOW</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">표준의 언어로 일한다</div>
+        <div class="d"><strong>ISTQB CTFL</strong>(2024.10)로 테스트 용어와 기법을 표준에 맞췄고,
+          <strong>JLPT N2</strong>를 취득해 지금은 N1을 준비하고 있습니다.</div></div>
+        <div class="tag">CERT</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">같은 일을 두 번 하면 만든다 — 그리고 점점 “팀이 쓰는 것”으로</div>
+        <div class="d">혼자 쓰던 로그 파싱 스크립트(KPI Calculator, 검증 리소스 30% 절감)에서 시작해,
+          비개발자도 쓰는 GUI 도구 → 팀 업무를 바꾸는 시스템(Test Run 도구, QA Request 봇) → AI 에이전트(TC Creator → QA Vault · Slack Agent)로 넓혀 왔습니다.
+          만드는 대상이 “내 반복”에서 “팀의 반복”으로 옮겨온 것이 가장 큰 성장이라고 생각합니다.</div></div>
+        <div class="tag">CASE-01·02·06·07</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">실패는 증거와 함께 기록하고, 규칙으로 바꾼다</div>
+        <div class="d">자동화 트러블슈팅은 추측으로 고친 것 없이 증거로 원인을 확정한 과정을 남기고,
+          AI 에이전트가 틀린 지점은 절차 문서와 가드레일에 반영해 다음 실행부터 같은 실수를 못 하게 합니다.
+          <a href="#lessons">위의 실패 사례</a>가 그 기록입니다.</div></div>
+        <div class="tag">CASE-01·04</div></div>
+      <div class="check"><div class="mark">✓</div><div class="body">
+        <div class="t">궁금하면 일단 만들어 본다</div>
+        <div class="d">OCR · 멀티 에이전트를 업무와 무관하게 만들어 봤고, 거기서 익힌 것이 실무 도구의 부품이 됐습니다.
+          교차 검증과 “자동 판단에는 근거 기록이 따라와야 한다”는 원칙도 여기서 왔습니다. <span class="nb">(<a href="#side">토이 프로젝트</a>)</span></div></div>
+        <div class="tag">SIDE</div></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b>지금 하고 있는 것</b> — KAIST 부트캠프로 검증 대상인 모델을 배우는 한편, AI 결과물의 검수 루프를 실제 업무에 붙이고, 승인율 · 수정 후 승인율 같은 <strong>검수의 효과를 숫자로 재는 방법</strong>을 만들고 있습니다.
+      QA Vault의 질문 Agent는 개발 · 기획 채널로 넓히며 사용 지표를 추적할 계획입니다.
     </div>
   </div>
 </section>
@@ -210,12 +358,12 @@
         <div class="t">프로세스 설계 — 정착과 구축</div>
         <div class="d">ASPICE Level 1 SWE.6 인증 환경의 구조적 QA 수행과, 프로세스 부재 환경에서
           워크플로우 · Git 브랜치 전략 · 자동화 규칙을 0에서 설계한 경험을 모두 보유.</div></div>
-        <div class="tag">CASE-01</div></div>
+        <div class="tag">CASE-03</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">테스트 자동화 · 회귀 검증</div>
         <div class="d">Playwright · Node.js 기반 MLOps E2E 회귀 시스템(실서버 3-worker 병렬) 1인 설계·구축·운영,
           팀 셀프서비스 실행 러너 구축, Selenium UI 자동화, Jenkins · GitHub Actions 연계.</div></div>
-        <div class="tag">CASE-02·03</div></div>
+        <div class="tag">CASE-04·05</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">AI 제품 검증 — 판정 기준 수립</div>
         <div class="d">LLM 기반 ERP 매칭을 데이터셋 정확도(%) 합격 기준으로 판정(ISO/IEC TR 29119-11의 테스트 오라클 문제 참고), 비전 검사 PoC의 판별 가능 여부 근거 도출,
@@ -223,9 +371,9 @@
         <div class="tag">CAREER</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">AI 활용 · 도구 직접 제작</div>
-        <div class="d">Claude Agent 기반 Regression TC Creator, Slack + AWS Lambda 기반 QA Request 봇,
+        <div class="d">Claude Code 기반 QA 지식관리시스템(QA Vault) · Slack 질문 Agent, Claude Agent 기반 Regression TC Creator, Slack + AWS Lambda 기반 QA Request 봇,
           Google Apps Script 기반 QA Test Run 관리 도구, 종합추출도구 · KPI Calculator 등 실무 유틸리티.</div></div>
-        <div class="tag">CASE-04</div></div>
+        <div class="tag">CASE-01·02·06</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">자동차 임베디드 검증</div>
         <div class="d">HILs 기반 IVI 시스템 검증, CAN 통신 · CANoe 기반 네트워크 검증,
@@ -235,7 +383,7 @@
         <div class="t">웹 품질 · 보안 점검</div>
         <div class="d">KRDS 웹 접근성 검증, REST API 검증 과정에서 서버 측 검증 로직 부재를 지적하고 개선 주도,
           Burp Suite · Lighthouse 기반 웹 보안·품질 진단.</div></div>
-        <div class="tag">CASE-05</div></div>
+        <div class="tag">CASE-07</div></div>
       <div class="check"><div class="mark">✓</div><div class="body">
         <div class="t">협업 · 문서화</div>
         <div class="d">Jira · Xray · Jira Automation · ClickUp · Confluence 기반 테스트 관리,
@@ -247,10 +395,11 @@
     <div class="grid g3">
       <div class="card"><h3>테스트 관리 · 협업</h3><div class="tags"><span>Jira</span><span>Xray</span><span>Jira Automation</span><span>ClickUp</span><span>Confluence</span><span>Slack</span></div></div>
       <div class="card"><h3>자동화 · 스크립팅</h3><div class="tags"><span>Playwright</span><span>Selenium</span><span>Postman</span><span>Python</span><span>Node.js</span><span>Shell</span><span>Jenkins</span><span>GitHub Actions</span></div></div>
-      <div class="card"><h3>AI · LLM</h3><div class="tags"><span>Claude Agent</span><span>MCP</span><span>LLM 정확도 검증</span></div></div>
+      <div class="card"><h3>AI · LLM</h3><div class="tags"><span>Claude Agent</span><span>Claude Code</span><span>MCP</span><span>Obsidian</span><span>LLM 정확도 검증</span></div></div>
       <div class="card"><h3>자동차 HILs · 진단</h3><div class="tags"><span>Vector CANoe</span><span>CANalyzer</span><span>Monaco</span><span>ETFW</span><span>DCM</span></div></div>
+      <div class="card"><h3>자격 · 교육</h3><div class="tags"><span>ISTQB CTFL</span><span>JLPT N2</span><span>KAIST 제조AI 부트캠프 2기</span></div></div>
       <div class="card"><h3>웹 보안 · 품질</h3><div class="tags"><span>Burp Suite</span><span>Lighthouse</span><span>KRDS</span></div></div>
-      <div class="card"><h3>서버리스 · 연동</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Google Sheets API</span><span>Apps Script</span></div></div>
+      <div class="card"><h3>서버리스 · 연동</h3><div class="tags"><span>AWS Lambda</span><span>Slack API</span><span>ClickUp API</span><span>Figma REST API</span><span>Slack Bolt</span><span>Google Sheets API</span><span>Apps Script</span></div></div>
     </div>
   </div>
 </section>
@@ -280,6 +429,8 @@
                 <li>워크플로우 · 배포 게이트 · RC · RCA 설계 <a href="process.html">→</a></li>
                 <li>MLOps 무인 회귀 검증 · 셀프서비스 러너 <a href="automation.html">→</a></li>
                 <li>Claude Agent 기반 회귀 TC 자동 생성 <a href="agent.html">→</a></li>
+                <li>QA 지식관리시스템 구축 <a href="vault.html">→</a></li>
+                <li>Slack 정책 질문 Agent <a href="askbot.html">→</a></li>
               </ul>
               <p style="margin-bottom:0">추적성 체계 구축으로 신규 기능 <strong>요구사항 커버리지 100%</strong> 달성.</p></div>
             </div>

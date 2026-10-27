@@ -16,15 +16,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html" class="on">CASE-03</a><a href="agent.html">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html" class="on">CASE-05</a><a href="agent.html">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="../runner.html" hreflang="ko" lang="ko">한국어</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-03</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-05</span></div>
   <h1>テストランナー — 誰でも検証できる環境</h1>
   <p class="lede">全社で<strong>同じプロダクトをつくっているのに、それを検証できる人はごく一部</strong>でした。つくる人なら誰でも、自分の変更を自分で確認できるべきだと考えました。そこで、インストールもコマンドも不要で<strong>ブラウザさえあれば検証が回る環境</strong>をつくり、設計・実装・ユーザー向けドキュメントまで1人で担当しました。</p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>同じプロダクトを一緒につくっているのに、<strong>品質の確認はQAを通さないと</strong>できませんでした。スイートは完成していても、ターミナルや環境設定を分かる人しか実行できませんでした。</p></div><div><h5>Action</h5><p>「ツールを知らない人が押しても間違いが起きない」を基準に、安全な初期値と依存関係の自動解決を備えた検証環境をつくりました。</p></div><div class="r"><h5>Result</h5><p>つくった人が<strong>自分の変更を自分で検証</strong>し、QAは何をどう検証するかの<strong>設計に集中</strong>できるようになりました。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>同じプロダクトを一緒につくっているのに、<strong>品質の確認はQAを通さないと</strong>できませんでした。スイートは完成していても、ターミナルや環境設定を分かる人しか実行できませんでした。</p></div><div><h5>Action</h5><p>「ツールを知らない人が押しても間違いが起きない」を基準に、安全な初期値と依存関係の自動解決を備えた検証環境をつくりました。</p></div><div class="r"><h5>Result</h5><p>インストール0ステップ・コマンド0行で誰でも回せる<strong>セルフサービス環境は整いました。</strong>ただし今は主にQAが使っており、<strong>チーム全体に広げることが次の課題</strong>です。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · 設計・実装・ユーザー向けドキュメントを単独で担当</p><ol><li><b>目標を「ツール一つ」ではなく「つくった人なら誰でも検証できる環境」に置きました。</b> <em>— 検証をQAが独占すると、品質はQAの処理量の分しか良くなりません。</em></li><li><b>前提となるテストは、ユーザーではなくランナーが計算するようにしました。</b> <em>— 依存関係を知らないと使えないなら、それはセルフサービスではありません。代わりに、なぜ含まれたかは🔒で開示しています。</em></li><li><b>リトライ後の通過を緑ではなく「不安定」として別に分類しました。</b> <em>— 「通ったからOK」で済ませるとflakyは永遠に溜まります。判定基準をドキュメントではなくツールに固定しました。</em></li><li><b>現状をありのままに見ています。</b> <em>— 環境は整いましたが、主な利用者はまだQAです。社内でテストの価値が十分に実感されていない状況なので、ツールよりも「なぜ回すべきか」を伝える仕事が残っています。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <div class="note" style="margin-bottom:18px">
   <b>私がつくりたかったもの</b> — 全社で1つのプロダクトをつくっているなら、
   <strong>つくる人は誰でも自分の変更を確認できるべき</strong>であり、
@@ -149,7 +149,7 @@
     <div class="tw"><table>
       <thead><tr><th>項目</th><th>Before</th><th>After</th></tr></thead>
       <tbody>
-        <tr><td>実行する人</td><td class="before">ターミナルを使えるQA 1人</td><td class="after">開発・QAのメンバー誰でも（ブラウザのURL 1つ）</td></tr>
+        <tr><td>実行できる人</td><td class="before">ターミナルを使えるQA 1人</td><td class="after">ブラウザのURL 1つで誰でも <span class="nb">（現在の主な利用者はQA）</span></td></tr>
         <tr><td>実行の準備</td><td class="before">クローン・依存関係のインストール・環境変数・コマンドの習得</td><td class="after">インストール0ステップ · コマンド0行</td></tr>
         <tr><td>同時実行の事故</td><td class="before">共有アカウントの衝突で両方とも失敗</td><td class="after">単独実行を保証 + 実行者・経過時間を表示</td></tr>
         <tr><td>前提条件</td><td class="before">ユーザーが依存関係を把握して自分で選択</td><td class="after">ランナーが自動選択 · 含めた理由を表示</td></tr>
@@ -165,12 +165,17 @@
       · <strong>ドメイン知識が必要な部分はツールが代わりに計算する</strong> — 前提となるテスト、並列での所要時間<br>
       · <strong>基準をドキュメントではなくツールに固定する</strong> — 不安定な状態を分離し、flakyの判定基準を強制
     </div>
+    <div class="note warn">
+      <b>率直な現状と次の課題</b> — 誰でも回せる環境をつくるところまではできましたが、<strong>実際に使ってもらうのはこれから</strong>です。
+      今のランナーの主な利用者はQAで、社内ではテストの重要性がまだ十分に認識されていません。
+      ツールをさらに磨くよりも、開発者が「自分の変更を自分で確かめる理由」を実感できるようにすることが次の課題です。
+    </div>
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="automation.html"><span class="k">PREV · CASE-02</span><span class="t">← Playwrightによるテスト自動化の構築</span></a><a href="agent.html" style="text-align:right"><span class="k">NEXT · CASE-04</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
+  <div class="pager"><a href="automation.html"><span class="k">PREV · CASE-04</span><span class="t">← Playwrightによるテスト自動化の構築</span></a><a href="agent.html" style="text-align:right"><span class="k">NEXT · CASE-06</span><span class="t">AI Agent — Regression TC Creator →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-03 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-05 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
     顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャは韓国語のUIのまま掲載しています。</p>

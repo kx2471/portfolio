@@ -16,15 +16,15 @@
 <body>
 <nav class="nav"><div class="nav-in">
   <a class="brand" href="index.html"><span class="dot"></span>Home</a>
-  <div class="menu"><a href="process.html">CASE-01</a><a href="automation.html">CASE-02</a><a href="runner.html">CASE-03</a><a href="agent.html" class="on">CASE-04</a><a href="practice.html">CASE-05</a></div>
+  <div class="menu"><a href="vault.html">CASE-01</a><a href="askbot.html">CASE-02</a><a href="process.html">CASE-03</a><a href="automation.html">CASE-04</a><a href="runner.html">CASE-05</a><a href="agent.html" class="on">CASE-06</a><a href="practice.html">CASE-07</a></div>
   <a class="lang" href="../agent.html" hreflang="ko" lang="ko">한국어</a>
 </div></nav>
 <header class="phead"><div class="wrap">
-  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-04</span></div>
+  <div class="crumb"><a href="index.html">← REPORT</a><span style="color:var(--faint)">/</span><span>CASE-06</span></div>
   <h1>AI Agent — Regression TC Creator</h1>
   <p class="lede">私が記入を必須化したRoot Causeの記録を読み取り、回帰テストケースを設計してGoogle Sheetsに記録し、チケットにコメントとフィールドまで連携するClaudeベースのAgentです。<strong>ルールを定めた本人が、そのルールが残したデータを活用するツールを自らつくりました。</strong></p>
 </div></header>
-<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>RCAの記録は溜まる一方で、活用されない資産になるおそれがあり、回帰テストケースの設計・記録・連携は毎スプリント繰り返す手作業でした。</p></div><div><h5>Action</h5><p>MCPツールの組み合わせ・3段階のゲーティング・安全策を備えた仕組みとして実装しました。</p></div><div class="r"><h5>Result</h5><p>チケットIDを1行渡すだけで、テストケース設計・シートへの記録・チケット連携が自動で完了します。他チームが社内の業務改善事例として共有しました。</p></div></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
+<div class="wrap"><div class="psr"><div><h5>Problem</h5><p>RCAの記録は溜まる一方で、活用されない資産になるおそれがあり、回帰テストケースの設計・記録・連携は毎スプリント繰り返す手作業でした。</p></div><div><h5>Action</h5><p>MCPツールの組み合わせ・3段階のゲーティング・安全策を備えた仕組みとして実装しました。</p></div><div class="r"><h5>Result</h5><p>チケットIDを1行渡すだけで、テストケース設計・シートへの記録・チケット連携が自動で完了します。Related TCで紐付いた回帰資産は45件、他チームが社内の業務改善事例として共有しました。</p></div></div><div class="mine"><h5>判断と貢献</h5><p class="role"><b>役割</b> · 設計・実装・社内展開を単独で担当</p><ol><li><b>私が必須化したRoot Causeの記録が死んだデータにならないよう、その使い道を自らつくりました。</b> <em>— 使われない記録は、やがて書かれなくなります。</em></li><li><b>シートへの記録 → コメント → フィールド連携を、前の段階が成功しないと進まない3段階にまとめました。</b> <em>— 一部だけ反映された不完全な状態が、最も見つけにくいエラーだからです。</em></li><li><b>レビュー用のシートを別に設けず、正本に直接書き込むようにしました。</b> <em>— シートが2つあると誰も見ません。代わりにオレンジ色の背景・作成者をClaudeに固定・空の分類欄で、まだ人が見ていないテストケースが正本の中で分かるようにしました。</em></li><li><b>その後、ツールからナレッジベースへと移行しました。</b> <em>— 現在はこのエージェントではなく<a href="vault.html">CASE-01</a>のナレッジベースを根拠に回帰テストケースを書き、レビューは目印ではなく関門（下書き → レビュー → 作成）になりました。</em></li></ol></div></div><div class="wrap" style="padding-top:8px;padding-bottom:20px">
 <details open>
   <summary>なぜつくったか · 動作の流れ<span class="meta">ルールが残したデータを使うツール</span></summary>
   <div class="det">
@@ -100,7 +100,10 @@
   <div class="det">
     <h4 class="h">Step 1. Google Sheetsへの記録（正式版）</h4>
     <p>14列の書式で、シートの最終行の次に直接記録します。
-      Agentが追加した行は<strong>オレンジ色の背景</strong>にして、人が書いたテストケースとすぐ区別できるようにし、
+      <strong>レビュー用のシートを別につくらず正本に直接書き込むのは、意図した選択</strong>です — シートが2つあると誰も見ません。
+      その代わり、正本の中にレビューの仕掛けを設けました。Agentが追加した行は<strong>オレンジ色の背景</strong>にし、
+      <strong>作成者はClaudeに固定</strong>し、<strong>分類欄は空けておいてQAが埋める</strong>ようにしました。
+      分類が空のオレンジ色の行が、そのまま「まだ人が見ていないテストケース」です。また、
       <code>wrapStrategy: WRAP</code>を適用してセル内の改行が実際に見えるようにしました。</p>
     <figure class="shot"><img src="../assets/img/tc-sheet.jpg" alt="Step 1 — 最終行の次に回帰テストケースが追加される。Agentが入れた行はオレンジ色の背景なので、人が書いたテストケースとすぐ区別できる。（TC_871以外の実際のテストケースは匿名化）" loading="lazy"><figcaption>Step 1 — 最終行の次に回帰テストケースが追加される。Agentが入れた行はオレンジ色の背景なので、人が書いたテストケースとすぐ区別できる。（TC_871以外の実際のテストケースは匿名化）</figcaption></figure>
     <h4 class="h">Step 2 · 3. コメントの投稿 → Related TCの連携</h4>
@@ -112,7 +115,7 @@
     <div class="note">
       これは、私が設計したQAワークフローの3つ目の原則（<strong>Root Causeの記入必須化</strong>）で終わらせず、
       <em>その記録が検証の資産へとつながる輪</em>をつくる段階です。
-      <a href="process.html">→ 01 プロセス設計</a>
+      <a href="process.html">→ CASE-03 プロセス設計</a>
     </div>
   </div>
 </details>
@@ -163,9 +166,9 @@
       <li><strong>利用ガイドを同梱</strong> — できること・基本的な使い方・オプションを社内ドキュメントとして一緒に配布</li>
     </ul>
     <div class="note">
-      <b>次のステップ</b> — 現在はエージェントが正式版のシートに直接書き込み、オレンジ色の行で人がレビューすべき対象を見分けています。
-      次はこれを<strong>レビュー待ち → 承認 → 正式版</strong>に変えて、レビューが必ず通る段階にし、
-      差し戻し理由をエージェントのルールに反映することです。<span class="nb">（<a href="index.html#direction">目指す方向</a>）</span>
+      <b>その後 — ツールからナレッジベースへ</b> — 現在はこのエージェントを使っていません。
+      チケット1件のRoot Causeだけを見るやり方から、<a href="vault.html">QA Vault（CASE-01）</a>に蓄積された仕様・イシュー・インサイト全体を根拠に
+      回帰テストケースを書くやり方へ移行しました。レビューも目印から関門に変わり、AIが書いたテストケースは下書き → レビュー → 作成を経ます。
     </div>
     <div class="why"><b>振り返って</b>
       良いツールをつくることより、<strong>他の人に使ってもらうことのほうがはるかに難しい</strong>ということを、
@@ -174,9 +177,9 @@
   </div>
 </details>
 </div><footer><div class="wrap">
-  <div class="pager"><a href="runner.html"><span class="k">PREV · CASE-03</span><span class="t">← テストランナー — 誰でも検証できる環境</span></a><a href="practice.html" style="text-align:right"><span class="k">NEXT · CASE-05</span><span class="t">検証実務 — API検証・トレーサビリティ・業務ツール →</span></a></div>
+  <div class="pager"><a href="runner.html"><span class="k">PREV · CASE-05</span><span class="t">← テストランナー — 誰でも検証できる環境</span></a><a href="practice.html" style="text-align:right"><span class="k">NEXT · CASE-07</span><span class="t">検証実務 — API検証・トレーサビリティ・業務ツール →</span></a></div>
   <p style="margin-top:26px;font-family:var(--mono);font-size:12px;color:var(--faint)">
-    END OF CASE-04 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
+    END OF CASE-06 · <a href="mailto:kx2471@gmail.com">kx2471@gmail.com</a> ·
     <a href="https://github.com/kx2471" target="_blank" rel="noopener">github.com/kx2471</a></p>
   <p class="disclaimer">実際の業務経験をもとに再構成・加工したものです。企業機密の保護のため、
     顧客名・担当者名・バージョン・内部アドレスなどの機密情報は匿名化しています。画面キャプチャと動画は韓国語のUIのまま掲載しています。</p>
